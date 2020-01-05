@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/pts/';
+$config['base_url']	= 'http://10.234.15.22/pts/';
 
 /*
 |--------------------------------------------------------------------------
