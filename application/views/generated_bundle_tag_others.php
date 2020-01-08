@@ -39,6 +39,9 @@
         if($part_name=='pocket'){
             echo 'Pocket';
         }
+        if($part_name=='box_plkt'){
+            echo 'BOX_PLKT';
+        }
         //                if($part_name=='collar_upper'){
         //                    echo '<b>Collar_Upper</b>';
         //                }
@@ -160,6 +163,9 @@ $cl_ending = $packing_order_size[0]['cl_ending'];
                 }
                 if($part_name=='slv_plkt_l'){
                     echo '<b>SLV_PLKT_L</b>';
+                }
+                if($part_name=='box_plkt'){
+                    echo '<b>BOX_PLKT</b>';
                 }
                 if($part_name=='pocket'){
                     echo '<b>Pocket</b>';
