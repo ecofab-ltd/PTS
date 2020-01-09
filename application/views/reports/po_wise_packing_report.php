@@ -41,13 +41,26 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <select required class="form-control" id="po_no" name="po_no" onchange="getReportByPo(id);">
-                                <option value="">SO_PO_Item_Quality_Color_ExFacDate</option>
+                                <option value="">SO_PO_Item_Quality_Color_ExFacDate_Type</option>
                             <?php
-                                foreach ($purchase_order_nos as $pos){ ?>
-                                    <option value="<?php echo $pos['so_no'].'_'.$pos['po_no'].'_'.$pos['purchase_order'].'_'.$pos['item'].'_'.$pos['color'];?>"><?php echo $pos['so_no'].'_'.$pos['purchase_order'].'_'.$pos['item'].'_'.$pos['quality'].'_'.$pos['color'].'_'.$pos['ex_factory_date'];?></option>
+                                foreach ($purchase_order_nos as $pos){
+
+                                    $po_type='';
+
+                                    if($pos['po_type']==0){
+                                        $po_type='BULK';
+                                    }
+                                    if($pos['po_type']==1){
+                                        $po_type='SizeSet';
+                                    }
+                                    if($pos['po_type']==2){
+                                        $po_type='SAMPLE';
+                                    }
+                                    ?>
+                                    <option value="<?php echo $pos['so_no'].'_'.$pos['po_no'].'_'.$pos['purchase_order'].'_'.$pos['item'].'_'.$pos['color'];?>"><?php echo $pos['so_no'].'_'.$pos['purchase_order'].'_'.$pos['item'].'_'.$pos['quality'].'_'.$pos['color'].'_'.$pos['ex_factory_date'].'_'.$po_type;?></option>
                             <?php
                                 }
-//                            ?>
+//                          ?>
                         </select>
                         <span style="font-size: 11px;">* Select SO_PO_Item_Quality_Color</span>
                     </div>

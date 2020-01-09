@@ -66,11 +66,13 @@ $count_unscanned_pc = $cut_qty - ($count_total_carton_qty + $total_wh_qty);
                 <table class="table" border="1">
                     <thead>
                     <tr>
-                        <th class="center">PO/STROKE</th>
+                        <th class="center">Group PO</th>
+                        <th class="center">SO</th>
+                        <th class="center">Purchase Order</th>
                         <th class="center">ITEM/WEEK</th>
                         <th class="center">STYLE</th>
-                        <th class="center" colspan="2">QUALITY-COLOR</th>
-                        <th class="center" colspan="2">Ex-Fac Date</th>
+                        <th class="center">QUALITY-COLOR</th>
+                        <th class="center">Ex-Fac Date</th>
 <!--                        <th class="center">ORDERED</th>-->
                         <!--                        <th class="center">Cut</th>-->
                         <!--                        <th class="center">Packed</th>-->
@@ -81,11 +83,13 @@ $count_unscanned_pc = $cut_qty - ($count_total_carton_qty + $total_wh_qty);
                     </thead>
                     <tbody>
                     <tr>
+                        <td class="center"><?php echo $po_no;?></td>
+                        <td class="center"><?php echo $so_no;?></td>
                         <td class="center"><?php echo $purchase_order;?></td>
                         <td class="center"><?php echo $item;?></td>
-                        <td class="center"><?php echo $style_no;?></td>
-                        <td class="center" colspan="2"><?php echo $quality.'-'.$color;?></td>
-                        <td class="center" colspan="2"><?php echo $ex_factory_date;?></td>
+                        <td class="center"><?php echo $style_no.'-'.$style_name;?></td>
+                        <td class="center"><?php echo $quality.'-'.$color;?></td>
+                        <td class="center"><?php echo $ex_factory_date;?></td>
 <!--                        <td class="center">--><?php //echo $order_quality;?><!--</td>-->
                         <!--                        <td class="center">--><?php //echo $cut_qty;?><!--</td>-->
                         <!--                        <td class="center">--><?php //echo $count_total_packing_qty;?><!--</td>-->
