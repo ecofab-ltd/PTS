@@ -9847,8 +9847,12 @@ class Access extends CI_Controller {
 
     public function po_in_carton_and_wash_gmt()
     {
-//        $date = date('Y-m-d H:i:s');
-        $date = $this->input->post('ex_fac_date');
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+//        $date = $this->input->post('ex_fac_date');
         $data['warehouse_qa_type']=$this->input->post('destination_id');
 
 
@@ -9904,7 +9908,12 @@ class Access extends CI_Controller {
     }
     public function po_in_carton_and_non_wash_gmt()
     {
-        $date = $this->input->post('ex_fac_date');
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+//        $date = $this->input->post('ex_fac_date');
         $data['carton_status']="1";
         $data['warehouse_qa_type']=$this->input->post('destination_id');
         $data['sent_to_production']="1";
@@ -9952,8 +9961,13 @@ class Access extends CI_Controller {
 
     public function po_in_non_carton_and_wash_gmt()
     {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-        $date = $this->input->post('ex_fac_date');
+//        $date = $this->input->post('ex_fac_date');
         $data['is_going_wash']="1";
         $data['going_wash_scan_date_time']=$date;
         $data['wash_going_printed']="1";
@@ -9996,8 +10010,13 @@ class Access extends CI_Controller {
 
     public function po_in_non_carton_and_non_wash_gmt()
     {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-        $date = $this->input->post('ex_fac_date');
+//        $date = $this->input->post('ex_fac_date');
         $data['sent_to_production']="1";
         $data['sent_to_production_date_time']=$date;
         $data['is_printed']="1";
@@ -10033,8 +10052,13 @@ class Access extends CI_Controller {
     }
     public function po_in_warehouse_buyer_and_wash_gmt()
     {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-        $date = $this->input->post('ex_fac_date');
+//        $date = $this->input->post('ex_fac_date');
         $data['is_going_wash']="1";
         $data['going_wash_scan_date_time']="$date";
         $data['wash_going_printed']="1";
@@ -10083,8 +10107,13 @@ class Access extends CI_Controller {
     }
     public function po_in_warehouse_buyer_and_non_wash_gmt()
     {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-        $date = $this->input->post('ex_fac_date');
+//        $date = $this->input->post('ex_fac_date');
         $data['sent_to_production']="1";
         $data['sent_to_production_date_time']="$date";
         $data['is_printed']="1";
@@ -10127,8 +10156,13 @@ class Access extends CI_Controller {
     }
     public function po_in_warehouse_factory_and_non_wash_gmt()
     {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-        $date = $this->input->post('ex_fac_date');
+//        $date = $this->input->post('ex_fac_date');
         $data['sent_to_production']="1";
         $data['sent_to_production_date_time']="$date";
         $data['is_printed']="1";
@@ -10171,8 +10205,13 @@ class Access extends CI_Controller {
     }
     public function po_in_warehouse_trash_and_non_wash_gmt()
     {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-        $date = $this->input->post('ex_fac_date');
+//        $date = $this->input->post('ex_fac_date');
         $data['sent_to_production']="1";
         $data['sent_to_production_date_time']="$date";
         $data['is_printed']="1";
@@ -10215,8 +10254,13 @@ class Access extends CI_Controller {
     }
     public function po_in_warehouse_production_and_non_wash_gmt()
     {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-        $date = $this->input->post('ex_fac_date');
+//        $date = $this->input->post('ex_fac_date');
         $data['sent_to_production']="1";
         $data['sent_to_production_date_time']="$date";
         $data['is_printed']="1";
@@ -10259,8 +10303,13 @@ class Access extends CI_Controller {
     }
     public function po_in_warehouse_other_and_non_wash_gmt()
     {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-        $date = $this->input->post('ex_fac_date');
+//        $date = $this->input->post('ex_fac_date');
         $data['sent_to_production']="1";
         $data['sent_to_production_date_time']="$date";
         $data['is_printed']="1";
@@ -10305,8 +10354,13 @@ class Access extends CI_Controller {
     }
     public function po_in_lost_and_non_wash_gmt()
     {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-        $date = $this->input->post('ex_fac_date');
+//        $date = $this->input->post('ex_fac_date');
         $data['sent_to_production']="1";
         $data['sent_to_production_date_time']="$date";
         $data['is_printed']="1";
@@ -10349,8 +10403,13 @@ class Access extends CI_Controller {
     }
     public function po_in_warehouse_factory_and_wash_gmt()
     {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-        $date = $this->input->post('ex_fac_date');
+//        $date = $this->input->post('ex_fac_date');
         $data['is_going_wash']="1";
         $data['going_wash_scan_date_time']="$date";
         $data['wash_going_printed']="1";
@@ -10400,8 +10459,13 @@ class Access extends CI_Controller {
 
     public function po_in_warehouse_trash_and_wash_gmt()
     {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-        $date = $this->input->post('ex_fac_date');
+//        $date = $this->input->post('ex_fac_date');
         $data['is_going_wash']="1";
         $data['going_wash_scan_date_time']="$date";
         $data['wash_going_printed']="1";
@@ -10451,8 +10515,13 @@ class Access extends CI_Controller {
     }
     public function po_in_warehouse_production_and_wash_gmt()
     {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-        $date = $this->input->post('ex_fac_date');
+//        $date = $this->input->post('ex_fac_date');
         $data['is_going_wash']="1";
         $data['going_wash_scan_date_time']="$date";
         $data['wash_going_printed']="1";
@@ -10501,8 +10570,13 @@ class Access extends CI_Controller {
     }
     public function po_in_warehouse_other_and_wash_gmt()
     {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-        $date = $this->input->post('ex_fac_date');
+//        $date = $this->input->post('ex_fac_date');
         $data['is_going_wash']="1";
         $data['going_wash_scan_date_time']="$date";
         $data['wash_going_printed']="1";
@@ -10553,8 +10627,13 @@ class Access extends CI_Controller {
 
     public function po_in_lost_and_wash_gmt()
     {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-        $date = $this->input->post('ex_fac_date');
+//        $date = $this->input->post('ex_fac_date');
         $data['is_going_wash']="1";
         $data['going_wash_scan_date_time']="$date";
         $data['wash_going_printed']="1";
