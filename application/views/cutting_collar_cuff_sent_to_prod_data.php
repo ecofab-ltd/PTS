@@ -66,8 +66,8 @@
                 </thead>
                 <tbody>
                 <?php foreach($prod_summary as $k => $v){
-//                    if (($v['total_cut_qty'] - $v['count_end_line_qc_pass']) > 0) {
-                    if (date('Y-m-d', strtotime($v['ex_factory_date']. ' + 15 days')) > date('Y-m-d')) {
+                    if (($v['total_cut_qty'] - $v['count_package_ready_qty']) > 0) {
+//                    if (date('Y-m-d', strtotime($v['ex_factory_date']. ' + 15 days')) > date('Y-m-d')) {
 
                         ?>
                         <tr>
@@ -111,6 +111,7 @@
 
                         </tr>
                         <?php
+//                        }
                     }
                 }
                 ?>

@@ -1075,8 +1075,12 @@ class Access_model extends CI_Model {
 
                 SUM(CASE WHEN is_cutting_cuff_bundle_ready=1
                 THEN cut_qty
-                ELSE 0 end) AS count_cutting_cuff_bundle_qty
+                ELSE 0 end) AS count_cutting_cuff_bundle_qty,
 
+                SUM(CASE WHEN is_package_ready=1
+                THEN cut_qty
+                ELSE 0 end) AS count_package_ready_qty
+                
                 FROM tb_cut_summary WHERE 1 GROUP BY po_no,so_no,item,quality,color,purchase_order
                 ) AS t2
                 ON t1.so_no=t2.so_no
