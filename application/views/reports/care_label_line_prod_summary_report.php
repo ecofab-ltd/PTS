@@ -1,8 +1,8 @@
 <div class="col-md-12 well1" id="tableWrap">
     <table class="table table-scroll table-striped" border="1" id="table_id">
         <thead>
-        <tr>
-            <th class="" colspan="11" style="width: 49.7%"></th>
+        <tr style="background-color: #defa9e; font-size: 20px;">
+            <th class="text-center" colspan="11" style="width: 49.7%;">RUNNING PO LIST</th>
             <th class="" colspan="3" style="text-align: center;">Cutting</th>
 <!--            <th class="" colspan="1" style="text-align: center;">Range</th>-->
             <th class="" colspan="5" style="text-align: center;">Sewing</th>
