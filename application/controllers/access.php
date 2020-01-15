@@ -10363,6 +10363,55 @@ class Access extends CI_Controller {
 
         echo 'done';
     }
+    public function po_in_size_set_and_non_wash_gmt()
+    {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $data['warehouse_qa_type']=$this->input->post('destination_id');
+//        $date = $this->input->post('ex_fac_date');
+        $data['sent_to_production']="1";
+        $data['sent_to_production_date_time']="$date";
+        $data['is_printed']="1";
+        $data['printing_date_time']="$date";
+
+        $data['access_points']="4";
+        $data['access_points_status']="4";
+        $data['end_line_qc_date_time']="$date";
+        $data['other_purpose_remarks']="Manually Closed";
+        $data['other_purpose_liable_person']="Administrator";
+        $data['lost_date_time']="$date";
+        $data['manually_closed']="1";
+
+        $data['line_input_date_time']="$date";
+        $data['mid_line_qc_date_time']="$date";
+        $data['lost_date_time']="$date";
+        $data['packing_status']="1";
+        $data['packing_date_time']="$date";
+        $po_ids=$this->input->post('po_ids');
+        $lost_points=$this->input->post('lost_points');
+        $line_ids=$this->input->post('line_ids');
+
+        foreach ($po_ids as $k => $p_id){
+            if($line_ids[$k]==0){
+                $data['line_id']="100";
+            }else{
+                $data['line_id']=$line_ids[$k];
+            }
+
+            if ($lost_points[$k] != ''){
+                $data['other_purpose_remarks'] = "Manually Closed - $lost_points[$k]";
+            }
+
+            $po_info = $this->access_model->manualClosedById($p_id);
+            $this->access_model->update_care_labels($data, $p_id);
+        }
+
+
+        echo 'done';
+    }
     public function po_in_lost_and_non_wash_gmt()
     {
         $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
@@ -10602,6 +10651,64 @@ class Access extends CI_Controller {
         $data['warehouse_other_purpose_date_time']="$date";
         $data['other_purpose_remarks']="Manually Closed";
         $data['other_purpose_liable_person']="Administrator";
+        $data['manually_closed']="1";
+
+        $data['sent_to_production']="1";
+        $data['sent_to_production_date_time']="$date";
+        $data['is_printed']="1";
+        $data['printing_date_time']="$date";
+        $data['line_input_date_time']="$date";
+        $data['mid_line_qc_date_time']="$date";
+        $data['packing_status']="1";
+        $data['packing_date_time']="$date";
+        $data['lost_date_time']="$date";
+        $po_ids=$this->input->post('po_ids');
+        $lost_points=$this->input->post('lost_points');
+        $line_ids=$this->input->post('line_ids');
+
+        foreach ($po_ids as $k => $p_id){
+
+            if($line_ids[$k]==0){
+                $data['line_id']="100";
+            }else{
+                $data['line_id']=$line_ids[$k];
+            }
+
+            if ($lost_points[$k] != ''){
+                $data['other_purpose_remarks'] = "Manually Closed - $lost_points[$k]";
+            }
+
+            $po_info = $this->access_model->manualClosedById($p_id);
+            $this->access_model->update_care_labels($data, $p_id);
+        }
+
+
+        echo 'done';
+    }
+
+    public function po_in_size_set_and_wash_gmt()
+    {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $data['warehouse_qa_type']=$this->input->post('destination_id');
+//        $date = $this->input->post('ex_fac_date');
+        $data['is_going_wash']="1";
+        $data['going_wash_scan_date_time']="$date";
+        $data['wash_going_printed']="1";
+        $data['wash_going_print_date_time']="$date";
+        $data['washing_status']="1";
+        $data['washing_date_time']="$date";
+
+        $data['access_points']="4";
+        $data['access_points_status']="4";
+        $data['end_line_qc_date_time']="$date";
+        $data['lost_date_time']="$date";
+        $data['other_purpose_remarks']="Manually Closed";
+        $data['other_purpose_liable_person']="Administrator";
+        $data['lost_date_time']="$date";
         $data['manually_closed']="1";
 
         $data['sent_to_production']="1";
@@ -11061,6 +11168,7 @@ class Access extends CI_Controller {
         $data['access_points'] = $this->session->userdata('access_points');
 
         $data['sap_no'] = $this->access_model->getAllSos();
+
         $data['maincontent'] = $this->load->view('manual_closing',$data, true);
         $this->load->view('master', $data);
     }

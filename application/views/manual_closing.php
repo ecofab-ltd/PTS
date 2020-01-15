@@ -55,6 +55,7 @@
                                                 <option value="4">Warehouse Production Sample</option>
                                                 <option value="5">Other</option>
                                                 <option value="6">Lost</option>
+                                                <option value="7">Size Set</option>
 
                                             </select>
                                         </div>
@@ -451,6 +452,25 @@
 
         }
 
+
+        if(destination_id ==7 && is_wash_garments==0)
+        {
+            $.ajax({
+                url:"<?php echo base_url('access/po_in_size_set_and_non_wash_gmt')?>",
+                type:"post",
+                dataType:"html",
+                data:{destination_id:destination_id,po_ids:po_ids,line_ids:line_ids,lost_points: lost_points,is_wash_garments:is_wash_garments,ex_fac_date:ex_fac_date},
+                success:function (data) {
+                    if(data='done'){
+                        alert('Po Closed Success!!');
+                        $("#table_data tbody").empty();
+                        $("#checkAll").attr("checked", false);
+                    }
+                }
+            });
+
+        }
+
         if(destination_id ==2 && is_wash_garments==1)
         {
             $.ajax({
@@ -526,6 +546,24 @@
         {
             $.ajax({
                 url:"<?php echo base_url('access/po_in_lost_and_wash_gmt')?>",
+                type:"post",
+                dataType:"html",
+                data:{destination_id:destination_id,po_ids:po_ids,line_ids:line_ids,lost_points: lost_points,is_wash_garments:is_wash_garments,ex_fac_date:ex_fac_date},
+                success:function (data) {
+                    if(data='done'){
+                        alert('Po Closed Success!!');
+                        $("#table_data tbody").empty();
+                        $("#checkAll").attr("checked", false);
+                    }
+                }
+            });
+
+        }
+
+        if(destination_id ==7 && is_wash_garments==1)
+        {
+            $.ajax({
+                url:"<?php echo base_url('access/po_in_size_set_and_wash_gmt')?>",
                 type:"post",
                 dataType:"html",
                 data:{destination_id:destination_id,po_ids:po_ids,line_ids:line_ids,lost_points: lost_points,is_wash_garments:is_wash_garments,ex_fac_date:ex_fac_date},
