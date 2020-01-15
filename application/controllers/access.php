@@ -107,6 +107,17 @@ class Access extends CI_Controller {
         $this->load->view('master_line', $data);
     }
 
+    public function poInfoReport(){
+        $data['title']='PO Info Report';
+
+        $data['brands'] = $this->access_model->getAllBrands();
+
+        $data['ship_dates'] = $this->dashboard_model->getAllShipDates();
+
+        $data['maincontent'] = $this->load->view('po_info_report', $data, true);
+        $this->load->view('reports/master', $data);
+    }
+
     public function other_purpose(){
         $data['title']='Other Purpose';
         $data['user_name'] = $this->session->userdata('user_name');
@@ -10568,6 +10579,7 @@ class Access extends CI_Controller {
 
         echo 'done';
     }
+
     public function po_in_warehouse_other_and_wash_gmt()
     {
         $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));

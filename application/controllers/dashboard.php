@@ -4034,6 +4034,35 @@ class Dashboard extends CI_Controller {
         $this->load->view('reports/master', $data);
     }
 
+    public function getPoInfoReport(){
+        $po_type = $this->input->post('po_type');
+        $brands_string = $this->input->post('brands');
+//        $data['brands_string'] = implode(", ", $brands);
+//        $brands_string = $data['brands_string'];
+
+        $ship_date = $this->input->post('ship_date');
+
+        $data['ex_factory_date'] = $ship_date;
+
+        $where = '';
+
+        if($brands_string != ''){
+            $where .= " AND brand in ($brands_string)";
+        }
+
+        if($po_type != ''){
+            $where .= " AND po_type = $po_type";
+        }
+
+        if($ship_date != '' && $ship_date != '1970-01-01'){
+            $where .= " AND ex_factory_date=$ship_date";
+        }
+
+        $data['po_info_report'] = $this->dashboard_model->isAvailAlready($where);
+
+        echo $maincontent = $this->load->view('reports/po_detail_info_report', $data);
+    }
+
     public function shipDateWiseReport(){
         $data['title']='Ship Date Wise Report';
 
