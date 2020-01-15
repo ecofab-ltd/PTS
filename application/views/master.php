@@ -266,6 +266,7 @@
                   <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>access/print_input_ticket"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b> Get Input Ticket </b> </a> </li>
               </ul>
             </li>
+            <li> <a href="<?php echo base_url();?>access/poInfoReport"><i class="fa fa-circle"></i> PO Info </a></li>
 
             <?php
                 }
