@@ -9863,34 +9863,34 @@ class Access extends CI_Controller {
         $date_time=$datex->format('Y-m-d H:i:s');
         $date=$datex->format('Y-m-d');
 
-//        $date = $this->input->post('ex_fac_date');
+        $ex_fac_date = $this->input->post('ex_fac_date');
         $data['warehouse_qa_type']=$this->input->post('destination_id');
 
 
         $data['carton_status']="1";
         $data['is_going_wash']="1";
-        $data['going_wash_scan_date_time']="$date";
+        $data['going_wash_scan_date_time']="$ex_fac_date";
         $data['wash_going_printed']="1";
-        $data['wash_going_print_date_time']="$date";
+        $data['wash_going_print_date_time']="$ex_fac_date";
         $data['washing_status']="1";
-        $data['washing_date_time']="$date";
+        $data['washing_date_time']="$ex_fac_date";
 
         $data['access_points']="4";
         $data['access_points_status']="4";
-        $data['end_line_qc_date_time']="$date";
+        $data['end_line_qc_date_time']="$ex_fac_date";
         $data['other_purpose_remarks']="Manually Closed";
         $data['other_purpose_liable_person']="Administrator";
-        $data['carton_date_time']="$date";
+        $data['carton_date_time']="$ex_fac_date";
         $data['manually_closed']="1";
 //        $new_line .= '<td class="center">'.$size.'</td>';
         $data['sent_to_production']="1";
-        $data['sent_to_production_date_time']="$date";
+        $data['sent_to_production_date_time']="$ex_fac_date";
         $data['is_printed']="1";
-        $data['printing_date_time']="$date";
-        $data['line_input_date_time']="$date";
-        $data['mid_line_qc_date_time']="$date";
+        $data['printing_date_time']="$ex_fac_date";
+        $data['line_input_date_time']="$ex_fac_date";
+        $data['mid_line_qc_date_time']="$ex_fac_date";
         $data['packing_status']="1";
-        $data['packing_date_time']="$date";
+        $data['packing_date_time']="$ex_fac_date";
         $data['lost_date_time']="$date";
 
         $po_ids=$this->input->post('po_ids');
@@ -9924,27 +9924,27 @@ class Access extends CI_Controller {
         $date_time=$datex->format('Y-m-d H:i:s');
         $date=$datex->format('Y-m-d');
 
-//        $date = $this->input->post('ex_fac_date');
+        $ex_fac_date = $this->input->post('ex_fac_date');
         $data['carton_status']="1";
         $data['warehouse_qa_type']=$this->input->post('destination_id');
         $data['sent_to_production']="1";
-        $data['sent_to_production_date_time']="$date";
+        $data['sent_to_production_date_time']="$ex_fac_date";
         $data['is_printed']="1";
-        $data['printing_date_time']="$date";
+        $data['printing_date_time']="$ex_fac_date";
 
         $data['access_points']="4";
         $data['access_points_status']="4";
-        $data['end_line_qc_date_time']="$date";
+        $data['end_line_qc_date_time']="$ex_fac_date";
         $data['other_purpose_remarks']="Manually Closed";
         $data['other_purpose_liable_person']="Administrator";
-        $data['carton_date_time']="$date";
+        $data['carton_date_time']="$ex_fac_date";
         $data['manually_closed']="1";
 
-        $data['line_input_date_time']="$date";
+        $data['line_input_date_time']="$ex_fac_date";
         $data['lost_date_time']="$date";
-        $data['mid_line_qc_date_time']="$date";
+        $data['mid_line_qc_date_time']="$ex_fac_date";
         $data['packing_status']="1";
-        $data['packing_date_time']="$date";
+        $data['packing_date_time']="$ex_fac_date";
         $po_ids=$this->input->post('po_ids');
         $lost_points=$this->input->post('lost_points');
         $line_ids=$this->input->post('line_ids');
@@ -10069,30 +10069,32 @@ class Access extends CI_Controller {
         $date=$datex->format('Y-m-d');
 
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-//        $date = $this->input->post('ex_fac_date');
+        $ex_fac_date = $this->input->post('ex_fac_date');
+
         $data['is_going_wash']="1";
-        $data['going_wash_scan_date_time']="$date";
+        $data['going_wash_scan_date_time']="$ex_fac_date";
         $data['wash_going_printed']="1";
-        $data['wash_going_print_date_time']="$date";
+        $data['wash_going_print_date_time']="$ex_fac_date";
         $data['washing_status']="1";
-        $data['washing_date_time']="$date";
+        $data['washing_date_time']="$ex_fac_date";
 
         $data['access_points']="4";
         $data['access_points_status']="4";
-        $data['end_line_qc_date_time']="$date";
-        $data['warehouse_buyer_date_time']="$date";
+        $data['end_line_qc_date_time']="$ex_fac_date";
+        $data['warehouse_buyer_date_time']="$ex_fac_date";
         $data['other_purpose_remarks']="Manually Closed";
         $data['other_purpose_liable_person']="Administrator";
         $data['manually_closed']="1";
 
         $data['sent_to_production']="1";
-        $data['sent_to_production_date_time']="$date";
+        $data['sent_to_production_date_time']="$ex_fac_date";
         $data['is_printed']="1";
-        $data['printing_date_time']="$date";
-        $data['line_input_date_time']="$date";
-        $data['mid_line_qc_date_time']="$date";
+        $data['printing_date_time']="$ex_fac_date";
+        $data['line_input_date_time']="$ex_fac_date";
+        $data['mid_line_qc_date_time']="$ex_fac_date";
         $data['packing_status']="1";
-        $data['packing_date_time']="$date";
+        $data['packing_date_time']="$ex_fac_date";
+        $data['lost_date_time']="$date";
         $po_ids=$this->input->post('po_ids');
         $lost_points=$this->input->post('lost_points');
         $line_ids=$this->input->post('line_ids');
@@ -10124,25 +10126,26 @@ class Access extends CI_Controller {
         $date=$datex->format('Y-m-d');
 
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-//        $date = $this->input->post('ex_fac_date');
+        $ex_fac_date = $this->input->post('ex_fac_date');
+
         $data['sent_to_production']="1";
-        $data['sent_to_production_date_time']="$date";
+        $data['sent_to_production_date_time']="$ex_fac_date";
         $data['is_printed']="1";
-        $data['printing_date_time']="$date";
+        $data['printing_date_time']="$ex_fac_date";
 
         $data['access_points']="4";
         $data['access_points_status']="4";
-        $data['end_line_qc_date_time']="$date";
-        $data['warehouse_buyer_date_time']="$date";
+        $data['end_line_qc_date_time']="$ex_fac_date";
+        $data['warehouse_buyer_date_time']="$ex_fac_date";
         $data['other_purpose_remarks']="Manually Closed";
         $data['other_purpose_liable_person']="Administrator";
         $data['manually_closed']="1";
 
-        $data['line_input_date_time']="$date";
-        $data['mid_line_qc_date_time']="$date";
+        $data['line_input_date_time']="$ex_fac_date";
+        $data['mid_line_qc_date_time']="$ex_fac_date";
         $data['lost_date_time']="$date";
         $data['packing_status']="1";
-        $data['packing_date_time']="$date";
+        $data['packing_date_time']="$ex_fac_date";
         $po_ids=$this->input->post('po_ids');
         $lost_points=$this->input->post('lost_points');
         $line_ids=$this->input->post('line_ids');
@@ -10173,25 +10176,26 @@ class Access extends CI_Controller {
         $date=$datex->format('Y-m-d');
 
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-//        $date = $this->input->post('ex_fac_date');
+        $ex_fac_date = $this->input->post('ex_fac_date');
+
         $data['sent_to_production']="1";
-        $data['sent_to_production_date_time']="$date";
+        $data['sent_to_production_date_time']="$ex_fac_date";
         $data['is_printed']="1";
-        $data['printing_date_time']="$date";
+        $data['printing_date_time']="$ex_fac_date";
 
         $data['access_points']="4";
         $data['access_points_status']="4";
-        $data['end_line_qc_date_time']="$date";
-        $data['warehouse_factory_date_time']="$date";
+        $data['end_line_qc_date_time']="$ex_fac_date";
+        $data['warehouse_factory_date_time']="$ex_fac_date";
         $data['other_purpose_remarks']="Manually Closed";
         $data['other_purpose_liable_person']="Administrator";
         $data['manually_closed']="1";
 
-        $data['line_input_date_time']="$date";
-        $data['mid_line_qc_date_time']="$date";
+        $data['line_input_date_time']="$ex_fac_date";
+        $data['mid_line_qc_date_time']="$ex_fac_date";
         $data['lost_date_time']="$date";
         $data['packing_status']="1";
-        $data['packing_date_time']="$date";
+        $data['packing_date_time']="$ex_fac_date";
         $po_ids=$this->input->post('po_ids');
         $lost_points=$this->input->post('lost_points');
         $line_ids=$this->input->post('line_ids');
@@ -10222,25 +10226,26 @@ class Access extends CI_Controller {
         $date=$datex->format('Y-m-d');
 
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-//        $date = $this->input->post('ex_fac_date');
+        $ex_fac_date = $this->input->post('ex_fac_date');
+
         $data['sent_to_production']="1";
-        $data['sent_to_production_date_time']="$date";
+        $data['sent_to_production_date_time']="$ex_fac_date";
         $data['is_printed']="1";
-        $data['printing_date_time']="$date";
+        $data['printing_date_time']="$ex_fac_date";
 
         $data['access_points']="4";
         $data['access_points_status']="4";
-        $data['end_line_qc_date_time']="$date";
-        $data['warehouse_trash_date_time']="$date";
+        $data['end_line_qc_date_time']="$ex_fac_date";
+        $data['warehouse_trash_date_time']="$ex_fac_date";
         $data['other_purpose_remarks']="Manually Closed";
         $data['other_purpose_liable_person']="Administrator";
         $data['manually_closed']="1";
 
-        $data['line_input_date_time']="$date";
-        $data['mid_line_qc_date_time']="$date";
+        $data['line_input_date_time']="$ex_fac_date";
+        $data['mid_line_qc_date_time']="$ex_fac_date";
         $data['lost_date_time']="$date";
         $data['packing_status']="1";
-        $data['packing_date_time']="$date";
+        $data['packing_date_time']="$ex_fac_date";
         $po_ids=$this->input->post('po_ids');
         $lost_points=$this->input->post('lost_points');
         $line_ids=$this->input->post('line_ids');
@@ -10271,25 +10276,26 @@ class Access extends CI_Controller {
         $date=$datex->format('Y-m-d');
 
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-//        $date = $this->input->post('ex_fac_date');
+        $ex_fac_date = $this->input->post('ex_fac_date');
+
         $data['sent_to_production']="1";
-        $data['sent_to_production_date_time']="$date";
+        $data['sent_to_production_date_time']="$ex_fac_date";
         $data['is_printed']="1";
-        $data['printing_date_time']="$date";
+        $data['printing_date_time']="$ex_fac_date";
 
         $data['access_points']="4";
         $data['access_points_status']="4";
-        $data['end_line_qc_date_time']="$date";
-        $data['warehouse_production_sample_date_time']="$date";
+        $data['end_line_qc_date_time']="$ex_fac_date";
+        $data['warehouse_production_sample_date_time']="$ex_fac_date";
         $data['other_purpose_remarks']="Manually Closed";
         $data['other_purpose_liable_person']="Administrator";
         $data['manually_closed']="1";
 
-        $data['line_input_date_time']="$date";
-        $data['mid_line_qc_date_time']="$date";
+        $data['line_input_date_time']="$ex_fac_date";
+        $data['mid_line_qc_date_time']="$ex_fac_date";
         $data['lost_date_time']="$date";
         $data['packing_status']="1";
-        $data['packing_date_time']="$date";
+        $data['packing_date_time']="$ex_fac_date";
         $po_ids=$this->input->post('po_ids');
         $lost_points=$this->input->post('lost_points');
         $line_ids=$this->input->post('line_ids');
@@ -10320,26 +10326,27 @@ class Access extends CI_Controller {
         $date=$datex->format('Y-m-d');
 
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-//        $date = $this->input->post('ex_fac_date');
+        $ex_fac_date = $this->input->post('ex_fac_date');
+
         $data['sent_to_production']="1";
-        $data['sent_to_production_date_time']="$date";
+        $data['sent_to_production_date_time']="$ex_fac_date";
         $data['is_printed']="1";
-        $data['printing_date_time']="$date";
+        $data['printing_date_time']="$ex_fac_date";
 
         $data['access_points']="4";
         $data['access_points_status']="4";
-        $data['end_line_qc_date_time']="$date";
-        $data['warehouse_other_purpose_date_time']="$date";
+        $data['end_line_qc_date_time']="$ex_fac_date";
+        $data['warehouse_other_purpose_date_time']="$ex_fac_date";
         $data['other_purpose_remarks']="Manually Closed";
         $data['other_purpose_liable_person']="Administrator";
         $data['manually_closed']="1";
 
 
-        $data['line_input_date_time']="$date";
-        $data['mid_line_qc_date_time']="$date";
+        $data['line_input_date_time']="$ex_fac_date";
+        $data['mid_line_qc_date_time']="$ex_fac_date";
         $data['lost_date_time']="$date";
         $data['packing_status']="1";
-        $data['packing_date_time']="$date";
+        $data['packing_date_time']="$ex_fac_date";
         $po_ids=$this->input->post('po_ids');
         $lost_points=$this->input->post('lost_points');
         $line_ids=$this->input->post('line_ids');
@@ -10371,25 +10378,25 @@ class Access extends CI_Controller {
         $date=$datex->format('Y-m-d');
 
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-//        $date = $this->input->post('ex_fac_date');
+        $ex_fac_date = $this->input->post('ex_fac_date');
+
         $data['sent_to_production']="1";
-        $data['sent_to_production_date_time']="$date";
+        $data['sent_to_production_date_time']="$ex_fac_date";
         $data['is_printed']="1";
-        $data['printing_date_time']="$date";
+        $data['printing_date_time']="$ex_fac_date";
 
         $data['access_points']="4";
         $data['access_points_status']="4";
-        $data['end_line_qc_date_time']="$date";
+        $data['end_line_qc_date_time']="$ex_fac_date";
         $data['other_purpose_remarks']="Manually Closed";
         $data['other_purpose_liable_person']="Administrator";
         $data['lost_date_time']="$date";
         $data['manually_closed']="1";
 
-        $data['line_input_date_time']="$date";
-        $data['mid_line_qc_date_time']="$date";
-        $data['lost_date_time']="$date";
+        $data['line_input_date_time']="$ex_fac_date";
+        $data['mid_line_qc_date_time']="$ex_fac_date";
         $data['packing_status']="1";
-        $data['packing_date_time']="$date";
+        $data['packing_date_time']="$ex_fac_date";
         $po_ids=$this->input->post('po_ids');
         $lost_points=$this->input->post('lost_points');
         $line_ids=$this->input->post('line_ids');
@@ -10420,25 +10427,26 @@ class Access extends CI_Controller {
         $date=$datex->format('Y-m-d');
 
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-//        $date = $this->input->post('ex_fac_date');
+        $ex_fac_date = $this->input->post('ex_fac_date');
+
         $data['sent_to_production']="1";
-        $data['sent_to_production_date_time']="$date";
+        $data['sent_to_production_date_time']="$ex_fac_date";
         $data['is_printed']="1";
-        $data['printing_date_time']="$date";
+        $data['printing_date_time']="$ex_fac_date";
 
         $data['access_points']="4";
         $data['access_points_status']="4";
-        $data['end_line_qc_date_time']="$date";
+        $data['end_line_qc_date_time']="$ex_fac_date";
         $data['other_purpose_remarks']="Manually Closed";
         $data['other_purpose_liable_person']="Administrator";
         $data['lost_date_time']="$date";
         $data['manually_closed']="1";
 
-        $data['line_input_date_time']="$date";
-        $data['mid_line_qc_date_time']="$date";
+        $data['line_input_date_time']="$ex_fac_date";
+        $data['mid_line_qc_date_time']="$ex_fac_date";
         $data['lost_date_time']="$date";
         $data['packing_status']="1";
-        $data['packing_date_time']="$date";
+        $data['packing_date_time']="$ex_fac_date";
         $po_ids=$this->input->post('po_ids');
         $lost_points=$this->input->post('lost_points');
         $line_ids=$this->input->post('line_ids');
@@ -10469,31 +10477,32 @@ class Access extends CI_Controller {
         $date=$datex->format('Y-m-d');
 
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-//        $date = $this->input->post('ex_fac_date');
+        $ex_fac_date = $this->input->post('ex_fac_date');
+
         $data['is_going_wash']="1";
-        $data['going_wash_scan_date_time']="$date";
+        $data['going_wash_scan_date_time']="$ex_fac_date";
         $data['wash_going_printed']="1";
-        $data['wash_going_print_date_time']="$date";
+        $data['wash_going_print_date_time']="$ex_fac_date";
         $data['washing_status']="1";
-        $data['washing_date_time']="$date";
+        $data['washing_date_time']="$ex_fac_date";
 
         $data['access_points']="4";
         $data['access_points_status']="4";
-        $data['end_line_qc_date_time']="$date";
-        $data['warehouse_factory_date_time']="$date";
+        $data['end_line_qc_date_time']="$ex_fac_date";
+        $data['warehouse_factory_date_time']="$ex_fac_date";
         $data['other_purpose_remarks']="Manually Closed";
         $data['other_purpose_liable_person']="Administrator";
         $data['manually_closed']="1";
 
         $data['sent_to_production']="1";
-        $data['sent_to_production_date_time']="$date";
+        $data['sent_to_production_date_time']="$ex_fac_date";
         $data['lost_date_time']="$date";
         $data['is_printed']="1";
-        $data['printing_date_time']="$date";
-        $data['line_input_date_time']="$date";
-        $data['mid_line_qc_date_time']="$date";
+        $data['printing_date_time']="$ex_fac_date";
+        $data['line_input_date_time']="$ex_fac_date";
+        $data['mid_line_qc_date_time']="$ex_fac_date";
         $data['packing_status']="1";
-        $data['packing_date_time']="$date";
+        $data['packing_date_time']="$ex_fac_date";
         $po_ids=$this->input->post('po_ids');
         $lost_points=$this->input->post('lost_points');
         $line_ids=$this->input->post('line_ids');
@@ -10525,30 +10534,31 @@ class Access extends CI_Controller {
         $date=$datex->format('Y-m-d');
 
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-//        $date = $this->input->post('ex_fac_date');
+        $ex_fac_date = $this->input->post('ex_fac_date');
+
         $data['is_going_wash']="1";
-        $data['going_wash_scan_date_time']="$date";
+        $data['going_wash_scan_date_time']="$ex_fac_date";
         $data['wash_going_printed']="1";
-        $data['wash_going_print_date_time']="$date";
+        $data['wash_going_print_date_time']="$ex_fac_date";
         $data['washing_status']="1";
-        $data['washing_date_time']="$date";
+        $data['washing_date_time']="$ex_fac_date";
 
         $data['access_points']="4";
         $data['access_points_status']="4";
-        $data['end_line_qc_date_time']="$date";
-        $data['warehouse_trash_date_time']="$date";
+        $data['end_line_qc_date_time']="$ex_fac_date";
+        $data['warehouse_trash_date_time']="$ex_fac_date";
         $data['other_purpose_remarks']="Manually Closed";
         $data['other_purpose_liable_person']="Administrator";
         $data['manually_closed']="1";
 
         $data['sent_to_production']="1";
-        $data['sent_to_production_date_time']="$date";
+        $data['sent_to_production_date_time']="$ex_fac_date";
         $data['is_printed']="1";
-        $data['printing_date_time']="$date";
-        $data['line_input_date_time']="$date";
-        $data['mid_line_qc_date_time']="$date";
+        $data['printing_date_time']="$ex_fac_date";
+        $data['line_input_date_time']="$ex_fac_date";
+        $data['mid_line_qc_date_time']="$ex_fac_date";
         $data['packing_status']="1";
-        $data['packing_date_time']="$date";
+        $data['packing_date_time']="$ex_fac_date";
         $data['lost_date_time']="$date";
         $po_ids=$this->input->post('po_ids');
         $lost_points=$this->input->post('lost_points');
@@ -10581,30 +10591,31 @@ class Access extends CI_Controller {
         $date=$datex->format('Y-m-d');
 
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-//        $date = $this->input->post('ex_fac_date');
+        $ex_fac_date = $this->input->post('ex_fac_date');
+
         $data['is_going_wash']="1";
-        $data['going_wash_scan_date_time']="$date";
+        $data['going_wash_scan_date_time']="$ex_fac_date";
         $data['wash_going_printed']="1";
-        $data['wash_going_print_date_time']="$date";
+        $data['wash_going_print_date_time']="$ex_fac_date";
         $data['washing_status']="1";
-        $data['washing_date_time']="$date";
+        $data['washing_date_time']="$ex_fac_date";
 
         $data['access_points']="4";
         $data['access_points_status']="4";
-        $data['end_line_qc_date_time']="$date";
-        $data['warehouse_production_sample_date_time']="$date";
+        $data['end_line_qc_date_time']="$ex_fac_date";
+        $data['warehouse_production_sample_date_time']="$ex_fac_date";
         $data['other_purpose_remarks']="Manually Closed";
         $data['other_purpose_liable_person']="Administrator";
         $data['manually_closed']="1";
 
         $data['sent_to_production']="1";
-        $data['sent_to_production_date_time']="$date";
+        $data['sent_to_production_date_time']="$ex_fac_date";
         $data['is_printed']="1";
-        $data['printing_date_time']="$date";
-        $data['line_input_date_time']="$date";
-        $data['mid_line_qc_date_time']="$date";
+        $data['printing_date_time']="$ex_fac_date";
+        $data['line_input_date_time']="$ex_fac_date";
+        $data['mid_line_qc_date_time']="$ex_fac_date";
         $data['packing_status']="1";
-        $data['packing_date_time']="$date";
+        $data['packing_date_time']="$ex_fac_date";
         $data['lost_date_time']="$date";
         $po_ids=$this->input->post('po_ids');
         $lost_points=$this->input->post('lost_points');
@@ -10637,30 +10648,31 @@ class Access extends CI_Controller {
         $date=$datex->format('Y-m-d');
 
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-//        $date = $this->input->post('ex_fac_date');
+        $ex_fac_date = $this->input->post('ex_fac_date');
+
         $data['is_going_wash']="1";
-        $data['going_wash_scan_date_time']="$date";
+        $data['going_wash_scan_date_time']="$ex_fac_date";
         $data['wash_going_printed']="1";
-        $data['wash_going_print_date_time']="$date";
+        $data['wash_going_print_date_time']="$ex_fac_date";
         $data['washing_status']="1";
-        $data['washing_date_time']="$date";
+        $data['washing_date_time']="$ex_fac_date";
 
         $data['access_points']="4";
         $data['access_points_status']="4";
-        $data['end_line_qc_date_time']="$date";
-        $data['warehouse_other_purpose_date_time']="$date";
+        $data['end_line_qc_date_time']="$ex_fac_date";
+        $data['warehouse_other_purpose_date_time']="$ex_fac_date";
         $data['other_purpose_remarks']="Manually Closed";
         $data['other_purpose_liable_person']="Administrator";
         $data['manually_closed']="1";
 
         $data['sent_to_production']="1";
-        $data['sent_to_production_date_time']="$date";
+        $data['sent_to_production_date_time']="$ex_fac_date";
         $data['is_printed']="1";
-        $data['printing_date_time']="$date";
-        $data['line_input_date_time']="$date";
-        $data['mid_line_qc_date_time']="$date";
+        $data['printing_date_time']="$ex_fac_date";
+        $data['line_input_date_time']="$ex_fac_date";
+        $data['mid_line_qc_date_time']="$ex_fac_date";
         $data['packing_status']="1";
-        $data['packing_date_time']="$date";
+        $data['packing_date_time']="$ex_fac_date";
         $data['lost_date_time']="$date";
         $po_ids=$this->input->post('po_ids');
         $lost_points=$this->input->post('lost_points');
@@ -10694,32 +10706,31 @@ class Access extends CI_Controller {
         $date=$datex->format('Y-m-d');
 
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-//        $date = $this->input->post('ex_fac_date');
+        $ex_fac_date = $this->input->post('ex_fac_date');
+
         $data['is_going_wash']="1";
-        $data['going_wash_scan_date_time']="$date";
+        $data['going_wash_scan_date_time']="$ex_fac_date";
         $data['wash_going_printed']="1";
-        $data['wash_going_print_date_time']="$date";
+        $data['wash_going_print_date_time']="$ex_fac_date";
         $data['washing_status']="1";
-        $data['washing_date_time']="$date";
+        $data['washing_date_time']="$ex_fac_date";
 
         $data['access_points']="4";
         $data['access_points_status']="4";
-        $data['end_line_qc_date_time']="$date";
+        $data['end_line_qc_date_time']="$ex_fac_date";
         $data['lost_date_time']="$date";
         $data['other_purpose_remarks']="Manually Closed";
         $data['other_purpose_liable_person']="Administrator";
-        $data['lost_date_time']="$date";
         $data['manually_closed']="1";
 
         $data['sent_to_production']="1";
-        $data['sent_to_production_date_time']="$date";
+        $data['sent_to_production_date_time']="$ex_fac_date";
         $data['is_printed']="1";
-        $data['printing_date_time']="$date";
-        $data['line_input_date_time']="$date";
-        $data['mid_line_qc_date_time']="$date";
+        $data['printing_date_time']="$ex_fac_date";
+        $data['line_input_date_time']="$ex_fac_date";
+        $data['mid_line_qc_date_time']="$ex_fac_date";
         $data['packing_status']="1";
-        $data['packing_date_time']="$date";
-        $data['lost_date_time']="$date";
+        $data['packing_date_time']="$ex_fac_date";
         $po_ids=$this->input->post('po_ids');
         $lost_points=$this->input->post('lost_points');
         $line_ids=$this->input->post('line_ids');
@@ -10740,7 +10751,6 @@ class Access extends CI_Controller {
             $this->access_model->update_care_labels($data, $p_id);
         }
 
-
         echo 'done';
     }
 
@@ -10752,32 +10762,31 @@ class Access extends CI_Controller {
         $date=$datex->format('Y-m-d');
 
         $data['warehouse_qa_type']=$this->input->post('destination_id');
-//        $date = $this->input->post('ex_fac_date');
+        $ex_fac_date = $this->input->post('ex_fac_date');
+
         $data['is_going_wash']="1";
-        $data['going_wash_scan_date_time']="$date";
+        $data['going_wash_scan_date_time']="$ex_fac_date";
         $data['wash_going_printed']="1";
-        $data['wash_going_print_date_time']="$date";
+        $data['wash_going_print_date_time']="$ex_fac_date";
         $data['washing_status']="1";
-        $data['washing_date_time']="$date";
+        $data['washing_date_time']="$ex_fac_date";
 
         $data['access_points']="4";
         $data['access_points_status']="4";
-        $data['end_line_qc_date_time']="$date";
+        $data['end_line_qc_date_time']="$ex_fac_date";
         $data['lost_date_time']="$date";
         $data['other_purpose_remarks']="Manually Closed";
         $data['other_purpose_liable_person']="Administrator";
-        $data['lost_date_time']="$date";
         $data['manually_closed']="1";
 
         $data['sent_to_production']="1";
-        $data['sent_to_production_date_time']="$date";
+        $data['sent_to_production_date_time']="$ex_fac_date";
         $data['is_printed']="1";
-        $data['printing_date_time']="$date";
-        $data['line_input_date_time']="$date";
-        $data['mid_line_qc_date_time']="$date";
+        $data['printing_date_time']="$ex_fac_date";
+        $data['line_input_date_time']="$ex_fac_date";
+        $data['mid_line_qc_date_time']="$ex_fac_date";
         $data['packing_status']="1";
-        $data['packing_date_time']="$date";
-        $data['lost_date_time']="$date";
+        $data['packing_date_time']="$ex_fac_date";
         $po_ids=$this->input->post('po_ids');
         $lost_points=$this->input->post('lost_points');
         $line_ids=$this->input->post('line_ids');
