@@ -2405,7 +2405,7 @@ class Dashboard_model extends CI_Model {
         $sql="SELECT t1.line_id,t1.packing_date_time,  t1.total_cut_input_qty, 
               t1.count_input_line_qc_pass, t1.count_mid_line_qc_pass, t1.count_end_line_qc_pass, 
               t1.count_washing_pass, t1.count_packing_pass, t1.count_carton_pass, t1.total_wh_qa, 
-              t2.*, t3.line_name, t4.so_fail_count
+              t2.*, t3.responsible_line, t4.so_fail_count
               FROM
               (Select * FROM vt_po_summary WHERE 1 $where) as t2
               
@@ -2438,15 +2438,14 @@ class Dashboard_model extends CI_Model {
             AND t1.quality=t2.quality AND t1.color=t2.color
             
             LEFT JOIN
-            tb_line as t3
-            ON t1.line_id=t3.id
+            tb_production_summary as t3
+            ON t1.so_no=t3.so_no
             
             LEFT JOIN
             (Select so_no, COUNT(so_no) AS so_fail_count FROM tb_aql_status_log WHERE aql_status=2 GROUP BY so_no) as t4
             ON t1.so_no=t4.so_no
             
             ORDER by t1.packing_date_time DESC";
-
         $query = $this->db->query($sql)->result_array();
         return $query;
     }
