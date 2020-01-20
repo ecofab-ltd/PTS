@@ -2450,6 +2450,21 @@ class Dashboard_model extends CI_Model {
         return $query;
     }
 
+    public function getHourlyReportByLineCode($line_code, $date){
+        $sql="SELECT t1.*, t2.*, t3.*, round(t3.target/t3.target_hour) AS per_hour_target
+            FROM 
+            (SELECT * FROM `tb_line` WHERE line_code='$line_code') AS t1
+            LEFT JOIN
+            `tb_today_line_output_qty` AS t2
+            ON t1.id=t2.line_id
+            LEFT JOIN
+            (SELECT * FROM line_daily_target WHERE date='$date') AS t3
+            ON t1.id=t3.line_id";
+
+        $query = $this->db->query($sql)->result_array();
+        return $query;
+    }
+
     public function getAqlSummaryReport($date)
     {
         $sql="SELECT t0.brand, t1.today_plan_aql_count, t2.today_plan_aql_pass_count, t3.today_plan_aql_fail_count,

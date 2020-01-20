@@ -2842,9 +2842,9 @@ class Access_model extends CI_Model {
                   SELECT
                     so_no,po_no,item,quality,color,purchase_order,line_id,brand,ex_factory_date,style_no,style_name,
                     
-                    CASE WHEN line_input_date_time !='0000-00-00 00:00:00' THEN line_input_date_time END line_input_date_time,
-                    CASE WHEN mid_line_qc_date_time !='0000-00-00 00:00:00' THEN mid_line_qc_date_time END mid_line_qc_date_time,
-                    CASE WHEN end_line_qc_date_time !='0000-00-00 00:00:00' THEN 1 END end_line_qc_date_time
+                    CASE WHEN access_points>=2 AND access_points_status in (1, 4) THEN line_input_date_time END line_input_date_time,
+                    CASE WHEN access_points>=3 AND access_points_status in (1, 4) THEN mid_line_qc_date_time END mid_line_qc_date_time,
+                    CASE WHEN access_points=4 AND access_points_status=4 THEN 1 END end_line_qc_date_time
                    
                   FROM vt_few_days_po_pcs 
                     
