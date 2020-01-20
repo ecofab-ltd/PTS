@@ -115,7 +115,7 @@ class Access extends CI_Controller {
         $data['ship_dates'] = $this->dashboard_model->getAllShipDates();
 
         $data['maincontent'] = $this->load->view('po_info_report', $data, true);
-        $this->load->view('reports/master', $data);
+        $this->load->view('master', $data);
     }
 
     public function other_purpose(){

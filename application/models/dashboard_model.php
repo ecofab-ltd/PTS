@@ -3424,7 +3424,7 @@ class Dashboard_model extends CI_Model {
          $sql = "SELECT ex_factory_date 
                  FROM `tb_po_detail` 
                  WHERE ex_factory_date 
-                 BETWEEN (CURDATE() - INTERVAL 60 day) AND (CURDATE() + INTERVAL 30 day)
+                 BETWEEN (CURDATE() - INTERVAL 60 day) AND (CURDATE() + INTERVAL 60 day)
                  GROUP BY ex_factory_date";
 
 
