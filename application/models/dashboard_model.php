@@ -2405,7 +2405,7 @@ class Dashboard_model extends CI_Model {
         $sql="SELECT t1.line_id,t1.packing_date_time,  t1.total_cut_input_qty, 
               t1.count_input_line_qc_pass, t1.count_mid_line_qc_pass, t1.count_end_line_qc_pass, 
               t1.count_washing_pass, t1.count_packing_pass, t1.count_carton_pass, t1.total_wh_qa, 
-              t2.*, t3.responsible_line, t4.so_fail_count
+              t2.*, t3.line_name, t4.so_fail_count
               FROM
               (Select * FROM vt_po_summary WHERE 1 $where) as t2
               
@@ -2425,8 +2425,8 @@ class Dashboard_model extends CI_Model {
                 so_no,po_no,item,quality,color,purchase_order,brand,ex_factory_date,packing_date_time,style_name,style_no,line_id,
                CASE WHEN  access_points=4 AND access_points_status=4 THEN end_line_qc_date_time END end_line_qc_date_time,    
                CASE WHEN sent_to_production=1 THEN sent_to_production_date_time END sent_to_production_date_time,
-                CASE WHEN access_points=3 AND access_points_status=1 THEN mid_line_qc_date_time END mid_line_qc_date_time,
-                CASE WHEN access_points=2 AND access_points_status=1 THEN line_input_date_time END line_input_date_time,
+                CASE WHEN access_points>=3 AND access_points_status in (1, 4) THEN mid_line_qc_date_time END mid_line_qc_date_time,
+                CASE WHEN access_points>=2 AND access_points_status in (1, 4) THEN line_input_date_time END line_input_date_time,
                 CASE WHEN packing_status = 1 THEN packing_status END packing_status,
                  CASE WHEN carton_status = 1 THEN carton_status END carton_status,
                 CASE WHEN washing_status = 1 THEN washing_status END washing_status,
@@ -2438,8 +2438,8 @@ class Dashboard_model extends CI_Model {
             AND t1.quality=t2.quality AND t1.color=t2.color
             
             LEFT JOIN
-            tb_production_summary as t3
-            ON t1.so_no=t3.so_no
+            tb_line as t3
+            ON t1.line_id=t3.id
             
             LEFT JOIN
             (Select so_no, COUNT(so_no) AS so_fail_count FROM tb_aql_status_log WHERE aql_status=2 GROUP BY so_no) as t4
