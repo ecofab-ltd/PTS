@@ -1,15 +1,18 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <meta http-equiv="refresh" content="120">
+    <meta http-equiv="refresh" content="180">
     <title><?php echo $title ?></title>
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/images/favicon.ico" type="image/x-icon" />
     <!--Canvas Chart Asset Start-->
+    <script src="<?php echo base_url(); ?>assets/js/canvas_chart/jquery-1.11.1.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/canvas_chart/canvasjs.min.js"></script>
     <!--Canvas Chart Asset End-->
 </head>
 <body>
 <div id="chartContainer" style="height: 560px; width: 100%;"></div>
+<br />
+<div id="chartContainer_1" style="height: 560px; width: 100%;"></div>
 </body>
 </html>
 
@@ -40,6 +43,7 @@
             data: [
                 {
                     type: "column",
+                    click: onClick,
                     name: "Target",
                     showInLegend: true,
                     color: "#d8cf27",
@@ -74,6 +78,7 @@
                 },
                 {
                     type: "column",
+                    click: onClick,
                     name: "Actual",
                     showInLegend: true,
                     color: "GREEN",
@@ -109,6 +114,7 @@
                 },
                 {
                     type: "line",
+                    click: onClick,
                     name: "Efficiency",
                     indexLabelFontColor: "blue",
                     indexLabelFontWeight: "bold",
@@ -147,6 +153,105 @@
         });
         chart.render();
 
+        function onClick(e) {
+            var line_code = e.dataPoint.label;
+
+            $.ajax({
+                url: "<?php echo base_url();?>dashboard/getHourlyReportByLineCode/",
+                type: "POST",
+                data: {line_code: line_code},
+                dataType: "json",
+                success: function (data) {
+
+                    var dataPoints_1 = [];
+                    var dataPoints_2 = [];
+
+                    var count_data = data.length;
+
+                    if(count_data > 0){
+
+                        for (var i = 0; i < data.length; i++) {
+                            dataPoints_1.push({
+                                label: data[i].start_time+' - '+data[i].end_time,
+                                y: data[i].per_hour_target * 1,
+                                indexLabel: data[i].per_hour_target,
+                            });
+                        }
+
+                        for (var j = 0; j < data.length; j++) {
+
+                            var achieve_percentage = Math.round(((data[j].qty * 1) / (data[j].per_hour_target * 1)) * 100);
+
+                            if(achieve_percentage >= 90){
+                                var color = "#42c000";
+                            }else{
+                                var color = "#DF5D67";
+                            }
+
+                            dataPoints_2.push({
+                                label: data[j].start_time+' - '+data[j].end_time,
+                                y: data[j].qty * 1,
+                                indexLabel: data[j].qty,
+                                color: color,
+                            });
+                        }
+
+                        var chart_1 = new CanvasJS.Chart("chartContainer_1", {
+                            animationEnabled: true,
+                            title: {
+                                text: "Hourly Report of Line: "+line_code
+                            },
+                            axisX: {
+                                valueFormatString: ""
+                            },
+                            axisY: {
+                                prefix: "",
+                                labelFormatter: addSymbols
+                            },
+//                toolTip: {
+//                    shared: true
+//                }
+//                ,
+                            legend: {
+                                cursor: "pointer",
+                                itemclick: toggleDataSeries
+                            },
+                            data: [
+                                {
+                                    type: "column",
+                                    name: "Target",
+                                    showInLegend: true,
+                                    color: "#62a4d8",
+                                    indexLabelFontSize: 16,
+                                    indexLabelOrientation: "vertical",
+                                    xValueFormatString: "Target",
+                                    yValueFormatString: "#,##0",
+                                    dataPoints: dataPoints_1
+
+                                },
+                                {
+                                    type: "column",
+                                    name: "Actual",
+                                    showInLegend: true,
+                                    color: "#42c000",
+                                    indexLabelFontSize: 16,
+                                    indexLabelOrientation: "vertical",
+                                    xValueFormatString: "Actual",
+                                    yValueFormatString: "##0",
+                                    dataPoints: dataPoints_2
+
+                                }]
+                        });
+                        chart_1.render();
+
+                    }else{
+                        $("#chartContainer_1").append("No Data Found!");
+                    }
+
+                }
+            });
+        }
+
         function addSymbols(e) {
             var suffixes = ["", "K", "M", "B"];
             var order = Math.max(Math.floor(Math.log(e.value) / Math.log(1000)), 0);
@@ -159,6 +264,7 @@
         }
 
         function toggleDataSeries(e) {
+            alert(e);
             if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
                 e.dataSeries.visible = false;
             } else {

@@ -4780,6 +4780,18 @@ class Dashboard extends CI_Controller {
         $data['maincontent'] = $this->load->view('all_line_performance_dashboard', $data);
     }
 
+    public function getHourlyReportByLineCode(){
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $line_code = $this->input->post('line_code');
+
+        $data = $this->dashboard_model->getHourlyReportByLineCode($line_code, $date);
+
+        echo json_encode($data);
+    }
+
     public function getLineHourlyOutputReloadPre($line_id){
         $data['line_info'] = $this->access_model->getLineInfo($line_id);
 
