@@ -12,6 +12,8 @@
 <body>
 <div id="chartContainer" style="height: 560px; width: 100%;"></div>
 <br />
+<hr>
+<br />
 <div id="chartContainer_1" style="height: 560px; width: 100%;"></div>
 </body>
 </html>
@@ -198,8 +200,10 @@
 
                         var chart_1 = new CanvasJS.Chart("chartContainer_1", {
                             animationEnabled: true,
+                            theme: "light2",
                             title: {
-                                text: "Hourly Report of Line: "+line_code
+                                text: "Hourly Report of Line: "+line_code,
+                                fontSize: 40,
                             },
                             axisX: {
                                 valueFormatString: ""
