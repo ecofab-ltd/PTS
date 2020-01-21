@@ -2453,7 +2453,15 @@ class Dashboard_model extends CI_Model {
     }
 
     public function getHourlyReportByLineCode($line_code, $date){
-        $sql="SELECT t1.*, t2.*, t3.*, round(t3.target/t3.target_hour) AS per_hour_target
+        $sql="SELECT t1.*, t2.date, t2.start_time, t2.end_time, t2.qty, t2.efficiency, t2.wip, t2.dhu, 
+             t2.produce_minute_1, t2.work_minute_1, t2.work_hour_1, 
+             t2.produce_minute_2, t2.work_minute_2, t2.work_hour_2, 
+             t2.produce_minute_3, t2.work_minute_3, t2.work_hour_3, 
+             t2.produce_minute_4, t2.work_minute_4, t2.work_hour_4, 
+             t3.target, t3.target_hour, t3.man_power_1, t3.man_power_2, 
+             t3.man_power_3, t3.man_power_4, t3.remarks,
+             round(t3.target/t3.target_hour) AS per_hour_target
+                 
             FROM 
             (SELECT * FROM `tb_line` WHERE line_code='$line_code') AS t1
             LEFT JOIN
