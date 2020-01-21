@@ -23,6 +23,7 @@
 <script src="<?php echo base_url(); ?>assets/select2/jquery.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/select2/select2.min.js"></script>
 <link href="<?php echo base_url(); ?>assets/select2/select2.min.css" rel="stylesheet"/>
+    <!--Select2 End-->
 
     <!--Canvas Chart Asset Start-->
     <script src="<?php echo base_url(); ?>assets/js/canvas_chart/canvasjs.min.js"></script>
@@ -115,7 +116,7 @@
             /*border: none;*/
         }
     </style>
-    <!--Select2 End-->
+
 </head>
 <!--<body class="light_theme  fixed_header left_nav_fixed">-->
 <body class="light_theme  fixed_header atm-spmenu-push green_thm left_nav_hide">
@@ -224,8 +225,9 @@
 <!--                  <li> <a style="margin-bottom: 1px;" target="_blank" href="--><?php //echo base_url();?><!--dashboard/dateWiseCuttingReport"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Date Wise Cutting</b> </a> </li>-->
 <!--                  <li> <a style="margin-bottom: 1px;" target="_blank" href="--><?php //echo base_url();?><!--dashboard/lineWIPReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>WIP Report Graph</b> </a> </li>-->
                   <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>dashboard/print_bundle_summary_page"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Bundle Summary</b> </a> </li>
-                  <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>dashboard/package_ready_report"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Ready Package</b> </a> </li>
+                  <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>dashboard/package_ready_report"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Ready Summary </b> </a> </li>
                   <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>dashboard/packageReadyByPO"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>PO Ready Package</b> </a> </li>
+                  <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>dashboard/cutPackageReportChart" target="_blank"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Package Ready Chart</b> </a> </li>
               </ul>
             </li>
 
