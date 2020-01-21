@@ -185,9 +185,9 @@
                             var achieve_percentage = Math.round(((data[j].qty * 1) / (data[j].per_hour_target * 1)) * 100);
 
                             if(achieve_percentage >= 90){
-                                var color = "#42c000";
+                                var color = "GREEN";
                             }else{
-                                var color = "#DF5D67";
+                                var color = "RED";
                             }
 
                             dataPoints_2.push({
