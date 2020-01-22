@@ -23,7 +23,8 @@
     <div class="pull-left breadcrumb_admin clear_both">
         <div class="pull-left page_title theme_color">
             <h1>Today Line Hourly Report</h1>
-            <h2 class="">Today Line Hourly Report...</h2>
+            <button type="button" onclick="printDiv('print_div')" class="btn btn-success print_cl_btn">Print</button>
+            <button class="btn btn-primary" style="color: #FFF;" id="btnExport"><b>Export Excel</b></button>
         </div>
         <div class="pull-right">
             <ol class="breadcrumb">
@@ -35,23 +36,7 @@
     </div>
     <div class="container clear_both padding_fix">
         <!--\\\\\\\ container  start \\\\\\-->
-        <div class="row">
-            <div class="form-group">
-                <div class="col-md-12">
-                <div class="col-md-3">
-                    <div class="form-group">
 
-                    </div>
-                </div>
-                    <button type="button" onclick="printDiv('print_div')" class="print_cl_btn" style="border-style: none; width: 80px; height: 30px; background-color: green; color: white; border-radius: 5px;">Print</button>
-                    <button class="btn btn-primary" style="color: #FFF;" id="btnExport"><b>Export Excel</b></button>
-                <div class="col-md-1" id="loader" style="display: none;"><div class="loader"></div></div>
-
-                </div>
-            </div>
-        </div>
-
-        <br />
         <div id="print_div">
             <div class="row" id="report_content" style="overflow-x:auto;">
                 <table class="table table-striped" id="" border="1">
