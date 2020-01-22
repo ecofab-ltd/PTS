@@ -34,10 +34,9 @@
                 prefix: "",
                 labelFormatter: addSymbols
             },
-//                toolTip: {
-//                    shared: true
-//                }
-//                ,
+            toolTip: {
+                shared: true
+            },
             legend: {
                 cursor: "pointer",
                 itemclick: toggleDataSeries
@@ -167,6 +166,7 @@
 
                     var dataPoints_1 = [];
                     var dataPoints_2 = [];
+                    var dataPoints_3 = [];
 
                     var count_data = data.length;
 
@@ -198,6 +198,17 @@
                             });
                         }
 
+                        for (var k = 0; k < data.length; k++) {
+
+                            dataPoints_3.push({
+                                label: data[k].start_time+' - '+data[k].end_time,
+                                y: data[k].dhu * 1,
+                                indexLabel: data[k].dhu,
+                            });
+                        }
+
+                        console.log(dataPoints_3);
+
                         var chart_1 = new CanvasJS.Chart("chartContainer_1", {
                             animationEnabled: true,
                             theme: "light2",
@@ -212,10 +223,9 @@
                                 prefix: "",
                                 labelFormatter: addSymbols
                             },
-//                toolTip: {
-//                    shared: true
-//                }
-//                ,
+                            toolTip: {
+                                shared: true
+                            },
                             legend: {
                                 cursor: "pointer",
                                 itemclick: toggleDataSeries
@@ -244,9 +254,45 @@
                                     yValueFormatString: "##0",
                                     dataPoints: dataPoints_2
 
+                                },
+                                {
+                                    type: "line",
+                                    click: onClick,
+                                    name: "DHU",
+                                    color: "#3000d8",
+                                    indexLabelFontColor: "BLACK",
+                                    indexLabelFontWeight: "bold",
+                                    indexLabelFontSize: 20,
+                                    showInLegend: true,
+                                    indexLabelOrientation: "vertical",
+                                    xValueFormatString: "DHU",
+                                    yValueFormatString: "00.00#",
+                                    dataPoints: dataPoints_3
                                 }]
                         });
                         chart_1.render();
+
+
+                        function addSymbols(e) {
+                            var suffixes = ["", "K", "M", "B"];
+                            var order = Math.max(Math.floor(Math.log(e.value) / Math.log(1000)), 0);
+
+                            if(order > suffixes.length - 1)
+                                order = suffixes.length - 1;
+
+                            var suffix = suffixes[order];
+                            return CanvasJS.formatNumber(e.value / Math.pow(1000, order)) + suffix;
+                        }
+
+                        function toggleDataSeries(e) {
+                            alert(e);
+                            if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                                e.dataSeries.visible = false;
+                            } else {
+                                e.dataSeries.visible = true;
+                            }
+                            e.chart.render();
+                        }
 
                     }else{
                         $("#chartContainer_1").append("No Data Found!");
