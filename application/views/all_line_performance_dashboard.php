@@ -275,7 +275,7 @@
                                     type: "column",
                                     name: "Actual",
                                     showInLegend: true,
-                                    color: "#42c000",
+                                    color: "GREEN",
                                     indexLabelFontSize: 16,
                                     indexLabelOrientation: "vertical",
                                     xValueFormatString: "Actual",
