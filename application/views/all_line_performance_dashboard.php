@@ -148,7 +148,7 @@
                         <?php foreach ($line_report as $k_1 => $v_1){
 
                         ?>
-                        { label: "<?php echo $v_1['line_code'];?>", y: <?php echo ($v_1['efficiency'] * 20);?>, indexLabel: "<?php echo $v_1['efficiency'];?>" },
+                        { label: "<?php echo $v_1['line_code'];?>", y: <?php echo ($v_1['efficiency'] * 10);?>, indexLabel: "<?php echo $v_1['efficiency'];?>" },
                         <?php } ?>
                     ]
                 },
