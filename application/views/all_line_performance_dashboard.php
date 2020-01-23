@@ -34,9 +34,9 @@
                 prefix: "",
                 labelFormatter: addSymbols
             },
-            toolTip: {
-                shared: true
-            },
+//            toolTip: {
+//                shared: true
+//            },
             legend: {
                 cursor: "pointer",
                 itemclick: toggleDataSeries
@@ -118,10 +118,11 @@
                     click: onClick,
                     name: "Efficiency",
                     indexLabelFontColor: "blue",
+                    color: "BLUE",
                     indexLabelFontWeight: "bold",
-                    indexLabelFontSize: 20,
+                    indexLabelFontSize: 15,
                     showInLegend: true,
-                    indexLabelOrientation: "vertical",
+                    indexLabelOrientation: "horizontal",
                     xValueFormatString: "Efficiency",
                     yValueFormatString: "00.00#",
                     dataPoints: [
@@ -150,7 +151,36 @@
                         { label: "<?php echo $v_1['line_code'];?>", y: <?php echo ($v_1['efficiency'] * 10);?>, indexLabel: "<?php echo $v_1['efficiency'];?>" },
                         <?php } ?>
                     ]
-                }]
+                },
+                {
+                    type: "line",
+                    click: onClick,
+                    name: "DHU",
+                    lineDashType: "dash",
+                    color: "RED",
+                    indexLabelFontColor: "red",
+                    indexLabelFontWeight: "bold",
+                    indexLabelFontSize: 15,
+                    showInLegend: true,
+                    indexLabelOrientation: "horizontal",
+                    xValueFormatString: "DHU",
+                    yValueFormatString: "00.00#",
+                    dataPoints: [
+                        <?php foreach ($line_report as $k_1 => $v_1){
+                        $dhu_sum = ($v_1['sum_dhu'] != '' ? $v_1['sum_dhu'] : 0);
+                        $work_hour_1 = ($v_1['work_hour_1'] != '' ? $v_1['work_hour_1'] : 0);
+                        $work_hour_2 = ($v_1['work_hour_2'] != '' ? $v_1['work_hour_2'] : 0);
+                        $work_hour_3 = ($v_1['work_hour_3'] != '' ? $v_1['work_hour_3'] : 0);
+                        $work_hour_4 = ($v_1['work_hour_4'] != '' ? $v_1['work_hour_4'] : 0);
+
+                        $total_wh = $work_hour_1+$work_hour_2+$work_hour_3+$work_hour_4;
+                        $average_dhu = round($dhu_sum/$total_wh, 2);
+                        ?>
+                        { label: "<?php echo $v_1['line_code'];?>", y: <?php echo $average_dhu * 10 ;?>, indexLabel: "<?php echo $average_dhu;?>" },
+                        <?php } ?>
+                    ]
+                }
+                ]
         });
         chart.render();
 
@@ -207,8 +237,6 @@
                             });
                         }
 
-                        console.log(dataPoints_3);
-
                         var chart_1 = new CanvasJS.Chart("chartContainer_1", {
                             animationEnabled: true,
                             theme: "light2",
@@ -259,12 +287,13 @@
                                     type: "line",
                                     click: onClick,
                                     name: "DHU",
-                                    color: "#3000d8",
-                                    indexLabelFontColor: "BLACK",
+                                    lineDashType: "dash",
+                                    color: "#64020a",
+                                    indexLabelFontColor: "#64020a",
                                     indexLabelFontWeight: "bold",
-                                    indexLabelFontSize: 20,
+                                    indexLabelFontSize: 15,
                                     showInLegend: true,
-                                    indexLabelOrientation: "vertical",
+                                    indexLabelOrientation: "horizontal",
                                     xValueFormatString: "DHU",
                                     yValueFormatString: "00.00#",
                                     dataPoints: dataPoints_3

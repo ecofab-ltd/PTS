@@ -3470,7 +3470,8 @@ class Dashboard_model extends CI_Model {
     public function getAllLinePerformanceSummaryReport($date){
         $sql = "SELECT t1.*, t2.line_name, t2.line_code, t3.target
                 FROM 
-                (SELECT line_id, `date`, SUM(qty) as total_output_qty, efficiency 
+                (SELECT line_id, `date`, SUM(qty) as total_output_qty, efficiency, 
+                SUM(dhu) as sum_dhu, work_hour_1, work_hour_2, work_hour_3, work_hour_4
                 FROM `tb_today_line_output_qty` 
                 WHERE `date`='$date'
                 GROUP BY line_id) as t1
