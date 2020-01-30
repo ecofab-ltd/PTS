@@ -24,6 +24,13 @@ class Api extends CI_Controller {
 
     }
 
+    public function LineWisePerformanceDashboard(){
+        $date = '2020-01-26';
+
+        $line_report = $this->dashboard_model->getLineWisePerformanceDashboard($date);
+
+        echo json_encode($line_report);
+    }
 }
 
 /* End of file welcome.php */

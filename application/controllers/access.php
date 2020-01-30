@@ -110,6 +110,10 @@ class Access extends CI_Controller {
     public function poInfoReport(){
         $data['title']='PO Info Report';
 
+        $data['user_name'] = $this->session->userdata('user_name');
+        $data['user_description'] = $this->session->userdata('user_description');
+        $data['access_points'] = $this->session->userdata('access_points');
+
         $data['brands'] = $this->access_model->getAllBrands();
 
         $data['ship_dates'] = $this->dashboard_model->getAllShipDates();
@@ -2995,9 +2999,9 @@ class Access extends CI_Controller {
             elseif (($last_access_points == $access_points) && ($last_access_points_status == 2)){
                 foreach ($defect_codes_array as $k => $v){
 
-                    $res_def = $this->access_model->isDefectAvailable($carelabel_tracking_no, $line, $access_points, $v, $defect_codes_array[$k]);
+//                    $res_def = $this->access_model->isDefectAvailable($carelabel_tracking_no, $line, $access_points, $v, $defect_codes_array[$k]);
 
-                    if(empty($res_def)){
+//                    if(empty($res_def)){
                         $defect_data = array(
                             'pc_tracking_no' => $carelabel_tracking_no,
                             'line_id' => $line,
@@ -3008,7 +3012,7 @@ class Access extends CI_Controller {
                         );
 
                         $this->access_model->insertingData('tb_defects_tracking', $defect_data);
-                    }
+//                    }
                 }
 
                 echo 'Defects Updated!';
@@ -7159,15 +7163,12 @@ class Access extends CI_Controller {
             $bundle_type_status = substr($bundle_track_no[$k], -4);
             $bundle_tracking_no = substr_replace($bundle_track_no[$k] ,"",-4);
 
-
-
             if($bundle_type_status != '' && $bundle_type_status == 'clr.'){
                 $res = $this->access_model->cuttingCollarCuffTracking($bundle_tracking_no, 'is_cutting_collar_bundle_ready', 1, 'cutting_collar_bundle_ready_date_time', $date_time, $line_id);
 
                 if($res == 1){
 
                     $return_res = $this->packageReady($bundle_tracking_no);
-
 
                 }
 

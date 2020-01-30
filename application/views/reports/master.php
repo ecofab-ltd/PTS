@@ -241,7 +241,7 @@
 <!--                    <li> <a style="margin-bottom: 1px;" target="_blank" href="--><?php //echo base_url();?><!--dashboard/lineDefectReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Defect Report Graph</b> </a> </li>-->
 <!--                    <li> <a style="margin-bottom: 1px;" target="_blank" href="--><?php //echo base_url();?><!--dashboard/lineSummaryReport"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Line Summary Report</b> </a> </li>-->
                     <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>dashboard/allLinePerformanceDashboard"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Line Summary Report</b> </a> </li>
-                    <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>dashboard/lineHourlyreport"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Line Hourly Report</b> </a> </li>
+                    <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>dashboard/lineHourlyreport" target="_blank"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Line Hourly Report</b> </a> </li>
                 </ul>
             </li>
 

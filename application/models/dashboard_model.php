@@ -3487,6 +3487,26 @@ class Dashboard_model extends CI_Model {
         return $query;
     }
 
+    public function getLineWisePerformanceDashboard($date){
+        $sql = "SELECT t1.*, t2.line_name, t2.line_code, t3.target
+                FROM 
+                (SELECT line_id, `date`, SUM(qty) as total_output_qty, efficiency, 
+                SUM(dhu) as sum_dhu, work_hour_1, work_hour_2, work_hour_3, work_hour_4
+                FROM `tb_today_line_output_qty` 
+                WHERE `date`='$date'
+                GROUP BY line_id) as t1
+                LEFT JOIN 
+                `tb_line` as t2
+                ON t1.line_id=t2.id
+                LEFT JOIN 
+                `line_daily_target` as t3
+                ON t1.line_id=t3.line_id AND t1.date=t3.date
+                ORDER BY (t2.line_code * 1) ASC";
+
+        $query = $this->db->query($sql)->result();
+        return $query;
+    }
+
     public function updateTodayEfficiency($line_id, $set_fields){
         $sql = "UPDATE tb_today_line_output_qty 
                 $set_fields

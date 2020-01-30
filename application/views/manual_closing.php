@@ -581,7 +581,6 @@
          }
 
 
-
     function transfer_all() {
 //        alert("success");
         var destination_id=$("#destination_id").val();

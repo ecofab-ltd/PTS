@@ -18,6 +18,17 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     }
+
+    /*Table Head tr Fix Start*/
+
+    .tableFixHead { overflow-y: auto; height: 600px; }
+    .tableFixHead thead th { position: sticky; top: 0; }
+
+    table  { border-collapse: collapse; width: 100%; }
+    th, td { padding: 8px 16px; }
+    th     { background:#ffffff; }
+
+    /*Table Head tr Fix End*/
 </style>
 <div class="pull-left breadcrumb_admin clear_both">
     <div class="pull-left page_title theme_color">
@@ -96,7 +107,7 @@
                         <div class="row">
 
                             <div id="table_content">
-                                <div class="col-md-12" id="tableWrap">
+                                <div class="col-md-12 tableFixHead">
 
 
                                     <table class="table table-bordered table-striped" id="" border="1">

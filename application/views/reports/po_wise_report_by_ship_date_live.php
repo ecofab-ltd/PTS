@@ -1,4 +1,4 @@
-<div class="col-md-12" id="tableWrap" style="overflow-x:auto;">
+<div class="col-md-12 tableFixHead" id="">
     <table class="table table-bordered table-striped" id="" border="1">
         <thead>
         <tr>
@@ -165,26 +165,26 @@
         ?>
         </tbody>
         <tfoot>
-        <tr>
-            <td colspan="8" align="right"><h4><b>Total</b></h4></td>
-            <td class="center"><h4><b><?php echo $total_order_qty;?></b></h4></td>
-<!--            <td class="center"><h4><b>--><?php //echo $total_cut_qty;?><!--</b></h4></td>-->
-            <td class="center"><h4><b><?php echo $total_cut_pass_qty;?></b></h4></td>
-            <td class="center"><h4><b><?php echo $total_line_input_qty;?></b></h4></td>
-            <td class="center"><h4><b><?php echo $total_line_mid_qty;?></b></h4></td>
-            <td class="center"><h4><b><?php echo $total_line_output_qty;?></b></h4></td>
-            <td class="center"><h4><b><?php echo $total_line_output_balance_qty;?></b></h4></td>
-            <td class="center"><h4><b><?php echo $total_wash_send_qty;?></b></h4></td>
-            <td class="center"><h4><b><?php echo $total_washed_qty;?></b></h4></td>
-            <td class="center"><h4><b><?php echo $total_washing_balance_qty;?></b></h4></td>
-            <td class="center"><h4><b><?php echo $total_packing_qty;?></b></h4></td>
-            <td class="center"><h4><b><?php echo $total_packing_balance_qty;?></b></h4></td>
-            <td class="center"><h4><b><?php echo $total_carton_qty;?></b></h4></td>
-            <td class="center"><h4><b><?php echo $total_wh_qty;?></b></h4></td>
-            <!--        <td class="center"><h4><b>--><?php //echo $total_other_qty;?><!--</b></h4></td>-->
-            <td class="center"><h4><b><?php echo $total_balance_qty;?></b></h4></td>
-            <td class="center" colspan="3"></td>
-        </tr>
+            <tr>
+                <td colspan="8" align="right"><h4><b>Total</b></h4></td>
+                <td class="center"><h4><b><?php echo $total_order_qty;?></b></h4></td>
+    <!--            <td class="center"><h4><b>--><?php //echo $total_cut_qty;?><!--</b></h4></td>-->
+                <td class="center"><h4><b><?php echo $total_cut_pass_qty;?></b></h4></td>
+                <td class="center"><h4><b><?php echo $total_line_input_qty;?></b></h4></td>
+                <td class="center"><h4><b><?php echo $total_line_mid_qty;?></b></h4></td>
+                <td class="center"><h4><b><?php echo $total_line_output_qty;?></b></h4></td>
+                <td class="center"><h4><b><?php echo $total_line_output_balance_qty;?></b></h4></td>
+                <td class="center"><h4><b><?php echo $total_wash_send_qty;?></b></h4></td>
+                <td class="center"><h4><b><?php echo $total_washed_qty;?></b></h4></td>
+                <td class="center"><h4><b><?php echo $total_washing_balance_qty;?></b></h4></td>
+                <td class="center"><h4><b><?php echo $total_packing_qty;?></b></h4></td>
+                <td class="center"><h4><b><?php echo $total_packing_balance_qty;?></b></h4></td>
+                <td class="center"><h4><b><?php echo $total_carton_qty;?></b></h4></td>
+                <td class="center"><h4><b><?php echo $total_wh_qty;?></b></h4></td>
+                <!--        <td class="center"><h4><b>--><?php //echo $total_other_qty;?><!--</b></h4></td>-->
+                <td class="center"><h4><b><?php echo $total_balance_qty;?></b></h4></td>
+                <td class="center" colspan="3"></td>
+            </tr>
         </tfoot>
     </table>
 </div>

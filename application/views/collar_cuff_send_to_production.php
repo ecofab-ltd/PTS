@@ -263,7 +263,7 @@
 
     }
     
-    function sendingCollarCuffToProduction() {
+    function sendingCollarCuffToProduction(){
         var bundle_array = [];
 
         $("input[name='bundle_codes[]']").each(function() {

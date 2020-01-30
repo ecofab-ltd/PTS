@@ -1039,10 +1039,14 @@ class Access_model extends CI_Model {
 
 
         $sql="SELECT t2.*, t3.total_order_qty, t3.total_cut_qty,
-              t5.count_cutting_ready_package_qty
+              t1.count_cutting_ready_package_qty
               
                 FROM 
-                (SELECT so_no, po_no, purchase_order, item, quality, color, style_no, style_name, brand
+                (SELECT so_no, po_no, purchase_order, item, quality, color, style_no, style_name, brand,
+                SUM(CASE WHEN is_package_ready=1
+                THEN cut_qty
+                ELSE 0 end) AS count_cutting_ready_package_qty
+                
                 FROM `tb_cut_summary` WHERE 1 $where GROUP BY so_no) AS t1
                 
                 LEFT JOIN
@@ -1081,24 +1085,13 @@ class Access_model extends CI_Model {
                 THEN cut_qty
                 ELSE 0 end) AS count_package_ready_qty
                 
-                FROM tb_cut_summary WHERE 1 GROUP BY po_no,so_no,item,quality,color,purchase_order
+                FROM tb_cut_summary WHERE 1 $where GROUP BY po_no,so_no,item,quality,color,purchase_order
                 ) AS t2
                 ON t1.so_no=t2.so_no
                 
                 LEFT JOIN
                 tb_production_summary AS t3
-                ON t1.so_no=t3.so_no
-                                
-                LEFT JOIN
-                (
-                SELECT so_no,
-                SUM(CASE WHEN is_package_ready=1
-                THEN cut_qty
-                ELSE 0 end) AS count_cutting_ready_package_qty
-                FROM tb_cut_summary
-                GROUP BY po_no,so_no,item,quality,color,purchase_order
-                )  as t5
-                ON t1.so_no=t5.so_no";
+                ON t1.so_no=t3.so_no";
 
         $query = $this->db->query($sql)->result_array();
         return $query;
