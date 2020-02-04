@@ -233,6 +233,8 @@
                     <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>access/care_label_send_to_production_individual"><i class="fa fa-circle"></i> Piece Scan </a></li>
                     <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>access/collar_cuff_send_to_production"><i class="fa fa-circle"></i> Bundle Scan </a></li>
                     <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>access/package_send_to_sew"><i class="fa fa-circle"></i> Input to Sew </a></li>
+                    <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>access/lay_scan"><i class="fa fa-circle"></i> Lay Complete </a></li>
+                    <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>access/cut_scan"><i class="fa fa-circle"></i> Cut Complete </a></li>
                 </ul>
             </li>
 
