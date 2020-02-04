@@ -57,7 +57,7 @@
         </div>
 
 
-     <div class="alert" role="alert" id="result"></div>
+<!--     <div class="alert" role="alert" id="result"></div>-->
 
 
         <div class="pull-right">
