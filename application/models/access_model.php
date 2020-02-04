@@ -4492,7 +4492,7 @@ class Access_model extends CI_Model {
     }
 
     public function getAllSOs(){
-        $sql = "SELECT po_no, so_no, purchase_order, item, quality, color, style_no, style_name, ex_factory_date  
+        $sql = "SELECT po_no, so_no, purchase_order, item, quality, color, style_no, style_name, ex_factory_date, po_type  
                 FROM `tb_po_detail` WHERE po_no != '' GROUP BY po_no, so_no";
 
         $query = $this->db->query($sql)->result_array();
