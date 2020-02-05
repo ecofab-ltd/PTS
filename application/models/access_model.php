@@ -1419,6 +1419,31 @@ class Access_model extends CI_Model {
         return $query;
     }
 
+    public function getFinishingAlterReport(){
+        $sql1="SELECT so_no, purchase_order, item, quality, color, style_no, style_name,
+               brand, ex_factory_date, COUNT(id) as total_finishing_alter_qty
+               FROM `vt_few_days_po_pcs`
+               WHERE finishing_qc_status=2
+               GROUP BY so_no";
+
+        $query = $this->db->query($sql1)->result_array();
+        return $query;
+    }
+
+    public function getRemainingFinishingAlterPcs($where){
+        $sql1="SELECT t1.*, t2.line_code 
+               FROM (SELECT pc_tracking_no, so_no, purchase_order, item, size, 
+               quality, color, style_no, style_name, ex_factory_date, line_id
+               FROM `vt_few_days_po_pcs` 
+               WHERE finishing_qc_status=2 $where) AS t1
+               LEFT JOIN
+               tb_line AS t2
+               ON t1.line_id=t2.id";
+
+        $query = $this->db->query($sql1)->result_array();
+        return $query;
+    }
+
 //    public function getProducitonSummaryReportFinishViewTable($condition, $condition_1){
     public function getProducitonSummaryReportFinishViewTable($condition_1, $condition){
         $sql = "SELECT t1.*, t2.total_order_qty, t2.ex_factory_date, t2.wash_gmt, t3.count_end_line_qc_pass,
@@ -4304,14 +4329,9 @@ class Access_model extends CI_Model {
         return $query;
     }
 
-    public function sendToLineForAlter($care_label_no, $date_time){
-        $sql = "UPDATE tb_care_labels SET access_points=3, access_points_status=1, 
-                end_line_qc_date_time='0000-00-00 00:00:00', 
-                finishing_qc_status=0, finishing_qc_date_time='0000-00-00 00:00:00',
-                packing_status=0, packing_date_time='0000-00-00 00:00:00', carton_status=0, carton_date_time='0000-00-00 00:00:00',
-                warehouse_qa_type=0, warehouse_buyer_date_time='0000-00-00 00:00:00', warehouse_factory_date_time='0000-00-00 00:00:00',
-                warehouse_trash_date_time='0000-00-00 00:00:00', warehouse_production_sample_date_time='0000-00-00 00:00:00', warehouse_other_purpose_date_time='0000-00-00 00:00:00',
-                warehouse_last_action_date_time='0000-00-00 00:00:00', finishing_alter_date_time='$date_time'
+    public function sendToLineForAlter($care_label_no, $floor_id, $date_time){
+        $sql = "UPDATE tb_care_labels 
+                SET finishing_qc_status=2, finishing_qc_date_time='$date_time', finishing_floor_id='$floor_id', packing_status=0
                 WHERE pc_tracking_no='$care_label_no'";
 
         $query = $this->db->query($sql);
@@ -5652,7 +5672,10 @@ class Access_model extends CI_Model {
                 SET 
                 packing_status = $status,
                 packing_date_time = '$date_time',
+                finishing_qc_status = 1,
+                finishing_qc_date_time = '$date_time',
                 finishing_floor_id = '$floor_id'
+
                 WHERE pc_tracking_no = '$carelabel_tracking_no'";
 
         $query = $this->db->query($sql);

@@ -1759,7 +1759,7 @@ class Access extends CI_Controller {
     }
 
     public function finishing_alter(){
-        $data['title'] = 'Finishing Alter';
+        $data['title'] = 'Finishing QC';
 
         $data['user_name'] = $this->session->userdata('user_name');
         $data['user_description'] = $this->session->userdata('user_description');
@@ -1787,19 +1787,23 @@ class Access extends CI_Controller {
         $date=$datex->format('Y-m-d');
 
         $data['access_points'] = $this->session->userdata('access_points');
+        $floor_id = $this->session->userdata('floor_id');
 
-        $pc_no = $this->input->post('carelabel_tracking_no');
+        $pc_no = $this->input->post('care_label_no');
 
         $pc_no_info = $this->access_model->checkCareLabelInfo($pc_no);
 
+        $access_points = $pc_no_info[0]['access_points'];
+        $access_points_status = $pc_no_info[0]['access_points_status'];
         $line = $pc_no_info[0]['line_name'];
 
-        $this->access_model->sendToLineForAlter($pc_no, $date_time);
+        if($line != '' && $access_points==4 && $access_points_status==4){
+            $this->access_model->sendToLineForAlter($pc_no, $floor_id, $date_time);
 
-        $data['message']="$pc_no Sent to $line for Alteration!";
-        $this->session->set_userdata($data);
-
-        redirect('access/finishing_alter');
+            echo "$line";
+        }else{
+            echo "";
+        }
     }
 
     public function getPrinterOn()
@@ -1922,6 +1926,25 @@ class Access extends CI_Controller {
         }
 
         echo $data['maincontent'] = $this->load->view('packing_data', $data);
+    }
+
+    public function getFinishingAlterReport(){
+        $data['prod_summary'] = $this->access_model->getFinishingAlterReport();
+
+        echo $this->load->view('finishing_alter_report', $data);
+    }
+
+    public function getRemainingFinishingAlterPcs(){
+        $so_no = $this->input->post('so_no');
+
+        $where = '';
+        if($so_no != ''){
+            $where .= " AND so_no='$so_no'";
+        }
+
+        $data['remain_size_cl'] = $this->access_model->getRemainingFinishingAlterPcs($where);
+
+        echo $this->load->view('finishing_alter_cl_list_modal', $data);
     }
 
     public function care_label_carton(){
@@ -3836,38 +3859,6 @@ class Access extends CI_Controller {
                     window.location.href = "'.base_url().'access/care_label_packing/'.'";
                 </script>';
         }
-
-
-
-        // re-program
-//        if(($last_access_points == 4) && ($access_points_status == 4) && ($packing_status != 1)){
-//            $this->access_model->packingShirt($carelabel_tracking_no, 1, $date_time);
-//
-//            $data['message']='Successfully Packed!';
-//            $this->session->set_userdata($data);
-//        }
-//        elseif(($packing_status == 1)){
-//            $data['message']='Successfully Packed Already!';
-//            $this->session->set_userdata($data);
-//        }else{
-//            $data['exception']='Please Complete Previous Processes!';
-//            $this->session->set_userdata($data);
-//        }
-
-//        echo '<script>
-//            var r = confirm("Print Sticker?");
-//           if (r == true) {
-//                window.open("'.base_url().'access/printSticker/'.$carelabel_tracking_no.'");
-//                window.location.href = "'.base_url().'access/care_label_packing/'.'";
-//            }
-//            if (r == false) {
-//                window.location.href = "'.base_url().'access/care_label_packing/'.'";
-//            }
-//        </script>';
-
-//        $this->printSticker($carelabel_tracking_no);
-
-//        redirect('access/care_label_packing');
 
     }
 

@@ -29,7 +29,7 @@
 <!--          <h2 class="">Packing... </h2>-->
 
             <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#myModal2">Printing Switch</button>
-
+            <a href="<?php echo base_url();?>access/finishing_alter" class="btn btn-primary">Finishing QC</a>
 
             <!-- Modal -->
             <div id="myModal2" class="modal fade" role="dialog">
