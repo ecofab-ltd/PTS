@@ -5697,6 +5697,16 @@ class Access_model extends CI_Model {
         return $query;
     }
 
+    public function getFinishingQcSummaryReload($where){
+        $sql = "Select COUNT(id) as finishing_alter_qty, finishing_floor_id 
+                From `vt_few_days_po_pcs`
+                WHERE 1 $where
+                GROUP BY finishing_floor_id";
+
+        $query = $this->db->query($sql)->result_array();
+        return $query;
+    }
+
     public function getAqlSummaryList($date){
         $sql = "SELECT t0.brand, t1.today_plan_aql_count, t2.previous_due_aql_count, 
                 t3.today_plan_aql_pass_count, t4.previous_due_aql_pass_count,

@@ -3629,8 +3629,8 @@ class Dashboard extends CI_Controller {
         $data['lines'] = $this->access_model->getLines();
         $data['floors'] = $this->access_model->getFloors();
 
-        $data['maincontent'] = $this->load->view('reports/line_hourly_report', $data, true);
-        $this->load->view('reports/master', $data);
+        $data['maincontent'] = $this->load->view('reports/line_hourly_report', $data);
+//        $this->load->view('reports/master', $data);
     }
 
     public function getDetailsAqlreportToday($brand)
@@ -4945,6 +4945,26 @@ class Dashboard extends CI_Controller {
 
         echo $data['maincontent'] = $this->load->view('finishing_output_summary_reload', $data, true);
 //        echo $finishing_report;
+    }
+
+    public function getFinishingQcSummaryReload($floor_id){
+
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $where = '';
+
+        if($floor_id != '' && $floor_id != 0){
+            $where .= " AND finishing_qc_status=2 AND finishing_floor_id=$floor_id";
+
+            $finishing_report = $this->access_model->getFinishingQcSummaryReload($where);
+            $finishing_alter_qty = $finishing_report[0]['finishing_alter_qty'];
+
+            echo $finishing_alter_qty;
+        }
+
     }
 
     public function getLineOutputSummaryReload($line_id){

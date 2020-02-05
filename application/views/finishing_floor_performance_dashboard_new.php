@@ -78,9 +78,7 @@ $dataPoints = array(
                     <div class="panel-body">
 
                         <div class="center">
-
-                            <!--                                <span style="height: 420px; width: 100%; font-size: 50px;"><b>Hourly</b></span>-->
-                            <div id="chartContainer_1" style="<?php if($line_id == 7){ ?>height: 520px; <?php }else{ ?> height: 430px; <?php } ?> width: 100%;"></div>
+                                <div id="chartContainer_1" style="height: 430px; width: 100%;"></div>
                         </div>
 
 
@@ -92,175 +90,33 @@ $dataPoints = array(
                 <section class="panel default">
                     <div class="panel-body">
 
-                        <div id="chartContainer" style="<?php if($line_id == 7){ ?>height: 520px; <?php }else{ ?> height: 430px; <?php } ?> width: 100%;"></div>
+                        <div class="center">
+                            <div id="chartContainer" style="height: 430px; width: 100%;"></div>
+                        </div>
 
                     </div>
                 </section>
             </div>
-<!--            <div class="col-md-4">-->
-
-<!--                <div class="row">-->
-<!--                    <div class="col-sm-6">-->
-<!--                        <section class="panel default" id="wip" style="background-color: #ff0e16; color: #ffffff;">-->
-<!--                            <div class="row  center"><b><span style="font-size: 20px;">WIP</span></b></div>-->
-<!--                            <div class="panel-body">-->
-<!---->
-<!--                                --><?php
-//
-//                                $count_wip_qty_line = $line_status[0]['count_wip_qty_line'];
-//
-//                                ?>
-<!---->
-<!--                                <div class="row center" style="font-size: 25px;"><b>--><?php //echo (($count_wip_qty_line != '' && $count_wip_qty_line > 0) ? $count_wip_qty_line : 0);?><!--</b></div>-->
-<!---->
-<!--                            </div>-->
-<!--                        </section>-->
-<!--                    </div>-->
-<!--                    <!--                        <div class="col-sm-4">-->
-<!--                    <!---->
-<!--                    <!--                            <section class="panel default" style="background-color: #286110; color: #ffffff;">-->
-<!--                    <!--                                <div class="row center"><b><span style="font-size: 15px;">Collar-Cuff</span></b></div>-->
-<!--                    <!--                                <div class="panel-body">-->
-<!--                    <!---->
-<!--                    <!--                                    <div class="row center" style="font-size: 25px;"><b>250</b></div>-->
-<!--                    <!---->
-<!--                    <!--                                </div>-->
-<!--                    <!--                            </section>-->
-<!--                    <!--                        </div>-->
-<!--                    <div class="col-sm-6">-->
-<!--                        <section class="panel default" id="mid_qc_pass" style="background-color: #ffcb0c; color: #000000;">-->
-<!--                            <div class="row center"><b><span style="font-size: 20px;">MID PASS</span></b></div>-->
-<!--                            <div class="panel-body">-->
-<!---->
-<!--                                --><?php
-//
-//                                $count_mid_pass_qty = $line_status[0]['count_mid_pass_qty'];
-//
-//                                ?>
-<!---->
-<!--                                <div class="row center" style="font-size: 25px;"><b>--><?php //echo (($count_mid_pass_qty != '' && $count_mid_pass_qty > 0) ? $count_mid_pass_qty : 0);?><!--</b></div>-->
-<!---->
-<!--                            </div>-->
-<!--                        </section>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-
-
-<!--            </div>-->
-
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
+            <div class="col-md-4">
+
+                <section class="panel default">
+                    <div class="panel-body" style="background-color: red; color: white;">
+
+                        <div class="center">
+                            <span style="font-size: 30px;">QC ALTER</span>
+
+                            <div id="chartContainer_2" style="font-size: 25px; margin-top: 20px;"></div>
+                        </div>
 
 
-<!--            <div class="col-md-6">-->
-<!---->
-<!--                <section class="panel default">-->
-<!--                    <div class="panel-body" id="upcoming_pos">-->
-<!---->
-<!--                        <div class="left" style="width: 100%; font-size: 25px;"><b>Upcoming POs</b></div>-->
-<!--                        <br />-->
-<!--                        <marquee behavior="scroll" Scrolldelay="200" direction="up" scrollamount="1" onmouseover="this.stop();"-->
-<!--                                 onmouseout="this.start();" style="font-size: 18px; height: 75px;">-->
-<!---->
-<!--                            --><?php
-//
-//                            foreach ($upcoming_po as $v_3){ ?>
-<!---->
-<!--                                <table border="1" style="margin-left: 25px;">-->
-<!--                                    <thead>-->
-<!--                                    <tr style="background-color: #f7ffb0;">-->
-<!--                                        <th class="center">PO_ITEM</th>-->
-<!--                                        <th class="center">Brand</th>-->
-<!--                                        <th class="center">QLTY_CLR</th>-->
-<!--                                        <th class="center">STYLE</th>-->
-<!--                                        <th class="center">QTY</th>-->
-<!--                                    </tr>-->
-<!--                                    </thead>-->
-<!--                                    <tbody>-->
-<!---->
-<!--                                    <tr>-->
-<!--                                        <td class="center">--><?php //echo $v_3['purchase_order'].'_'.$v_3['item'];?><!--</td>-->
-<!--                                        <td class="center">--><?php //echo $v_3['brand'];?><!--</td>-->
-<!--                                        <td class="center">--><?php //echo $v_3['quality'].'_'.$v_3['color'];?><!--</td>-->
-<!--                                        <td class="center">--><?php //echo $v_3['style_name'];?><!--</td>-->
-<!--                                        <td class="center">--><?php //echo $v_3['total_order_qty'];?><!--</td>-->
-<!--                                    </tr>-->
-<!---->
-<!--                                    </tbody>-->
-<!--                                </table>-->
-<!--                                <br />-->
-<!--                            --><?php //} ?>
-<!---->
-<!--                        </marquee>-->
-<!---->
-<!--                    </div>-->
-<!--                </section>-->
-<!--            </div>-->
-
-<!--            <div class="col-md-6" style="align-items: ">-->
-<!---->
-<!--                <div class="col-md-6">-->
-<!--                    <div class="information green_info">-->
-<!--                        <div class="information_inner" id="man_power">-->
-<!--                            <div class="info green_symbols"><i class="fa fa-users icon"></i></div>-->
-<!--                            <span style="font-size: 25px;">MAN POWER</span>-->
-<!--                            <h1 class="bolded">--><?php //echo $man_power;?><!--</h1>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="col-md-6">-->
-<!---->
-<!--                    <div class="information red_info">-->
-<!--                        <div class="information_inner" id="efficiency">-->
-<!--                            <div class="info red_symbols"><img width="85" height="85" src="--><?php //echo base_url();?><!--assets/images/efficiency_logo.png"></div>-->
-<!--                            <span style="font-size: 25px;">EFFICIENCY</span>-->
-<!--                            <h1 class="bolded">-->
-<!--                                --><?php
-//                                $minutes = ($work_time[0]['working_time_diff_to_sec'] / 60);
-//                                $work_minute = $minutes * $man_power;
-//
-//                                //                                    echo '<pre>';
-//                                //                                    print_r($minutes.' '.$man_power);
-//                                //                                    echo '</pre>';
-//
-//                                //                                    echo '<pre>';
-//                                //                                    print_r('Work Min: '.$work_minute);
-//                                //                                    echo '</pre>';
-//
-//                                $produce_minute = 0;
-//                                $average_produce_min = 0;
-//                                foreach ($get_smv_list as $s){
-//                                    $smv = $s['smv'];
-//                                    $total_line_output = $s['total_line_output'];
-//
-//                                    $produce_minute += ($total_line_output * $smv);
-//
-////                                            echo '<pre>';
-////                                            print_r($smv.' '.$total_line_output);
-////                                            echo '</pre>';
-//                                }
-//
-//                                //                                    echo '<pre>';
-//                                //                                    print_r('Prod Min: '.$produce_minute);
-//                                //                                    echo '</pre>';
-//
-//                                $eff = ($produce_minute/$work_minute) * 100;
-//
-//                                echo $line_efficiency = sprintf('%0.2f', $eff);
-//                                ?>
-<!--                            </h1>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!---->
-<!--                </div>-->
-<!---->
-<!--            </div>-->
+                    </div>
+                </section>
+            </div>
         </div>
-
-
     </div>
 
 </div>
@@ -271,20 +127,14 @@ $dataPoints = array(
 //            $("#reload_div").load('<?php //echo base_url();?>//access/getProductionSummaryReportByUID');
 //        }, 10000);
 
-        $("#chartContainer_1").load('<?php echo base_url();?>dashboard/getFinishingHourlyOutputReload/<?php echo $floor_id;?>');
         $("#chartContainer").load('<?php echo base_url();?>dashboard/getFinishingOutputSummaryReload/<?php echo $floor_id;?>');
+        $("#chartContainer_1").load('<?php echo base_url();?>dashboard/getFinishingHourlyOutputReload/<?php echo $floor_id;?>');
+        $("#chartContainer_2").load('<?php echo base_url();?>dashboard/getFinishingQcSummaryReload/<?php echo $floor_id;?>');
 
         setInterval(function() {
-//            window.location.reload();
-
-//            $("#chartContainer_1").load('<?php //echo base_url();?>//dashboard/getLineHourlyOutputReload/<?php //echo $line_id;?>//');
             $("#chartContainer_1").load('<?php echo base_url();?>dashboard/getFinishingHourlyOutputReload/<?php echo $floor_id;?>');
             $("#chartContainer").load('<?php echo base_url();?>dashboard/getFinishingOutputSummaryReload/<?php echo $floor_id;?>');
-//            $("#wip").load('<?php //echo base_url();?>//dashboard/getWipReload/<?php //echo $line_id;?>//');
-//            $("#mid_qc_pass").load('<?php //echo base_url();?>//dashboard/getMidQcPassReload/<?php //echo $line_id;?>//');
-//            $("#efficiency").load('<?php //echo base_url();?>//dashboard/getEfficiencyReload/<?php //echo $line_id;?>//');
-//            $("#man_power").load('<?php //echo base_url();?>//dashboard/getManPowerReload/<?php //echo $line_id;?>//');
-//            $("#upcoming_pos").load('<?php //echo base_url();?>//dashboard/getUpcomingPosReload/<?php //echo $line_id;?>//');
+            $("#chartContainer_2").load('<?php echo base_url();?>dashboard/getFinishingQcSummaryReload/<?php echo $floor_id;?>');
 
         }, 120000);
     });
