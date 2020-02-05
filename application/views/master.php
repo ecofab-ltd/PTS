@@ -359,7 +359,7 @@
                 ?>
                 <!--            <li> <a href="--><?php //echo base_url();?><!--access/care_label_end_line"><i class="fa fa-circle"></i> End-Line QC</a></li>-->
                 <li> <a href="<?php echo base_url();?>access/care_label_packing"><i class="fa fa-circle"></i> Packing </a></li>
-                <li> <a href="<?php echo base_url();?>access/finishing_qc"><i class="fa fa-circle"></i> Quality Control </a></li>
+                <li> <a href="<?php echo base_url();?>access/finishing_alter"><i class="fa fa-circle"></i> Quality Control </a></li>
                 <li> <a href="<?php echo base_url();?>access/print_sticker_test"><i class="fa fa-circle"></i> Sticker Test </a></li>
 <!--                <li> <a href="javascript:void(0);"> <i class="fa fa-plus"></i> Line Reports <span class="plus"><i class="fa fa-plus"></i></span></a>-->
 <!--                    <ul>-->
