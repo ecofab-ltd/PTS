@@ -17,7 +17,9 @@
                 </thead>
                 <tbody>
                 <?php
+
                     foreach($prod_summary as $k => $v) {
+
                 ?>
                         <tr>
                             <td class="hidden-phone center"><?php echo $v['so_no'];?></td>
@@ -27,7 +29,7 @@
                             <td class="hidden-phone center"><?php echo $v['style_no'] . '-' . $v['style_name']; ?></td>
                             <td class="hidden-phone center"><?php echo $v['ex_factory_date']; ?></td>
                             <td class="hidden-phone center">
-                                <span class="btn btn-danger" data-target="#myModal" data-toggle="modal" onclick="getRemainingFinishingAlterPcs('<?php echo $v['so_no']; ?>');">
+                                <span class="btn btn-danger" data-target="#myModal2" data-toggle="modal" onclick="getRemainingFinishingAlterPcs('<?php echo $v['so_no']; ?>');">
                                     <?php echo $v['total_finishing_alter_qty']; ?>
                                 </span>
                             </td>

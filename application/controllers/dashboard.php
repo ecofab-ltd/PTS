@@ -4960,7 +4960,27 @@ class Dashboard extends CI_Controller {
             $where .= " AND finishing_qc_status=2 AND finishing_floor_id=$floor_id";
 
             $finishing_report = $this->access_model->getFinishingQcSummaryReload($where);
-            $finishing_alter_qty = $finishing_report[0]['finishing_alter_qty'];
+            $finishing_alter_qty = ($finishing_report[0]['finishing_alter_qty'] != '' ? $finishing_report[0]['finishing_alter_qty'] : 0);
+
+            echo $finishing_alter_qty;
+        }
+
+    }
+
+    public function getLineFinishingAlterReload($line_id){
+
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $where = '';
+
+        if($line_id != '' && $line_id != 0){
+            $where .= " AND finishing_qc_status=2 AND line_id=$line_id";
+
+            $finishing_report = $this->access_model->getLineFinishingQcSummaryReload($where);
+            $finishing_alter_qty = ($finishing_report[0]['finishing_alter_qty'] != '' ? $finishing_report[0]['finishing_alter_qty'] : 0);
 
             echo $finishing_alter_qty;
         }

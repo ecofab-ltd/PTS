@@ -51,7 +51,7 @@
                 $sewing_collar = ($v['count_collar_bundle_qty'] != '' ? $v['count_collar_bundle_qty'] : 0);
                 $sewing_cuff = ($v['count_cuff_bundle_qty'] != '' ? $v['count_cuff_bundle_qty'] : 0);
 
-            if (date('Y-m-d', strtotime($v['ex_factory_date']. ' + 10 days')) > date('Y-m-d')) {
+            if (date('Y-m-d', strtotime($v['ex_factory_date']. ' + 60 days')) > date('Y-m-d')) {
                 // New Logic End
                     ?>
                     <tr>

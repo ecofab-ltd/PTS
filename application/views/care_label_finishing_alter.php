@@ -22,7 +22,12 @@
 <div class="pull-left breadcrumb_admin clear_both">
         <div class="pull-left page_title theme_color">
           <h1>Finishing QC</h1>
-            <a href="<?php echo base_url();?>access/care_label_packing" class="btn btn-primary">Packing</a>
+            <?php if($access_points == 7){?>
+                <a href="<?php echo base_url();?>access/care_label_packing" class="btn btn-primary">Packing</a>
+            <?php } ?>
+            <?php if($access_points == 6){?>
+                <a href="<?php echo base_url();?>access/care_label_washing" class="btn btn-primary">Wash Return</a>
+            <?php } ?>
         </div>
         <div class="pull-right">
           <ol class="breadcrumb">
@@ -83,7 +88,7 @@
 <!--        </form>-->
 
       </div>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
 
@@ -151,7 +156,7 @@
 
                     if(data != ''){
                         $("#exception").empty();
-                        $("#message").text(care_label_no+" Sent to Line: "+data);
+                        $("#message").text(care_label_no+" Sent to "+data);
                     }
 
                     if(data == ''){

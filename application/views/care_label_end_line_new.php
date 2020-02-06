@@ -22,7 +22,7 @@
 <div class="pull-left breadcrumb_admin clear_both">
         <div class="pull-left page_title theme_color">
           <h1>End Line QC</h1>
-          <h2 class="">End Line QC...</h2>
+          <a class="btn btn-warning" href="<?php echo base_url()?>access/lineFinishingAlter">Finishing Alter</a>
         </div>
         <div class="pull-right">
           <ol class="breadcrumb">
@@ -44,7 +44,9 @@
                               <input type="text" placeholder="Pass" class="form-control" name="carelabel_tracking_no" autofocus required id="carelabel_tracking_no" autocomplete="off" onkeyup="submitClQcInfo();" />
                               <span style="">Pass</span>
                               <button style="display: none;" id="submit_btn_save_pass" class="btn btn-success">Save</button>
+                              <br />
                               <span style="margin-top: 30px;" id="refresh_report" class="btn btn-primary" onclick="getLineOutputReport();">Report</span>
+                              <br />
                               <div class="col-md-1" id="loader" style="display: none;"><div class="loader"></div></div>
                           </div>
                           <div class="col-md-4">
@@ -681,4 +683,5 @@ $('#defect_code_tbl tbody').find('tr:last').remove();
             }
         });
     }
+
 </script>

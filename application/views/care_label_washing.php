@@ -22,7 +22,7 @@
 <div class="pull-left breadcrumb_admin clear_both">
         <div class="pull-left page_title theme_color">
           <h1>Wash Return</h1>
-          <h2 class="">Wash Return...</h2>
+          <a href="<?php echo base_url();?>access/finishing_alter" class="btn btn-primary">Finishing QC</a>
         </div>
         <div class="pull-right">
           <ol class="breadcrumb">

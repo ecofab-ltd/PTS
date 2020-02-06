@@ -1085,11 +1085,6 @@ class Access extends CI_Controller {
 
             array_push($hours, $h_data);
 
-//            echo '<pre>';
-//            print_r($hours);
-//            echo '</pre>';
-//            die();
-
             foreach ($hours as $v_h){
 
                 $h_data = array(
@@ -1116,6 +1111,63 @@ class Access extends CI_Controller {
 
         $data['maincontent'] = $this->load->view('care_label_end_line_new', $data, true);
         $this->load->view('master', $data);
+    }
+
+    public function lineFinishingAlter(){
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $s_data['session_last_action_date_time'] = $date_time;
+        $this->session->set_userdata($s_data);
+
+        $data['title'] = 'Line-Finishing Alter';
+
+        $line_id = $this->session->userdata('line_id');
+        $data['user_name'] = $this->session->userdata('user_name');
+        $data['user_description'] = $this->session->userdata('user_description');
+        $data['access_points'] = $this->session->userdata('access_points');
+        $data['msg'] = '';
+        $data['session_out'] = $this->session_out;
+
+        $data['maincontent'] = $this->load->view('line_finishing_alter', $data, true);
+        $this->load->view('master', $data);
+    }
+
+    public function lineFinishingAlterDone(){
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $s_data['session_last_action_date_time'] = $date_time;
+        $this->session->set_userdata($s_data);
+
+        $data['title'] = 'Line-Finishing Alter';
+
+        $line_id = $this->session->userdata('line_id');
+
+        $carelabel_tracking_no = $this->input->post('carelabel_tracking_no');
+
+        $res = $this->access_model->checkCareLabelInfo($carelabel_tracking_no);
+
+        $finishing_qc_status = $res[0]['finishing_qc_status'];
+        $responsible_line_id = $res[0]['line_id'];
+
+        if($responsible_line_id == $line_id){
+            if($finishing_qc_status == 2){
+
+                $this->access_model->updateLineFinishingAlter($carelabel_tracking_no, $date_time);
+
+                echo "Successfully Updated";
+            }else{
+                echo "No Alter Request Found";
+            }
+        }else{
+            echo "Line Mismatch";
+        }
+
     }
 
     public function care_label_finishing(){
@@ -1929,17 +1981,47 @@ class Access extends CI_Controller {
     }
 
     public function getFinishingAlterReport(){
-        $data['prod_summary'] = $this->access_model->getFinishingAlterReport();
+        $line_id = $this->session->userdata('line_id');
+        $floor_id = $this->session->userdata('floor_id');
+
+        $where = '';
+
+        if($floor_id != ''){
+            $where .= " AND finishing_floor_id=$floor_id";
+            $prod_summary = $this->access_model->getFinishingAlterReport($where);
+        }
+
+        $data['prod_summary'] = $prod_summary;
+
+        echo $this->load->view('finishing_alter_report', $data);
+    }
+
+    public function getFinishingAlterLineReport(){
+        $line_id = $this->session->userdata('line_id');
+
+        $where = '';
+
+        if($line_id != ''){
+            $where .= " AND line_id=$line_id";
+            $prod_summary = $this->access_model->getFinishingAlterLineReport($where);
+        }
+
+        $data['prod_summary'] = $prod_summary;
 
         echo $this->load->view('finishing_alter_report', $data);
     }
 
     public function getRemainingFinishingAlterPcs(){
+        $line_id = $this->session->userdata('line_id');
+
         $so_no = $this->input->post('so_no');
 
         $where = '';
         if($so_no != ''){
             $where .= " AND so_no='$so_no'";
+        }
+        if($line_id != '' && $line_id != 0){
+            $where .= " AND line_id='$line_id'";
         }
 
         $data['remain_size_cl'] = $this->access_model->getRemainingFinishingAlterPcs($where);
@@ -3756,6 +3838,7 @@ class Access extends CI_Controller {
         $washing_status = $line_check[0]['washing_status'];
         $is_wash_gmt = $line_check[0]['is_wash_gmt'];
         $packing_status = $line_check[0]['packing_status'];
+        $finishing_qc_status = $line_check[0]['finishing_qc_status'];
         $size = $line_check[0]['size'];
         $line = $line_check[0]['line_name'];
 
@@ -3765,7 +3848,7 @@ class Access extends CI_Controller {
 
         if(sizeof($line_check) > 0){
             if($is_wash_gmt == 1){
-                if(($washing_status == 1) && ($last_access_points == 4) && ($access_points_status == 4) && ($packing_status != 1)){
+                if(($washing_status == 1) && ($last_access_points == 4) && ($access_points_status == 4) && ($packing_status == 0) && ($finishing_qc_status != 2)){
                     $this->access_model->packingShirt($carelabel_tracking_no, 1, $floor_id, $date_time);
 //                    $this->access_model->updateTodayLineOutputQty($floor_id, $date, $time);
                     $this->access_model->updateTodayFinishingOutputQty($floor_id, $date, $time);
@@ -3784,7 +3867,7 @@ class Access extends CI_Controller {
                             window.location.href = "'.base_url().'access/care_label_packing/'.'";
         //                </script>';
                     }
-                }elseif(($is_wash_gmt == 1) && ($last_access_points == 4) && ($access_points_status == 4) && ($packing_status == 1)){
+                }elseif(($washing_status == 1) && ($last_access_points == 4) && ($access_points_status == 4) && ($packing_status == 1) && ($finishing_qc_status != 2)){
                     $data['message']="$carelabel_tracking_no Packed Already!";
                     $this->session->set_userdata($data);
 
@@ -3798,17 +3881,25 @@ class Access extends CI_Controller {
                             window.location.href = "'.base_url().'access/care_label_packing/'.'";
         //                </script>';
                     }
-                }else{
+                }elseif(($washing_status == 1) && ($last_access_points == 4) && ($access_points_status == 4) && ($finishing_qc_status == 2)){
+                    $data['exception']="$carelabel_tracking_no $line Alter Not completed!";
+                    $this->session->set_userdata($data);
+
+                    echo '<script>
+                    window.location.href = "'.base_url().'access/care_label_packing/'.'";
+                    </script>';
+                }
+                elseif(($washing_status == 0) && ($last_access_points == 4) && ($access_points_status == 4)){
                     $data['exception']="$carelabel_tracking_no Wash-Return not completed!";
                     $this->session->set_userdata($data);
 
                     echo '<script>
                     window.location.href = "'.base_url().'access/care_label_packing/'.'";
-                </script>';
+                    </script>';
                 }
             }
             if($is_wash_gmt == 0){
-                if(($last_access_points == 4) && ($access_points_status == 4) && ($packing_status != 1)){
+                if(($last_access_points == 4) && ($access_points_status == 4) && ($packing_status == 0) && ($finishing_qc_status != 2)){
                     $this->access_model->packingShirt($carelabel_tracking_no, 1, $floor_id, $date_time);
                     $this->access_model->updateTodayFinishingOutputQty($floor_id, $date, $time);
 
@@ -3826,9 +3917,8 @@ class Access extends CI_Controller {
         //                </script>';
                     }
 
-
                 }
-                elseif(($last_access_points == 4) && ($access_points_status == 4) && ($packing_status == 1)){
+                elseif(($last_access_points == 4) && ($access_points_status == 4) && ($packing_status == 1) && ($finishing_qc_status != 2)){
                     $data['message']="$carelabel_tracking_no Packed Already!";
                     $this->session->set_userdata($data);
 
@@ -3842,7 +3932,16 @@ class Access extends CI_Controller {
                             window.location.href = "'.base_url().'access/care_label_packing/'.'";
         //                </script>';
                     }
-                }else{
+                }
+                elseif(($last_access_points == 4) && ($access_points_status == 4) && ($finishing_qc_status == 2)){
+                    $data['exception']="$carelabel_tracking_no Line: $line Alter Not completed!";
+                    $this->session->set_userdata($data);
+
+                    echo '<script>
+                    window.location.href = "'.base_url().'access/care_label_packing/'.'";
+                    </script>';
+                }
+                else{
                     $data['exception']="$carelabel_tracking_no $line Processes Not Completed!";
                     $this->session->set_userdata($data);
 

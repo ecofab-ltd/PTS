@@ -174,24 +174,29 @@ $dataPoints = array(
             </div>
             <div class="col-md-2">
                 <div class="information red_info">
+                    <div class="information_inner">
+                        <span style="font-size: 25px;">Finishing Alter</span>
+                        <h1 class="bolded" id="finishing_alter"><?php echo '';?></h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="information red_info">
                     <div class="information_inner" id="running_pos">
                         <span style="font-size: 25px;">RUNNING POs</span>
                         <h1 class="bolded"><?php echo '';?></h1>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-
-                <div class="col-md-6">
+                <div class="col-md-2">
                     <div class="information green_info">
                         <div class="information_inner" id="man_power">
-                            <div class="info green_symbols"><i class="fa fa-users icon"></i></div>
                             <span style="font-size: 25px;">MAN POWER</span>
                             <h1 class="bolded"><?php echo $man_power;?></h1>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-2">
 
                         <div class="information red_info">
                             <div class="information_inner" id="efficiency">
@@ -237,7 +242,6 @@ $dataPoints = array(
 
                 </div>
 
-            </div>
         </div>
 
 
@@ -272,6 +276,7 @@ $dataPoints = array(
                 $("#running_pos").load('<?php echo base_url();?>dashboard/getRunningPoQtyReload/<?php echo $line_id;?>');
                 $("#upcoming_pos").load('<?php echo base_url();?>dashboard/getUpcomingPosReload/<?php echo $line_id;?>');
                 $("#quality").load('<?php echo base_url();?>dashboard/getQualityDefectsReload/<?php echo $line_id;?>');
+                $("#finishing_alter").load('<?php echo base_url();?>dashboard/getLineFinishingAlterReload/<?php echo $line_id;?>');
 //            }
 
         }, 60000);

@@ -1419,12 +1419,25 @@ class Access_model extends CI_Model {
         return $query;
     }
 
-    public function getFinishingAlterReport(){
-        $sql1="SELECT so_no, purchase_order, item, quality, color, style_no, style_name,
+    public function getFinishingAlterReport($where){
+        $sql1="SELECT so_no, finishing_floor_id, purchase_order, item, quality, color, style_no, style_name,
                brand, ex_factory_date, COUNT(id) as total_finishing_alter_qty
-               FROM `vt_few_days_po_pcs`
+               FROM `vt_running_po_pcs`
                WHERE finishing_qc_status=2
-               GROUP BY so_no";
+               $where
+               GROUP BY so_no, finishing_floor_id";
+
+        $query = $this->db->query($sql1)->result_array();
+        return $query;
+    }
+
+    public function getFinishingAlterLineReport($where){
+        $sql1="SELECT so_no, line_id, purchase_order, item, quality, color, style_no, style_name,
+               brand, ex_factory_date, COUNT(id) as total_finishing_alter_qty
+               FROM `vt_running_po_pcs`
+               WHERE finishing_qc_status=2
+               $where
+               GROUP BY so_no, line_id";
 
         $query = $this->db->query($sql1)->result_array();
         return $query;
@@ -1434,7 +1447,7 @@ class Access_model extends CI_Model {
         $sql1="SELECT t1.*, t2.line_code 
                FROM (SELECT pc_tracking_no, so_no, purchase_order, item, size, 
                quality, color, style_no, style_name, ex_factory_date, line_id
-               FROM `vt_few_days_po_pcs` 
+               FROM `vt_running_po_pcs` 
                WHERE finishing_qc_status=2 $where) AS t1
                LEFT JOIN
                tb_line AS t2
@@ -5531,6 +5544,17 @@ class Access_model extends CI_Model {
         return $query;
     }
 
+    public function updateLineFinishingAlter($carelabel_tracking_no, $date_time)
+    {
+        $sql = "Update `vt_running_po_pcs` 
+                SET finishing_qc_status = 1, 
+                finishing_qc_date_time='$date_time'
+                WHERE pc_tracking_no='$carelabel_tracking_no'";
+
+        $query = $this->db->query($sql);
+        return $query;
+    }
+
     public function inputToLine($carelabel_tracking_no, $line_id, $access_points, $access_point_status, $date_time)
     {
         $sql = "Update `vt_running_po_pcs` 
@@ -5672,8 +5696,6 @@ class Access_model extends CI_Model {
                 SET 
                 packing_status = $status,
                 packing_date_time = '$date_time',
-                finishing_qc_status = 1,
-                finishing_qc_date_time = '$date_time',
                 finishing_floor_id = '$floor_id'
 
                 WHERE pc_tracking_no = '$carelabel_tracking_no'";
@@ -5702,6 +5724,16 @@ class Access_model extends CI_Model {
                 From `vt_few_days_po_pcs`
                 WHERE 1 $where
                 GROUP BY finishing_floor_id";
+
+        $query = $this->db->query($sql)->result_array();
+        return $query;
+    }
+
+    public function getLineFinishingQcSummaryReload($where){
+        $sql = "Select COUNT(id) as finishing_alter_qty, line_id, finishing_floor_id 
+                From `vt_few_days_po_pcs`
+                WHERE 1 $where
+                GROUP BY line_id";
 
         $query = $this->db->query($sql)->result_array();
         return $query;

@@ -67,7 +67,7 @@
             $line_rep = $this->method_call->getLineInfo($line_id);
             $dhu_summary = $this->method_call->getLineDHUSummary($line_id);
 
-            $dhu_sum = ($dhu_summary[0]['sum_dhu'] != '' ? $dhu_summary[0]['dhu_sum'] : 0);
+            $dhu_sum = ($dhu_summary[0]['dhu_sum'] != '' ? $dhu_summary[0]['dhu_sum'] : 0);
             $work_hour_1 = ($dhu_summary[0]['work_hour_1'] != '' ? $dhu_summary[0]['work_hour_1'] : 0);
             $work_hour_2 = ($dhu_summary[0]['work_hour_2'] != '' ? $dhu_summary[0]['work_hour_2'] : 0);
             $work_hour_3 = ($dhu_summary[0]['work_hour_3'] != '' ? $dhu_summary[0]['work_hour_3'] : 0);
@@ -82,7 +82,7 @@
         <tr>
             <td align="center"><?php echo $line['line_code']; ?></td>
             <td align="center"><?php echo $line_info[0]['target'];?></td>
-            <td align="center"><?php echo round($line_target_per_hour);?></td>
+            <td align="center"><?php echo round($line_target_per_hour).' / '.$line_target_hour;?></td>
             <td align="center">
                 <?php
                 if($segment_id == 1){
