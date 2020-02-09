@@ -2,7 +2,7 @@
     <table class="table table-bordered table-striped" id="" border="1">
         <thead>
         <tr>
-            <th class="hidden-phone center" colspan="25"><h3>Ship Date: <?php echo $ex_factory_date;?></h3></th>
+            <th class="hidden-phone center" colspan="26"><h3>Ship Date: <?php echo $ex_factory_date;?></h3></th>
         </tr>
         <tr>
             <th class="hidden-phone center">SO</th>
@@ -27,6 +27,7 @@
             <th class="hidden-phone center" title="Wash Send">Wash Send</th>
             <th class="hidden-phone center" title="Wash Receive">Wash Rcv</th>
             <th class="hidden-phone center" title="Wash Balance">Wash BLNC</th>
+            <th class="hidden-phone center">Alter</th>
             <th class="hidden-phone center">Packed</th>
             <th class="hidden-phone center">Pack BLNC</th>
             <th class="hidden-phone center">Carton</th>
@@ -57,6 +58,7 @@
         $total_wash_send_qty = 0;
         $total_washed_qty = 0;
         $total_washing_balance_qty = 0;
+        $total_finishing_alter_qty = 0;
         $total_packing_qty = 0;
         $total_packing_balance_qty = 0;
         $total_carton_qty = 0;
@@ -80,6 +82,7 @@
             $total_wash_send_qty += $v['count_wash_send'];
             $total_washed_qty += $v['count_washing_pass'];
             $total_washing_balance_qty += $washing_balance_qty;
+            $total_finishing_alter_qty += $v['count_finishing_alter_qty'];
             $total_packing_qty += $v['count_packing_pass'];
             $total_packing_balance_qty += $packing_balance_qty;
             $total_carton_qty += $v['count_carton_pass'];
@@ -109,6 +112,7 @@
                 <td class="center"><?php echo $v['count_wash_send'];?></td>
                 <td class="center"><?php echo $v['count_washing_pass'];?></td>
                 <td class="center"><?php echo $washing_balance_qty;?></td>
+                <td class="center"><?php echo $v['count_finishing_alter_qty'];?></td>
                 <td class="center"><?php echo $v['count_packing_pass'];?></td>
                 <td class="center" <?php if($packing_balance_qty > 0){ ?>style="background-color: #ffbcbf" <?php } ?>><?php echo $packing_balance_qty;?></td>
                 <td class="center"><?php echo $v['count_carton_pass'];?></td>
@@ -177,6 +181,7 @@
                 <td class="center"><h4><b><?php echo $total_wash_send_qty;?></b></h4></td>
                 <td class="center"><h4><b><?php echo $total_washed_qty;?></b></h4></td>
                 <td class="center"><h4><b><?php echo $total_washing_balance_qty;?></b></h4></td>
+                <td class="center"><h4><b><?php echo $total_finishing_alter_qty;?></b></h4></td>
                 <td class="center"><h4><b><?php echo $total_packing_qty;?></b></h4></td>
                 <td class="center"><h4><b><?php echo $total_packing_balance_qty;?></b></h4></td>
                 <td class="center"><h4><b><?php echo $total_carton_qty;?></b></h4></td>

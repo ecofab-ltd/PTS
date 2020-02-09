@@ -2907,7 +2907,7 @@ class Access extends CI_Controller {
 
     public function po_close_by_merchent()
     {
-        $data['title'] = 'PO Close';
+        $data['title'] = 'PO Remarks';
 
         $data['user_name'] = $this->session->userdata('user_name');
         $data['user_description'] = $this->session->userdata('user_description');
@@ -2921,8 +2921,8 @@ class Access extends CI_Controller {
 
     public function po_closed()
     {
-        $value=$this->input->post('value');
         $so_no=$this->input->post('so_no');
+        $value=$this->input->post('value');
 
         $status='';
 
@@ -2935,7 +2935,7 @@ class Access extends CI_Controller {
         }
 
 
-        $data=$this->access_model->po_closed($status,$so_no);
+        $data=$this->access_model->po_closed($so_no, $status);
 
         echo "success";
 
@@ -3085,7 +3085,10 @@ class Access extends CI_Controller {
             if(($last_access_points == 3) && ($last_access_points_status == 1)){
 
                 foreach ($defect_codes_array as $k => $v){
+                    $res_def = $this->access_model->isDefectAvailable($carelabel_tracking_no, $line, $access_points, $defect_codes_array[$k], $date_time);
+                    $count_def_row = sizeof($res_def);
 
+                    if($count_def_row == 0){
                         $defect_data = array(
                             'pc_tracking_no' => $carelabel_tracking_no,
                             'line_id' => $line,
@@ -3096,6 +3099,7 @@ class Access extends CI_Controller {
                         );
 
                         $this->access_model->insertingData('tb_defects_tracking', $defect_data);
+                    }
                 }
 
                 $this->access_model->endLineQC($carelabel_tracking_no, $access_points, $access_points_status, $date_time);
@@ -3104,9 +3108,10 @@ class Access extends CI_Controller {
             elseif (($last_access_points == $access_points) && ($last_access_points_status == 2)){
                 foreach ($defect_codes_array as $k => $v){
 
-//                    $res_def = $this->access_model->isDefectAvailable($carelabel_tracking_no, $line, $access_points, $v, $defect_codes_array[$k]);
+                    $res_def = $this->access_model->isDefectAvailable($carelabel_tracking_no, $line, $access_points, $defect_codes_array[$k], $date_time);
+                    $count_def_row = sizeof($res_def);
 
-//                    if(empty($res_def)){
+                    if($count_def_row == 0){
                         $defect_data = array(
                             'pc_tracking_no' => $carelabel_tracking_no,
                             'line_id' => $line,
@@ -3117,7 +3122,7 @@ class Access extends CI_Controller {
                         );
 
                         $this->access_model->insertingData('tb_defects_tracking', $defect_data);
-//                    }
+                    }
                 }
 
                 echo 'Defects Updated!';
@@ -3889,6 +3894,14 @@ class Access extends CI_Controller {
                     window.location.href = "'.base_url().'access/care_label_packing/'.'";
                     </script>';
                 }
+                elseif(($last_access_points != 4) && ($access_points_status != 4)){
+                    $data['exception']="$carelabel_tracking_no $line Process Not completed!";
+                    $this->session->set_userdata($data);
+
+                    echo '<script>
+                    window.location.href = "'.base_url().'access/care_label_packing/'.'";
+                    </script>';
+                }
                 elseif(($washing_status == 0) && ($last_access_points == 4) && ($access_points_status == 4)){
                     $data['exception']="$carelabel_tracking_no Wash-Return not completed!";
                     $this->session->set_userdata($data);
@@ -3916,7 +3929,6 @@ class Access extends CI_Controller {
                             window.location.href = "'.base_url().'access/care_label_packing/'.'";
         //                </script>';
                     }
-
                 }
                 elseif(($last_access_points == 4) && ($access_points_status == 4) && ($packing_status == 1) && ($finishing_qc_status != 2)){
                     $data['message']="$carelabel_tracking_no Packed Already!";
@@ -3934,7 +3946,15 @@ class Access extends CI_Controller {
                     }
                 }
                 elseif(($last_access_points == 4) && ($access_points_status == 4) && ($finishing_qc_status == 2)){
-                    $data['exception']="$carelabel_tracking_no Line: $line Alter Not completed!";
+                    $data['exception']="$carelabel_tracking_no $line Alter Not completed!";
+                    $this->session->set_userdata($data);
+
+                    echo '<script>
+                    window.location.href = "'.base_url().'access/care_label_packing/'.'";
+                    </script>';
+                }
+                elseif(($last_access_points != 4) && ($access_points_status != 4)){
+                    $data['exception']="$carelabel_tracking_no $line Process Not completed!";
                     $this->session->set_userdata($data);
 
                     echo '<script>

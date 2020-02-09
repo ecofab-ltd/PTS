@@ -2404,7 +2404,7 @@ class Dashboard_model extends CI_Model {
     {
         $sql="SELECT t1.line_id,t1.packing_date_time,  t1.total_cut_input_qty, 
               t1.count_input_line_qc_pass, t1.count_mid_line_qc_pass, t1.count_end_line_qc_pass, t1.count_wash_send, 
-              t1.count_washing_pass, t1.count_packing_pass, t1.count_carton_pass, t1.total_wh_qa, 
+              t1.count_washing_pass, t1.count_finishing_alter_qty, t1.count_packing_pass, t1.count_carton_pass, t1.total_wh_qa, 
               t2.*, t3.responsible_line, t4.so_fail_count
               FROM
               (Select * FROM vt_po_summary WHERE 1 $where) as t2
@@ -2419,6 +2419,7 @@ class Dashboard_model extends CI_Model {
               COUNT(is_going_wash) as count_wash_send, 
               COUNT(washing_status) as count_washing_pass, 
               COUNT(packing_status) as count_packing_pass,  
+              COUNT(finishing_qc_status) as count_finishing_alter_qty,  
           	  COUNT(carton_status) as count_carton_pass,
               COUNT(warehouse_qa_type) as total_wh_qa
            FROM (
@@ -2432,6 +2433,7 @@ class Dashboard_model extends CI_Model {
                 CASE WHEN carton_status = 1 THEN carton_status END carton_status,
                 CASE WHEN is_going_wash = 1 THEN is_going_wash END is_going_wash,
                 CASE WHEN washing_status = 1 THEN washing_status END washing_status,
+                CASE WHEN finishing_qc_status = 2 THEN finishing_qc_status END finishing_qc_status,
                 CASE WHEN warehouse_qa_type != 0 THEN warehouse_qa_type END warehouse_qa_type 
               FROM vt_few_days_po_pcs    
             ) vt_few_days_po_pcs GROUP BY so_no,po_no,item,quality,color,purchase_order) as t1

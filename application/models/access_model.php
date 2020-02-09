@@ -21,14 +21,14 @@ class Access_model extends CI_Model {
         return $query;
     }
 
-    public function isDefectAvailable($carelabel_tracking_no, $line, $access_points, $defect_part, $defect_code)
+    public function isDefectAvailable($carelabel_tracking_no, $line, $access_points, $defect_code, $date_time)
     {
         $sql = "SELECT * FROM `tb_defects_tracking`
                 WHERE pc_tracking_no = '$carelabel_tracking_no' 
                 AND line_id=$line AND qc_point=$access_points
-                AND defect_part = '$defect_part'
                 AND defect_code = '$defect_code'
-                AND defect_recovered=0";
+                AND defect_recovered=0
+                AND defect_date_time='$date_time'";
 
         $query = $this->db->query($sql)->result_array();
         return $query;
@@ -1966,17 +1966,16 @@ class Access_model extends CI_Model {
 
     public function getAllPurchaseOrdersForOlymp()
     {
-        $sql = "SELECT * FROM `tb_po_detail` 
-                WHERE brand='OLYMP' 
+        $sql = "SELECT * FROM `tb_po_detail`
                 GROUP BY so_no, po_no, purchase_order, item, quality, color";
 
         $query = $this->db->query($sql)->result_array();
         return $query;
     }
 
-    public function po_closed($value,$so_no)
+    public function po_closed($so_no, $status)
     {
-        $sql = "UPDATE tb_po_detail SET status='$value' WHERE so_no='$so_no'";
+        $sql = "UPDATE tb_po_detail SET status='$status' WHERE so_no='$so_no'";
 
         $query = $this->db->query($sql);
         return $query;

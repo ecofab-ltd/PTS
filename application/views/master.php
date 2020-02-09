@@ -183,7 +183,7 @@
       </div>-->
       <div class="left_nav_slidebar">
         <ul>
-            <li><a href="<?php echo base_url();?>"><i class="fa fa-home"></i> DASHBOARD <span class="left_nav_pointer"></span></a></li>
+            <li><a target="_blank" href="<?php echo base_url();?>dashboard/indexPc"><i class="fa fa-home"></i> DASHBOARD <span class="left_nav_pointer"></span></a></li>
 <!--            <li> <a href="javascript:void(0);"> <i class="fa fa-plus"></i> Manage Master Data <span class="plus"><i class="fa fa-plus"></i></span></a>-->
 <!--              <ul>-->
 <!--                  <li> <a href="--><?php //echo base_url();?><!--access/company_list"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Company List</b> </a> </li>-->
@@ -423,7 +423,7 @@
                 ?>
 
                 <li> <a href="<?php echo base_url();?>access/season"><i class="fa fa-circle"></i> Season </a></li>
-                <li> <a href="<?php echo base_url();?>access/po_close_by_merchent"><i class="fa fa-circle"></i> Po Close </a></li>
+                <li> <a href="<?php echo base_url();?>access/po_close_by_merchent"><i class="fa fa-circle"></i> PO Remarks </a></li>
 
                 <?php
             }

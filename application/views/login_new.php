@@ -14,9 +14,7 @@
     background-repeat: no-repeat;">
 <div class="wrapper">
   <!--\\\\\\\ wrapper Start \\\\\\-->
-  
-  
-  
+
   
   
   <div class="login_page">

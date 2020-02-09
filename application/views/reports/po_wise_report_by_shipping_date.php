@@ -40,7 +40,7 @@ foreach ($dates as $dt){
 <table class="display table table-bordered table-striped" id="" border="1">
     <thead>
     <tr>
-        <th class="hidden-phone center" colspan="25"><h3>Ship Date: <?php echo $dt['ex_factory_date'];?></h3></th>
+        <th class="hidden-phone center" colspan="28"><h3>Ship Date: <?php echo $dt['ex_factory_date'];?></h3></th>
     </tr>
     <tr>
         <th class="hidden-phone center">SO</th>
@@ -70,6 +70,9 @@ foreach ($dates as $dt){
         <th class="hidden-phone center" title="Balance">BLNC</th>
         <!--        <th class="hidden-phone center">Ex-Fac Date</th>-->
         <th class="hidden-phone center">Closing Date</th>
+        <th class="hidden-phone center">Test Report Status</th>
+        <th class="hidden-phone center">Plan Final Audit Date</th>
+        <th class="hidden-phone center">Cargo Handover Date</th>
         <th class="hidden-phone center">Remarks</th>
     </tr>
     </thead>
@@ -171,6 +174,25 @@ foreach ($dates as $dt){
                 }
                 ?>
             </td>
+            <td class="center"></td>
+            <td class="center">
+                <?php
+                if($v['brand'] == 'TIMBERLAND'){
+                    echo date('Y-m-d', strtotime($v['ex_factory_date']. ' - 1 days'));
+                }else{
+
+                }
+                ?>
+            </td>
+            <td class="center">
+                <?php
+                    if($v['brand'] == 'TIMBERLAND'){
+                        echo $v['ex_factory_date'];
+                    }else{
+                        echo '';
+                    }
+                ?>
+            </td>
             <td class="center">
                 <?php
                 if($v['status'] == 'CLOSE') {
@@ -203,6 +225,9 @@ foreach ($dates as $dt){
         <td class="center"><h4><b><?php echo ($total_wh_qty + $total_other_qty);?></b></h4></td>
         <!--        <td class="center"><h4><b>--><?php //echo $total_other_qty;?><!--</b></h4></td>-->
         <td class="center"><h4><b><?php echo $total_balance_qty;?></b></h4></td>
+        <td class="center"></td>
+        <td class="center"></td>
+        <td class="center"></td>
         <td class="center"></td>
         <td class="center"></td>
     </tr>
@@ -245,7 +270,7 @@ foreach ($dates as $dt){
 <table class="display table table-bordered table-striped" id="" border="1">
     <thead>
     <tr>
-        <th class="hidden-phone center" colspan="25"><h1><b>Month Summary</b></h1></th>
+        <th class="hidden-phone center" colspan="28"><h1><b>Month Summary</b></h1></th>
     </tr>
     <tr>
         <th class="hidden-phone center">Dates</th>
@@ -265,7 +290,7 @@ foreach ($dates as $dt){
         <!--        <th class="hidden-phone center">Other</th>-->
         <th class="hidden-phone center" title="Balance">BLNC</th>
         <!--        <th class="hidden-phone center">Ex-Fac Date</th>-->
-        <th class="hidden-phone center" colspan="10"></th>
+        <th class="hidden-phone center" colspan="13"></th>
     </tr>
     </thead>
     <tbody>
@@ -288,7 +313,7 @@ foreach ($dates as $dt){
         <td class="hidden-phone center"><?php echo $week_total_carton_balance_qty[$k];?></td>
         <td class="hidden-phone center"><?php echo $week_total_wh_qty[$k];?></td>
         <td class="hidden-phone center"><?php echo $week_total_balance_qty[$k];?></td>
-        <td class="hidden-phone center" colspan="10"></td>
+        <td class="hidden-phone center" colspan="13"></td>
     </tr>
     <?php } ?>
     </tbody>
@@ -310,7 +335,7 @@ foreach ($dates as $dt){
         <td class="center"><h4><b><?php echo $total_month_wh_qty + $total_month_other_qty;?></b></h4></td>
         <!--        <td class="center"><h4><b>--><?php //echo $total_other_qty;?><!--</b></h4></td>-->
         <td class="center"><h4><b><?php echo $total_month_balance_qty;?></b></h4></td>
-        <td class="center" colspan="10"></td>
+        <td class="center" colspan="13"></td>
     </tr>
     </tfoot>
 </table>
