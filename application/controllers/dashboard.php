@@ -4006,6 +4006,19 @@ class Dashboard extends CI_Controller {
         $this->load->view('reports/master', $data);
     }
 
+    public function getDailyLayCutPackageReportDetail($search_date){
+        $data['title']='Cutting Package Ready Detail';
+
+        $data['date'] = $search_date;
+
+        if($search_date != '' && $search_date != '1970-01-01'){
+            $data['cut_report'] = $this->dashboard_model->getDailyLayCutPackageReportDetail($search_date);
+        }
+
+        $data['maincontent'] = $this->load->view('reports/cutting_report_by_date', $data, true);
+        $this->load->view('reports/master', $data);
+    }
+
     public function getDailyPackingReportDetail($search_date, $floor_name, $floor_id){
         $data['title'] = "Packing Report";
 
@@ -4374,7 +4387,7 @@ class Dashboard extends CI_Controller {
         if($po_no != ''){
             $where .= " AND t1.po_no = '$po_no'";
         }
-        if($po_no != ''){
+        if($so_no != ''){
             $where .= " AND t1.so_no = '$so_no'";
         }
         if($purchase_order != ''){
@@ -4391,6 +4404,29 @@ class Dashboard extends CI_Controller {
         }
 
         $where .= " AND t1.carton_status=0 AND t1.warehouse_qa_type=0";
+
+        $get_data['remain_pcs'] = $this->dashboard_model->getRemainingCLBySize($where);
+
+        $maincontent = $this->load->view('po_item_wise_carton_remain_pcs', $get_data, true);
+
+        echo $maincontent;
+    }
+
+    public function getPoItemWiseLineRemainCL(){
+        $so_no = $this->input->post('so_no');
+        $line_id = $this->input->post('line_id');
+
+        $where = '';
+
+        if($so_no != ''){
+            $where .= " AND t1.so_no = '$so_no'";
+        }
+
+        if($so_no != ''){
+            $where .= " AND t1.line_id = '$line_id'";
+        }
+
+        $where .= " AND t1.access_points!=4 AND t1.access_points_status!=4";
 
         $get_data['remain_pcs'] = $this->dashboard_model->getRemainingCLBySize($where);
 

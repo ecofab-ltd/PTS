@@ -11,15 +11,37 @@ foreach ($po_items as $v_po_count) {
 
             <table class="display table table-bordered table-striped" id="sample_2">
                 <thead>
+
+<!--                --><?php //echo $img_url?>
+<!---->
+
+
+
+
                     <tr>
                         <th class="center" colspan="<?php echo $po_count+1;?>">
+                            <div style="float: left; padding: 2px">
+                                <?php
+
+                                $input_ticket_no_file = $img_url;
+                                //                    echo $input_ticket_no_file;
+
+                                $code = '<center><img src="'. base_url().'uploads/qr_image/'.$input_ticket_no_file.'" width="70" height="70" title="QR Code Image!"></center>';
+                                echo $code;
+                                ?>
+                            </div>
+
                             <span style="font-size: 20px;">
                                 SAP No.: <?php echo $cut_order_summary[0]['po_no'];?> /
                                 Cut No.: <?php echo $cut_order_summary[0]['cut_no'];?> /
                                 Style_Name: <?php echo $cut_order_summary[0]['style_name'];?> /
                                 Quality: <?php echo $cut_order_summary[0]['quality'];?> /
                                 Color: <?php echo $cut_order_summary[0]['color'];?> /
-                                Ex-Fac Date: <?php echo $cut_order_summary[0]['ex_factory_date'];?>
+                                Ex-Fac Date: <?php echo $cut_order_summary[0]['ex_factory_date'];?> /
+                                <?php
+                                echo ($cut_order_summary[0]['is_lay_complete'] == 1 ? "Lay Complete /" : "");
+                                echo ($cut_order_summary[0]['is_cutting_complete'] == 1 ? "Cut Complete /" : "");
+                                ?>
                             </span>
                         </th>
                     </tr>

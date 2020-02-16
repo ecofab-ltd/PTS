@@ -19,10 +19,22 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <select required class="form-control" id="so_no">
-                            <option value="" >SO ~ PO ~ ExFacDate</option>
+                            <option value="" >SO ~ PO ~ Status ~ Type ~ (ExFacDate)</option>
                             <?php
-                            foreach ($purchase_order_nos as $pos){ ?>
-                                <option value="<?php echo $pos['so_no'];?>"><?php echo $pos['so_no'].'~'.$pos['purchase_order'].'~'.$pos['status'].'~ ('.$pos['ex_factory_date'].')';?></option>
+                            $type = '';
+                            foreach ($purchase_order_nos as $pos){
+
+                                if($pos['po_type'] == 0){
+                                    $type = 'Bulk';
+                                }
+                                if($pos['po_type'] == 1){
+                                    $type = 'Size Set';
+                                }
+                                if($pos['po_type'] == 2){
+                                    $type = 'Sample';
+                                }
+                            ?>
+                                <option value="<?php echo $pos['so_no'];?>"><?php echo $pos['so_no'].'~'.$pos['purchase_order'].'~'.$pos['status'].'~'.$type.'~ ('.$pos['ex_factory_date'].')';?></option>
                                 <?php
                             }
                             ?>

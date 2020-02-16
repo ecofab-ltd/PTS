@@ -97,7 +97,11 @@
                             <td class="center"><?php echo $v['cuff_bndl_qty']; ?></td>
                             <td class="center"><?php echo $v['count_mid_line_qc_pass']; ?></td>
                             <td class="center"><?php echo $v['count_end_line_qc_pass']; ?></td>
-                            <td class="center"><?php echo $balance; ?></td>
+                            <td class="center">
+                                <span class="center btn btn-danger" data-target="#myModal2" data-toggle="modal" onclick="getPoItemWiseLineRemainCL('<?php echo $v['so_no']; ?>', '<?php echo $vl; ?>');">
+                                    <?php echo $balance; ?>
+                                </span>
+                            </td>
                         </tr>
                         <?php
                     }

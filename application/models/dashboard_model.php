@@ -414,10 +414,55 @@ class Dashboard_model extends CI_Model {
     }
 
     public function getCuttingTotalPackageReport($search_date){
-        $sql = "SELECT SUM(cut_qty) AS cut_package_ready_qty 
-                FROM `tb_cut_summary` 
-                WHERE is_package_ready=1 
-                AND DATE_FORMAT(package_ready_date_time, '%Y-%m-%d')='$search_date'";
+        $sql = "SELECT t1.*
+              
+                FROM (
+                SELECT
+                    SUM(CASE WHEN is_lay_complete=1 AND DATE_FORMAT(lay_complete_date_time, '%Y-%m-%d')='$search_date'
+                THEN cut_qty
+                ELSE 0 end) AS lay_complete_qty,
+
+                SUM(CASE WHEN is_cutting_complete=1 AND DATE_FORMAT(cutting_complete_date_time, '%Y-%m-%d')='$search_date'
+                THEN cut_qty
+                ELSE 0 end) AS cut_complete_qty,
+                    
+                SUM(CASE WHEN is_package_ready=1 AND DATE_FORMAT(package_ready_date_time, '%Y-%m-%d')='$search_date'
+                THEN cut_qty
+                ELSE 0 end) AS package_ready_qty
+                  
+                    
+                FROM tb_cut_summary)  as t1";
+
+        $query = $this->db->query($sql)->result_array();
+        return $query;
+    }
+
+    public function getDailyLayCutPackageReportDetail($search_date){
+        $sql = "SELECT t1.*, t2.total_order_qty
+              
+                FROM (
+                SELECT po_no,so_no,item,quality,color,purchase_order,ex_factory_date,brand,style_no,style_name,
+                    
+                    
+                SUM(CASE WHEN is_lay_complete=1 AND DATE_FORMAT(lay_complete_date_time, '%Y-%m-%d')='$search_date'
+                THEN cut_qty
+                ELSE 0 end) AS lay_complete_qty,
+
+                SUM(CASE WHEN is_cutting_complete=1 AND DATE_FORMAT(cutting_complete_date_time, '%Y-%m-%d')='$search_date'
+                THEN cut_qty
+                ELSE 0 end) AS cut_complete_qty,
+                    
+                    SUM(CASE WHEN is_package_ready=1 AND DATE_FORMAT(package_ready_date_time, '%Y-%m-%d')='$search_date'
+                THEN cut_qty
+                ELSE 0 end) AS package_ready_qty
+                  
+                    
+                FROM tb_cut_summary GROUP BY po_no,so_no,item,quality,color,purchase_order
+                )  as t1
+                LEFT JOIN
+                vt_po_summary as t2
+                ON t1.so_no=t2.so_no
+                WHERE t1.lay_complete_qty > 0 OR t1.cut_complete_qty > 0 OR t1.package_ready_qty > 0";
 
         $query = $this->db->query($sql)->result_array();
         return $query;
@@ -1020,13 +1065,17 @@ class Dashboard_model extends CI_Model {
     }
 
     public function getDateWisePackingReport($po_from_date, $floor_id){
-        $sql = "SELECT po_no, so_no, brand, purchase_order, style_no,
+        $sql = "SELECT t1.*, t2.total_order_qty, t2.count_packing_pass
+                FROM (SELECT po_no, so_no, brand, purchase_order, style_no,
                 style_name, item, quality, color, ex_factory_date,
                 COUNT(pc_tracking_no) as packing_qty
                 FROM `tb_care_labels`
-                WHERE DATE_FORMAT(packing_date_time, '%Y-%m-%d') = '$po_from_date' 
+                WHERE DATE_FORMAT(packing_date_time, '%Y-%m-%d') = '$po_from_date'
                 AND finishing_floor_id=$floor_id
-                GROUP BY po_no, so_no, purchase_order, item, quality, color, finishing_floor_id";
+                GROUP BY po_no, so_no, purchase_order, item, quality, color, finishing_floor_id) AS t1
+                LEFT JOIN
+                tb_production_summary AS t2
+                ON t1.so_no=t2.so_no";
 
         $query = $this->db->query($sql)->result_array();
         return $query;

@@ -5378,11 +5378,166 @@ class Access extends CI_Controller {
             $data['po_items'] = $this->access_model->getPoItemBySapCut($sap_no, $cut_no);
             $data['cut_order_summary'] = $this->access_model->getBundleSummary($sap_no, $cut_no);
 
-//        echo json_encode($data['cut_order_summary']);
+            $cut_tracking_nos = $this->access_model->getCutTrackingNo($sap_no, $cut_no);
+            $cut_tracking_no=$cut_tracking_nos[0]['cut_tracking_no'];
+
+
+            if($sap_no != '' && $cut_no != '')
+            {
+                $lay_complete = $cut_tracking_no;
+
+                $get_data['lay_complete'] = $lay_complete;
+
+                $this->load->library('ciqrcode');
+                $qr_image=$lay_complete.'png';
+                $params['data'] = $lay_complete;
+                $params['level'] = 'H';
+                $params['size'] = 8;
+                $params['savename'] =FCPATH."uploads/qr_image/".$qr_image;
+
+
+                if($this->ciqrcode->generate($params))
+                {
+                    $data['img_url']=$qr_image;
+                }
+            }
 
             echo $maincontent = $this->load->view('bundle_summary_tbl_new', $data, true);
         }
 
+    }
+
+    public function lay_scan()
+    {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $s_data['session_last_action_date_time'] = $date_time;
+        $this->session->set_userdata($s_data);
+
+        $data['title'] = 'Lay Scan';
+
+        $line_id = $this->session->userdata('line_id');
+        $data['user_name'] = $this->session->userdata('user_name');
+        $data['user_description'] = $this->session->userdata('user_description');
+        $data['access_points'] = $this->session->userdata('access_points');
+        $data['msg'] = '';
+        $data['session_out'] = $this->session_out;
+
+        $where = '';
+        if($line_id != 0 && $line_id != ''){
+            $where .= " AND t5.line_id=$line_id order by t3.max_mid_line_qc_date_time DESC";
+        }
+        $data['maincontent'] = $this->load->view('lay_scan', $data, true);
+        $this->load->view('master', $data);
+    }
+
+    public function inputToLay()
+    {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $s_data['session_last_action_date_time'] = $date_time;
+
+        $this->session->set_userdata($s_data);
+
+        $get_data['user_name'] = $this->session->userdata('user_name');
+        $get_data['user_description'] = $this->session->userdata('user_description');
+        $get_data['access_points'] = $this->session->userdata('access_points');
+
+        $access_points = $this->session->userdata('access_points');
+        $line_id = $this->session->userdata('line_id');
+
+        $carelabel_tracking_no = $this->input->post('care_label_no');
+
+        $chk_lay=$this->access_model->chk_lay($carelabel_tracking_no);
+        if(sizeof($chk_lay) > 0)
+        {
+            echo 'already pass';
+        }
+        else
+        {
+            $this->access_model->inputToLay($carelabel_tracking_no, $date_time);
+
+            echo 'done';
+        }
+
+
+    }
+
+    public function cut_scan()
+    {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $s_data['session_last_action_date_time'] = $date_time;
+        $this->session->set_userdata($s_data);
+
+        $data['title'] = 'Cut Scan';
+
+        $line_id = $this->session->userdata('line_id');
+        $data['user_name'] = $this->session->userdata('user_name');
+        $data['user_description'] = $this->session->userdata('user_description');
+        $data['access_points'] = $this->session->userdata('access_points');
+        $data['msg'] = '';
+        $data['session_out'] = $this->session_out;
+
+        $where = '';
+        if($line_id != 0 && $line_id != ''){
+            $where .= " AND t5.line_id=$line_id order by t3.max_mid_line_qc_date_time DESC";
+        }
+        $data['maincontent'] = $this->load->view('cut_scan', $data, true);
+        $this->load->view('master', $data);
+    }
+
+    public function inputToCut()
+    {
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $s_data['session_last_action_date_time'] = $date_time;
+
+        $this->session->set_userdata($s_data);
+
+        $get_data['user_name'] = $this->session->userdata('user_name');
+        $get_data['user_description'] = $this->session->userdata('user_description');
+        $get_data['access_points'] = $this->session->userdata('access_points');
+
+        $access_points = $this->session->userdata('access_points');
+        $line_id = $this->session->userdata('line_id');
+
+        $carelabel_tracking_no = $this->input->post('care_label_no');
+
+        $chk_lay=$this->access_model->check_lay($carelabel_tracking_no);
+        $chk_cut=$this->access_model->check_cut($carelabel_tracking_no);
+
+        if(sizeof($chk_lay) > 0)
+        {
+            if(sizeof($chk_cut) > 0)
+            {
+                echo 'Already Pass';
+            }
+            else
+            {
+                $this->access_model->inputToCut($carelabel_tracking_no, $date_time);
+                echo 'Done';
+            }
+
+        }
+
+
+        else
+        {
+            echo 'Pending';
+        }
     }
 
     public function getCuttingSummaryReport(){

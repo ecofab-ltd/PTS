@@ -4834,6 +4834,55 @@ class Access_model extends CI_Model {
         return $query;
     }
 
+    public function chk_lay($carelabel_tracking_no)
+    {
+        $sql = "SELECT * FROM `tb_cut_summary` WHERE is_lay_complete=1 AND cut_tracking_no='$carelabel_tracking_no'";
+
+        $query = $this->db->query($sql)->result_array();
+        return $query;
+    }
+
+    public function inputToLay($carelabel_tracking_no, $date_time)
+    {
+        $sql="UPDATE tb_cut_summary SET is_lay_complete=1,
+                lay_complete_date_time='$date_time'             
+                WHERE cut_tracking_no = '$carelabel_tracking_no'";
+
+        $query = $this->db->query($sql);
+        return $query;
+    }
+
+    public function check_lay($carelabel_tracking_no)
+    {
+        $sql="SELECT *  FROM `tb_cut_summary` WHERE `cut_tracking_no` = '$carelabel_tracking_no' AND is_lay_complete=1";
+        $query = $this->db->query($sql)->result_array();
+        return $query;
+    }
+
+    public function check_cut($carelabel_tracking_no)
+    {
+        $sql="SELECT *  FROM `tb_cut_summary` WHERE `cut_tracking_no` = '$carelabel_tracking_no' AND is_cutting_complete=1";
+        $query = $this->db->query($sql)->result_array();
+        return $query;
+    }
+
+    public function inputToCut($carelabel_tracking_no, $date_time)
+    {
+        $sql="UPDATE tb_cut_summary SET is_cutting_complete=1,
+                cutting_complete_date_time='$date_time'             
+                WHERE cut_tracking_no = '$carelabel_tracking_no'";
+
+        $query = $this->db->query($sql);
+        return $query;
+    }
+
+    public function getCutTrackingNo($sap_no, $cut_nos)
+    {
+        $sql="SELECT cut_tracking_no  FROM `tb_cut_summary` WHERE `po_no` = '$sap_no' AND cut_no='$cut_nos' GROUP BY cut_no";
+        $query = $this->db->query($sql)->result_array();
+        return $query;
+    }
+
     public function getCareLabelSentReportNew()
     {
         $sql = "Select A.*, count(A.sent_to_production) as count_sent_to_prod, B.cut_tracking_no_qty 
@@ -5231,7 +5280,8 @@ class Access_model extends CI_Model {
 //                ORDER BY t2.serial, t1.cut_layer, t1.purchase_order, t1.item, t1.size, t1.cut_layer";
 
 		$sql = "SELECT t1.* FROM (SELECT po_no, purchase_order, item, quality, style_no, style_name, 
-                color, brand, ex_factory_date, cut_no, cut_tracking_no, size, cut_qty, cut_layer, SUM(cut_qty) as qty  
+                color, brand, ex_factory_date, cut_no, cut_tracking_no, size, cut_qty, cut_layer, SUM(cut_qty) as qty,
+                is_lay_complete, is_cutting_complete
                 FROM `tb_cut_summary` WHERE `po_no` = '$sap_no' AND cut_no='$cut_no'  
                 GROUP BY po_no, cut_no, size, cut_layer) as t1
                 LEFT JOIN

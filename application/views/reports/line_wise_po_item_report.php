@@ -69,6 +69,34 @@
             <div class="row" id="report_content"></div>
             <div class="row" id="size_tbl"></div>
         </div>
+
+        <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel"></h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="col-md-3 scroll4">
+                            <div class="porlets-content">
+                                <div class="table-responsive" id="remain_cl_list">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <!--                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                        <!--                <button type="button" class="btn btn-primary">Save changes</button>-->
+                    </div>
+
+                </div>
+            </div>
+        </div>
     <!--\\\\\\\ container  end \\\\\\-->
 
 <script type="text/javascript">
@@ -107,6 +135,20 @@
             });
         }
 
+    }
+
+    function getPoItemWiseLineRemainCL(so_no, line_id) {
+        $("#remain_cl_list").empty();
+
+        $.ajax({
+            url: "<?php echo base_url();?>dashboard/getPoItemWiseLineRemainCL/",
+            type: "POST",
+            data: {so_no: so_no, line_id: line_id},
+            dataType: "html",
+            success: function (data) {
+                $("#remain_cl_list").append(data);
+            }
+        });
     }
 
     function getSizeWiseReport(sap_no, po, item, color) {
