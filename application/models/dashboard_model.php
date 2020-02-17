@@ -437,6 +437,46 @@ class Dashboard_model extends CI_Model {
         return $query;
     }
 
+    public function getDailyFusingReport($date)
+    {
+        $sql = "Select A.*, B.part_codes FROM (SELECT t1.*, t2.total_order_qty
+              
+                FROM (
+                SELECT po_no,so_no,item,quality,color,purchase_order,ex_factory_date,brand,style_no,style_name,
+                    
+                     SUM(CASE WHEN id !=''
+                THEN cut_qty
+                ELSE 0 end) AS count_cut_quantity,
+                    
+                SUM(CASE WHEN is_cutting_collar_bundle_ready=1 AND DATE_FORMAT(cutting_collar_bundle_ready_date_time, '%Y-%m-%d')='$date'
+                THEN cut_qty
+                ELSE 0 end) AS count_cutting_collar_bundle_qty,
+
+                SUM(CASE WHEN is_cutting_cuff_bundle_ready=1 AND DATE_FORMAT(cutting_cuff_bundle_ready_date_time, '%Y-%m-%d')='$date'
+                THEN cut_qty
+                ELSE 0 end) AS count_cutting_cuff_bundle_qty,
+                    
+                SUM(CASE WHEN is_cutting_sleeve_plkt_bundle_ready=1 AND DATE_FORMAT(cutting_sleeve_plkt_bundle_ready_date_time, '%Y-%m-%d')='$date'
+                THEN cut_qty
+                ELSE 0 end) AS count_slv_plkt_qty
+                    
+                FROM tb_cut_summary GROUP BY po_no,so_no,item,quality,color,purchase_order
+                )  as t1
+                LEFT JOIN
+                vt_po_summary as t2
+                ON t1.so_no=t2.so_no
+                
+                WHERE t1.count_cutting_collar_bundle_qty > 0 OR t1.count_cutting_cuff_bundle_qty > 0 OR t1.count_slv_plkt_qty > 0) AS A
+                
+                INNER JOIN
+                (SELECT po_no, GROUP_CONCAT(part_code SEPARATOR ',') AS part_codes 
+                FROM `tb_po_part_detail` GROUP BY po_no) AS B
+                ON A.po_no=B.po_no";
+
+        $query = $this->db->query($sql)->result_array();
+        return $query;
+    }
+
     public function getDailyLayCutPackageReportDetail($search_date){
         $sql = "SELECT t1.*, t2.total_order_qty
               
@@ -450,9 +490,27 @@ class Dashboard_model extends CI_Model {
 
                 SUM(CASE WHEN is_cutting_complete=1 AND DATE_FORMAT(cutting_complete_date_time, '%Y-%m-%d')='$search_date'
                 THEN cut_qty
-                ELSE 0 end) AS cut_complete_qty,
+                ELSE 0 end) AS cut_complete_qty
+                  
                     
-                    SUM(CASE WHEN is_package_ready=1 AND DATE_FORMAT(package_ready_date_time, '%Y-%m-%d')='$search_date'
+                FROM tb_cut_summary GROUP BY po_no,so_no,item,quality,color,purchase_order
+                )  as t1
+                LEFT JOIN
+                vt_po_summary as t2
+                ON t1.so_no=t2.so_no
+                WHERE t1.lay_complete_qty > 0 OR t1.cut_complete_qty > 0";
+
+        $query = $this->db->query($sql)->result_array();
+        return $query;
+    }
+
+    public function getDailyPackageReportDetail($search_date){
+        $sql = "SELECT t1.*, t2.total_order_qty
+              
+                FROM (
+                SELECT po_no,so_no,item,quality,color,purchase_order,ex_factory_date,brand,style_no,style_name,
+                    
+                SUM(CASE WHEN is_package_ready=1 AND DATE_FORMAT(package_ready_date_time, '%Y-%m-%d')='$search_date'
                 THEN cut_qty
                 ELSE 0 end) AS package_ready_qty
                   
@@ -462,7 +520,7 @@ class Dashboard_model extends CI_Model {
                 LEFT JOIN
                 vt_po_summary as t2
                 ON t1.so_no=t2.so_no
-                WHERE t1.lay_complete_qty > 0 OR t1.cut_complete_qty > 0 OR t1.package_ready_qty > 0";
+                WHERE t1.package_ready_qty > 0";
 
         $query = $this->db->query($sql)->result_array();
         return $query;

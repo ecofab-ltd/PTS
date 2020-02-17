@@ -40,7 +40,7 @@
         <tbody>
         <tr>
             <th><?php echo $cutting_target[0]['target'];?></th>
-            <th><?php echo $cutting_prod[0]['cut_package_ready_qty'];?></th>
+            <th><?php echo $cutting_prod[0]['package_ready_qty'];?></th>
 <!--            <th>-->
 <!--                --><?php
 //                $eot_cut_pass = ($cutting_prod[0]['total_cutting_output'] - $cutting_prod[0]['normal_hour_cutting_output']);
@@ -59,13 +59,13 @@
         'cut_target' => ($cutting_target[0]['target'] != '' ? $cutting_target[0]['target'] : 0),
 //        'normal_output' => ($cutting_prod[0]['normal_hour_cutting_output'] != '' ? $cutting_prod[0]['normal_hour_cutting_output'] : 0),
 //        'eot_output' => ($eot_cut_pass != '' ? $eot_cut_pass : 0),
-        'cut_output' => ($cutting_prod[0]['cut_package_ready_qty'] != '' ? $cutting_prod[0]['cut_package_ready_qty'] : 0),
+        'cut_output' => ($cutting_prod[0]['package_ready_qty'] != '' ? $cutting_prod[0]['package_ready_qty'] : 0),
         'date' => $previous_date
 
     );
     $this->method_call->deleteTblData('tb_daily_cut_summary', $previous_date);
 
-    if($cutting_prod[0]['cut_package_ready_qty'] != 0 && $cutting_prod[0]['cut_package_ready_qty'] != ''){
+    if($cutting_prod[0]['package_ready_qty'] != 0 && $cutting_prod[0]['package_ready_qty'] != ''){
         $this->method_call->insertTblData('tb_daily_cut_summary', $data_c);
     }
 

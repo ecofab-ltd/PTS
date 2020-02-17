@@ -3579,6 +3579,31 @@ class Dashboard extends CI_Controller {
         echo $maincontent;
     }
 
+    public function dailyFusingReport()
+    {
+        $data['title']='Daily Fusing Report';
+
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+        $data['date']=$date;
+
+//        $data['fusing_report'] = $this->dashboard_model->getDailyFusingReport($date);
+
+        $data['maincontent'] = $this->load->view('reports/daily_fusing_report', $data, true);
+        $this->load->view('reports/master', $data);
+    }
+
+    public function getFusingReport(){
+        $date = $this->input->post('date');
+
+        $data['date'] = $date;
+
+        $data['fusing_report'] = $this->dashboard_model->getDailyFusingReport($date);
+        echo $data['maincontent'] = $this->load->view('reports/daily_fusing_summary_report', $data);
+
+    }
+
     public function print_bundle_summary_page(){
         $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
         
@@ -4016,6 +4041,19 @@ class Dashboard extends CI_Controller {
         }
 
         $data['maincontent'] = $this->load->view('reports/cutting_report_by_date', $data, true);
+        $this->load->view('reports/master', $data);
+    }
+
+    public function getDailyPackageReportDetail($search_date){
+        $data['title']='Cutting Package Ready Detail';
+
+        $data['date'] = $search_date;
+
+        if($search_date != '' && $search_date != '1970-01-01'){
+            $data['cut_report'] = $this->dashboard_model->getDailyPackageReportDetail($search_date);
+        }
+
+        $data['maincontent'] = $this->load->view('reports/cutting_package_report_by_date', $data, true);
         $this->load->view('reports/master', $data);
     }
 
