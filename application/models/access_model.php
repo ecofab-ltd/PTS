@@ -5246,7 +5246,7 @@ class Access_model extends CI_Model {
 
     public function updatingCLPrintLog($so_no, $cut_tracking_no, $date_time, $print_qty){
         $sql = "Update `tb_care_labels` SET is_printed=1, printing_date_time='$date_time' 
-                WHERE po_no='$so_no' AND cut_tracking_no = '$cut_tracking_no' AND is_printed=0
+                WHERE so_no='$so_no' AND cut_tracking_no = '$cut_tracking_no' AND is_printed=0
                 ORDER BY id DESC
                 LIMIT $print_qty";
 
@@ -5256,7 +5256,7 @@ class Access_model extends CI_Model {
 
     public function updatingCLSummaryPrintLog($so_no, $cut_tracking_no, $date_time){
         $sql = "Update `tb_cut_summary` SET is_care_label_printed=1 
-                WHERE po_no='$so_no' AND cut_tracking_no = '$cut_tracking_no'";
+                WHERE so_no='$so_no' AND cut_tracking_no = '$cut_tracking_no'";
 
         $query = $this->db->query($sql);
         return $query;

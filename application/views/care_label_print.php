@@ -63,7 +63,7 @@
             document.body.innerHTML = originalContents;
 
             var cut_tracking_no = '<?php echo $cut_tracking_no;?>';
-            var so_no = '<?php echo $po_no;?>';
+            var so_no = '<?php echo $so_no;?>';
 
 //        alert(cut_tracking_no);
 
