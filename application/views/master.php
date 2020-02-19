@@ -266,6 +266,7 @@
                   <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>access/print_bundle_summary_page"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b> Bundle Summary </b> </a> </li>
                   <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>access/cutting_summary"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b> Cutting Summary </b> </a> </li>
                   <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>access/print_input_ticket"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b> Get Input Ticket </b> </a> </li>
+                  <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>dashboard/cutPackageReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b> Package Ready Chart </b> </a> </li>
               </ul>
             </li>
             <li> <a href="<?php echo base_url();?>access/poInfoReport"><i class="fa fa-circle"></i> PO Info </a></li>
@@ -311,12 +312,13 @@
             <li> <a href="<?php echo base_url();?>access/care_label_end_line_new"><i class="fa fa-circle"></i> End-Line QC</a></li>
             <li> <a href="javascript:void(0);"> <i class="fa fa-plus"></i> Line Reports <span class="plus"><i class="fa fa-plus"></i></span></a>
                 <ul>
-                    <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>access/dashboardReport"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Dashboard Report</b> </a> </li>
-                    <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>access/linePerformanceDashboard"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Line Performance</b> </a> </li>
-                    <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>access/lineInputReport"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Line Report</b> </a> </li>
-                    <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>access/lineInputReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Pass Report Graph</b> </a> </li>
-                    <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>access/lineWIPReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>WIP Report Graph</b> </a> </li>
-                    <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>access/lineDefectReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Defect Report Graph</b> </a> </li>
+                    <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>dashboard/linePerformanceDashboardNew/<?php echo $line_id;?>"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Line Dashboard</b> </a> </li>
+<!--                    <li> <a style="margin-bottom: 1px;" target="_blank" href="--><?php //echo base_url();?><!--access/dashboardReport"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Dashboard Report</b> </a> </li>-->
+<!--                    <li> <a style="margin-bottom: 1px;" target="_blank" href="--><?php //echo base_url();?><!--access/linePerformanceDashboard"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Line Performance</b> </a> </li>-->
+<!--                    <li> <a style="margin-bottom: 1px;" target="_blank" href="--><?php //echo base_url();?><!--access/lineInputReport"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Line Report</b> </a> </li>-->
+<!--                    <li> <a style="margin-bottom: 1px;" target="_blank" href="--><?php //echo base_url();?><!--access/lineInputReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Pass Report Graph</b> </a> </li>-->
+<!--                    <li> <a style="margin-bottom: 1px;" target="_blank" href="--><?php //echo base_url();?><!--access/lineWIPReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>WIP Report Graph</b> </a> </li>-->
+<!--                    <li> <a style="margin-bottom: 1px;" target="_blank" href="--><?php //echo base_url();?><!--access/lineDefectReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Defect Report Graph</b> </a> </li>-->
                 </ul>
             </li>
             <?php
@@ -343,14 +345,6 @@
                 ?>
                 <!--            <li> <a href="--><?php //echo base_url();?><!--access/care_label_end_line"><i class="fa fa-circle"></i> End-Line QC</a></li>-->
                 <li> <a href="<?php echo base_url();?>access/care_label_washing"><i class="fa fa-circle"></i> Wash Return</a></li>
-                <li> <a href="javascript:void(0);"> <i class="fa fa-plus"></i> Line Reports <span class="plus"><i class="fa fa-plus"></i></span></a>
-                    <ul>
-                        <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>access/lineInputReport"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Line Report</b> </a> </li>
-                        <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>access/lineInputReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Pass Report Graph</b> </a> </li>
-                        <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>access/lineWIPReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>WIP Report Graph</b> </a> </li>
-                        <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>access/lineDefectReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Defect Report Graph</b> </a> </li>
-                    </ul>
-                </li>
                 <?php
             }
 
@@ -361,14 +355,11 @@
                 <li> <a href="<?php echo base_url();?>access/care_label_packing"><i class="fa fa-circle"></i> Packing </a></li>
                 <li> <a href="<?php echo base_url();?>access/finishing_alter"><i class="fa fa-circle"></i> Quality Control </a></li>
                 <li> <a href="<?php echo base_url();?>access/print_sticker_test"><i class="fa fa-circle"></i> Sticker Test </a></li>
-<!--                <li> <a href="javascript:void(0);"> <i class="fa fa-plus"></i> Line Reports <span class="plus"><i class="fa fa-plus"></i></span></a>-->
-<!--                    <ul>-->
-<!--                        <li> <a style="margin-bottom: 1px;" target="_blank" href="--><?php //echo base_url();?><!--access/lineInputReport"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Line Report</b> </a> </li>-->
-<!--                        <li> <a style="margin-bottom: 1px;" target="_blank" href="--><?php //echo base_url();?><!--access/lineInputReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Pass Report Graph</b> </a> </li>-->
-<!--                        <li> <a style="margin-bottom: 1px;" target="_blank" href="--><?php //echo base_url();?><!--access/lineWIPReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>WIP Report Graph</b> </a> </li>-->
-<!--                        <li> <a style="margin-bottom: 1px;" target="_blank" href="--><?php //echo base_url();?><!--access/lineDefectReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Defect Report Graph</b> </a> </li>-->
-<!--                    </ul>-->
-<!--                </li>-->
+                <li> <a href="javascript:void(0);"> <i class="fa fa-plus"></i> Finishing Reports <span class="plus"><i class="fa fa-plus"></i></span></a>
+                    <ul>
+                        <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>dashboard/finishingFloorOutputReport/<?php echo $floor_id;?>"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Finishing Dashboard</b> </a> </li>
+                    </ul>
+                </li>
                 <?php
             }
 
@@ -389,15 +380,6 @@
             }
             if($access_points == 9){ ?>
                 <li> <a href="<?php echo base_url();?>access/care_label_carton"><i class="fa fa-circle"></i> Carton </a></li>
-                <li> <a href="javascript:void(0);"> <i class="fa fa-plus"></i> Line Reports <span class="plus"><i class="fa fa-plus"></i></span></a>
-                    <ul>
-                        <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>access/finishingFloorOutputReport"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Finishing Report</b> </a> </li>
-                        <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>access/lineInputReport"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Line Report</b> </a> </li>
-                        <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>access/lineInputReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Pass Report Graph</b> </a> </li>
-                        <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>access/lineWIPReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>WIP Report Graph</b> </a> </li>
-                        <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>access/lineDefectReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Defect Report Graph</b> </a> </li>
-                    </ul>
-                </li>
             <?php
             }
 

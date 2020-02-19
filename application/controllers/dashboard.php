@@ -2048,7 +2048,7 @@ class Dashboard extends CI_Controller {
         $date=$datex->format('Y-m-d');
 
         $previous_date = date( "Y-m-d", strtotime( $date . "-1 day"));
-//        $previous_date = "2019-10-30";
+//        $previous_date = "2020-02-16";
         $data['previous_date'] = $previous_date;
 
 //        echo '<pre>';
@@ -2676,9 +2676,13 @@ class Dashboard extends CI_Controller {
         }
 
         if($department == 'cutting'){
-            $data['cutting_prod'] = $this->dashboard_model->getDailyCutProductionSummaryReport($search_date);
+            $data['cutting_target'] = $this->dashboard_model->getCuttingTarget($search_date);
 
-            echo $content = $this->load->view('reports/daily_cutting_performance_report_by_date', $data);
+//            $data['cutting_prod'] = $this->dashboard_model->getDailyCutProductionSummaryReport($search_date);
+            $data['cutting_prod'] = $this->dashboard_model->getCuttingTotalPackageReport($search_date);
+
+//            echo $content = $this->load->view('reports/daily_cutting_performance_report_by_date', $data);
+            echo $content = $this->load->view('reports/daily_cutting_performance_report_by_today', $data);
         }
 
         if($department == 'sewing'){
@@ -4032,7 +4036,7 @@ class Dashboard extends CI_Controller {
     }
 
     public function getDailyLayCutPackageReportDetail($search_date){
-        $data['title']='Cutting Package Ready Detail';
+        $data['title']='Cutting Report';
 
         $data['date'] = $search_date;
 
@@ -4045,7 +4049,7 @@ class Dashboard extends CI_Controller {
     }
 
     public function getDailyPackageReportDetail($search_date){
-        $data['title']='Cutting Package Ready Detail';
+        $data['title']='Package Ready Report';
 
         $data['date'] = $search_date;
 

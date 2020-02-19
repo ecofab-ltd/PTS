@@ -490,15 +490,18 @@ class Dashboard_model extends CI_Model {
 
                 SUM(CASE WHEN is_cutting_complete=1 AND DATE_FORMAT(cutting_complete_date_time, '%Y-%m-%d')='$search_date'
                 THEN cut_qty
-                ELSE 0 end) AS cut_complete_qty
+                ELSE 0 end) AS cut_complete_qty,
+
+                SUM(CASE WHEN is_lay_complete=1 AND is_cutting_complete=0
+                THEN cut_qty
+                ELSE 0 end) AS lay_complete_cut_pending_qty
                   
-                    
                 FROM tb_cut_summary GROUP BY po_no,so_no,item,quality,color,purchase_order
                 )  as t1
                 LEFT JOIN
                 vt_po_summary as t2
                 ON t1.so_no=t2.so_no
-                WHERE t1.lay_complete_qty > 0 OR t1.cut_complete_qty > 0";
+                WHERE t1.lay_complete_qty > 0 OR t1.cut_complete_qty > 0 OR t1.lay_complete_cut_pending_qty > 0";
 
         $query = $this->db->query($sql)->result_array();
         return $query;

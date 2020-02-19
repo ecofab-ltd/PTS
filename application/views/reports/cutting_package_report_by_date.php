@@ -14,8 +14,8 @@
             <table class="display table table-bordered table-striped" id="" border="1">
                 <thead>
                 <tr>
-                    <th class="hidden-phone center" colspan="9"><h4>Package Ready Report</h4></th>
-                    <th class="hidden-phone center" colspan="2"><h4><?php echo $date;?></h4></th>
+                    <th class="hidden-phone center" colspan="10"><h4>Package Ready Report</h4></th>
+                    <th class="hidden-phone center"><h4><?php echo $date;?></h4></th>
                 </tr>
                 <tr>
                     <th class="hidden-phone center">Group SO</th>

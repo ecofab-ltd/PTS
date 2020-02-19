@@ -15,7 +15,7 @@
         <th class="center"><?php echo $cutting_prod[0]['cut_target'];?></th>
 <!--        <th class="center">--><?php //echo $cutting_prod[0]['normal_output'];?><!--</th>-->
 <!--        <th class="center">--><?php //echo $cutting_prod[0]['eot_output'];?><!--</th>-->
-        <th class="center"><a target="_blank" class="btn btn-warning" href="<?php echo base_url();?>dashboard/getDailyCuttingReportDetail/<?php echo $search_date;?>"><?php echo $cutting_prod[0]['cut_output'];?></a></th>
+        <th class="center"><a target="_blank" class="btn btn-warning" href="<?php echo base_url();?>dashboard/getDailyPackageReportDetail/<?php echo $search_date;?>"><?php echo $cutting_prod[0]['cut_output'];?></a></th>
     </tr>
     </tbody>
 </table>

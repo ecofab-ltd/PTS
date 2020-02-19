@@ -1062,6 +1062,7 @@ class Access extends CI_Controller {
         $data['title'] = 'End Line QC';
 
         $line_id = $this->session->userdata('line_id');
+        $data['line_id'] = $line_id;
         $data['user_name'] = $this->session->userdata('user_name');
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
@@ -1888,6 +1889,7 @@ class Access extends CI_Controller {
         $data['access_points'] = $this->session->userdata('access_points');
         $line_id = $this->session->userdata('line_id');
         $floor_id = $this->session->userdata('floor_id');
+        $data['floor_id'] = $floor_id;
         $data['msg'] = '';
         $data['session_out'] = $this->session_out;
 
@@ -5035,7 +5037,7 @@ class Access extends CI_Controller {
 
 
                     $bundle_tracking_no = $so_no.'_'.$cut_no.'_'.$size.'-'.$lay.'_'.$b_count; //New Bundle Card Code
-                    $cut_tracking_no = $so_no.'_'.$cut_no.'_'.$po_no_last_four.'_'.$item; //New Cutting Number Code
+                    $cut_tracking_no = $sap_no.'_'.$cut_no; //New Cutting Number Code
 
 //                    echo '<pre>';
 //                    print_r("Bundle Tracking No: ".$bundle_tracking_no); // $i=bundle_count reviously

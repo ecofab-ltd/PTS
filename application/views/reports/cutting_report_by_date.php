@@ -14,8 +14,8 @@
             <table class="display table table-bordered table-striped" id="" border="1">
                 <thead>
                 <tr>
-                    <th class="hidden-phone center" colspan="9"><h4>Cutting Report</h4></th>
-                    <th class="hidden-phone center" colspan="3"><h4><?php echo $date;?></h4></th>
+                    <th class="hidden-phone center" colspan="11"><h4>Cutting Report</h4></th>
+                    <th class="hidden-phone center" colspan="2"><h4><?php echo $date;?></h4></th>
                 </tr>
                 <tr>
                     <th class="hidden-phone center">Group SO</th>
@@ -28,6 +28,7 @@
                     <th class="hidden-phone center">Color</th>
                     <th class="hidden-phone center">Ex-Fac</th>
                     <th class="hidden-phone center">Order</th>
+                    <th class="hidden-phone center">Laid to Cut</th>
                     <th class="hidden-phone center">Lay</th>
                     <th class="hidden-phone center">Cut</th>
                 </tr>
@@ -37,12 +38,14 @@
                 <?php
 
                 $total_order_qty = 0;
+                $total_lay_complete_cut_pending_qty = 0;
                 $total_lay_qty = 0;
                 $total_cut_qty = 0;
                 $total_package_ready_qty = 0;
 
                 foreach ($cut_report as $v){
                 $total_order_qty += $v['total_order_qty'];
+                $total_lay_complete_cut_pending_qty += $v['lay_complete_cut_pending_qty'];
                 $total_lay_qty += $v['lay_complete_qty'];
                 $total_cut_qty += $v['cut_complete_qty'];
                 $total_package_ready_qty += $v['package_ready_qty'];
@@ -58,6 +61,7 @@
                     <td class="center"><?php echo $v['color'];?></td>
                     <td class="center"><?php echo $v['ex_factory_date']; ?></td>
                     <td class="center"><?php echo $v['total_order_qty'];?></td>
+                    <td class="center"><?php echo $v['lay_complete_cut_pending_qty'];?></td>
                     <td class="center"><?php echo $v['lay_complete_qty'];?></td>
                     <td class="center"><?php echo $v['cut_complete_qty'];?></td>
 
@@ -70,6 +74,7 @@
                 <tfoot>
                 <tr>
                     <td class="" align="right" colspan="10"><h5><b>Total Qty</b></h5></td>
+                    <td class="center"><h5><b><?php echo $total_lay_complete_cut_pending_qty;?></b></h5></td>
                     <td class="center"><h5><b><?php echo $total_lay_qty;?></b></h5></td>
                     <td class="center"><h5><b><?php echo $total_cut_qty;?></b></h5></td>
                 </tfoot>
