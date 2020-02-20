@@ -4842,11 +4842,13 @@ class Access_model extends CI_Model {
         return $query;
     }
 
-    public function inputToLay($carelabel_tracking_no, $date_time)
+    public function inputToLay($carelabel_tracking_no, $table_no, $date_time)
     {
-        $sql="UPDATE tb_cut_summary SET is_lay_complete=1,
-                lay_complete_date_time='$date_time'             
-                WHERE cut_tracking_no = '$carelabel_tracking_no'";
+        $sql="UPDATE tb_cut_summary 
+              SET is_lay_complete=1,
+              cut_table='$table_no',
+              lay_complete_date_time='$date_time'             
+              WHERE cut_tracking_no = '$carelabel_tracking_no'";
 
         $query = $this->db->query($sql);
         return $query;

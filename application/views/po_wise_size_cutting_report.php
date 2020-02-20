@@ -12,6 +12,7 @@ $po_no = $order_info[0]['po_no'];
 $purchase_order = $order_info[0]['purchase_order'];
 $item = $order_info[0]['item'];
 $style_no = $order_info[0]['style_no'];
+$style_name = $order_info[0]['style_name'];
 $quality = $order_info[0]['quality'];
 $color = $order_info[0]['color'];
 $ex_factory_date = $order_info[0]['ex_factory_date'];

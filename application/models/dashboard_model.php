@@ -507,6 +507,29 @@ class Dashboard_model extends CI_Model {
         return $query;
     }
 
+    public function getBalanceToCutDetailReport($po_no){
+        $sql = "SELECT t1.*, t2.total_order_qty
+              
+                FROM (
+                SELECT po_no,so_no,item,quality,color,purchase_order,ex_factory_date,brand,style_no,style_name, cut_no,
+                    
+                SUM(CASE WHEN is_lay_complete=1 AND is_cutting_complete=0
+                THEN cut_qty
+                ELSE 0 end) AS lay_complete_cut_pending_qty
+                  
+                FROM tb_cut_summary 
+                WHERE po_no='$po_no'
+                GROUP BY po_no,so_no,item,quality,color,purchase_order, cut_no
+                )  as t1
+                LEFT JOIN
+                vt_po_summary as t2
+                ON t1.so_no=t2.so_no
+                WHERE t1.lay_complete_cut_pending_qty > 0";
+
+        $query = $this->db->query($sql)->result_array();
+        return $query;
+    }
+
     public function getDailyPackageReportDetail($search_date){
         $sql = "SELECT t1.*, t2.total_order_qty
               
@@ -1638,118 +1661,9 @@ class Dashboard_model extends CI_Model {
     }
 
     public function getPoOrderPackingInfobyPo($where){
-        $sql = "SELECT A.*, B.total_cut_qty, D.total_end_pass_qty, E.total_packing_qty, 
-                F.total_carton_qty, date_format(F.po_closing_date_time, '%Y-%m-%d') as po_closing_date,
-                G.total_wh_qty
-                
-                FROM 
-                (SELECT so_no, po_no, purchase_order, brand, item, style_no, style_name, quality, 
-                color, SUM(quantity) as order_quantity, ex_factory_date 
-                FROM `tb_po_detail` GROUP BY so_no, po_no, purchase_order, item, style_no, quality, color) as A
-                
-                LEFT Join
-                (SELECT *, MIN(bundle) as bundle_start, MAX(bundle) as bundle_end, SUM(cut_qty) as total_cut_qty 
-                 FROM `tb_cut_summary`
-                GROUP BY po_no, purchase_order, item, style_no, quality, color) as B
-                ON A.po_no=B.po_no and A.purchase_order=B.purchase_order and A.item=B.item
-                and A.style_no=B.style_no and A.quality=B.quality
-                and A.color=B.color
-                
-                LEFT Join
-                (SELECT COUNT(pc_tracking_no) as total_end_pass_qty, po_no, purchase_order, item, 
-                quality, style_no, style_name, brand, size, color FROM `tb_care_labels` 
-                WHERE access_points=4 AND access_points_status=4 
-                GROUP BY po_no, purchase_order, item, style_no, quality, color) as D
-                ON A.po_no=D.po_no and A.purchase_order=D.purchase_order and A.item=D.item
-                and A.style_no=D.style_no and A.quality=D.quality
-                and A.color=D.color
-                
-                LEFT Join
-                (SELECT COUNT(pc_tracking_no) as total_packing_qty, po_no, purchase_order, item, 
-                quality, style_no, style_name, brand, size, color
-                FROM `tb_care_labels` 
-                WHERE packing_status=1
-                GROUP BY po_no, purchase_order, item, style_no, quality, color) as E
-                ON A.po_no=E.po_no and A.purchase_order=E.purchase_order and A.item=E.item
-                and A.style_no=E.style_no and A.quality=E.quality
-                and A.color=E.color
-                
-                LEFT Join
-                (SELECT COUNT(pc_tracking_no) as total_carton_qty, po_no, purchase_order, item, 
-                quality, style_no, style_name, brand, size, color, max(carton_date_time) as po_closing_date_time 
-                FROM `tb_care_labels` 
-                WHERE carton_status=1
-                GROUP BY po_no, purchase_order, item, style_no, quality, color) as F
-                ON A.po_no=F.po_no and A.purchase_order=F.purchase_order and A.item=F.item
-                and A.style_no=F.style_no and A.quality=F.quality
-                and A.color=F.color
-                
-                LEFT Join
-                (SELECT COUNT(pc_tracking_no) as total_wh_qty, po_no, purchase_order, item, 
-                quality, style_no, style_name, brand, size, color
-                FROM `tb_care_labels` 
-                WHERE warehouse_qa_type!=0
-                GROUP BY po_no, purchase_order, item, style_no, quality, color) as G
-                ON A.po_no=G.po_no and A.purchase_order=G.purchase_order and A.item=G.item
-                and A.style_no=G.style_no and A.quality=G.quality
-                and A.color=G.color
-                
-                WHERE 1 $where";
-        $sql1="SELECT t1.*,t2.total_order_qty FROM (SELECT po_no,so_no,item,quality,color,style_name,style_no,purchase_order,brand,ex_factory_date,
-             
-             	COUNT(packing_status) as count_packing_pass,  
-          		COUNT(carton_status) as count_carton_pass,
-                COUNT(warehouse_qa_type) as total_wh_qa
-           FROM (
-              SELECT
-                so_no,po_no,item,quality,color,purchase_order,brand,ex_factory_date,style_name,style_no,
-              
-                CASE WHEN packing_status = 1 THEN packing_status END packing_status,
-                 CASE WHEN carton_status = 1 THEN carton_status END carton_status,
-             
-                CASE WHEN warehouse_qa_type != 0 THEN warehouse_qa_type END warehouse_qa_type 
-              FROM tb_care_labels    
-            ) tb_care_labels WHERE 1 $where  GROUP BY so_no,po_no,item,quality,color,purchase_order) as t1
-            LEFT JOIN
-            vt_po_summary as t2
-            ON t1.so_no=t2.so_no AND t1.po_no=t2.po_no AND t1.purchase_order=t2.purchase_order AND t1.quality=t2.quality AND t1.color=t2.color";
-
-        $sql2="SELECT A.*
-                
-                FROM 
-                
-                
-                (SELECT so_no, po_no, purchase_order, brand, item, style_no, style_name, quality, 
-                color, SUM(quantity) as order_quantity, ex_factory_date 
-                FROM `tb_po_detail` GROUP BY so_no, po_no, purchase_order, item, style_no, quality, color) as A
-                
-               
-               
-                
-                WHERE 1 $where";
-
-        $sql3="SELECT t1.*,t2.cut_qty, t3.cut_pass_qty
+        $sql="SELECT t1.*,t2.cut_qty, t3.cut_pass_qty,t4.sew_qty,t5.total_packing_qty,t6.total_carton_qty
                 FROM
-                (SELECT po_no,so_no,item,quality,color,purchase_order,style_no, ex_factory_date, 
-                size,SUM(quantity) AS order_qty from tb_po_detail
-                  WHERE 1 $where
-                 GROUP BY po_no,so_no,item,quality,color,purchase_order,size) as t1
-                LEFT JOIN
-                (SELECT po_no,so_no,item,quality,color,purchase_order,size,COUNT(id) as cut_qty FROM `tb_care_labels` 
-                WHERE 1 $where
-                 GROUP BY po_no,so_no,item,quality,color,purchase_order,size) as t2
-                
-                ON t1.so_no=t2.so_no AND t1.size=t2.size
-                
-                LEFT JOIN
-                (SELECT po_no,so_no,item,quality,color,purchase_order,size,COUNT(id) as cut_pass_qty FROM `tb_care_labels` 
-                WHERE 1 $where and sent_to_production=1 GROUP BY po_no,so_no,item,quality,color,purchase_order,size) as t3
-                
-                ON t1.so_no=t3.so_no AND t1.size=t3.size";
-
-        $sql4="SELECT t1.*,t2.cut_qty, t3.cut_pass_qty,t4.sew_qty,t5.total_packing_qty,t6.total_carton_qty
-                FROM
-                (SELECT po_no,so_no,item,quality,color,purchase_order,style_no, ex_factory_date, 
+                (SELECT po_no,so_no,item,quality,color,purchase_order,style_no,style_name, ex_factory_date, 
                 size,SUM(quantity) AS order_qty from tb_po_detail
                   WHERE 1 $where
                  GROUP BY po_no,so_no,item,quality,color,purchase_order,size) as t1
@@ -1792,7 +1706,7 @@ class Dashboard_model extends CI_Model {
                 
                 ORDER BY t7.serial ASC";
 
-        $query = $this->db->query($sql4)->result_array();
+        $query = $this->db->query($sql)->result_array();
         return $query;
     }
 

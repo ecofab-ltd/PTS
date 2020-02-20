@@ -47,7 +47,7 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <select required class="form-control select" id="sap_no" name="sap_no" onchange="getForm();">
-                                        <option value="">Select SAP No...</option>
+                                        <option value="">GROUP SO...</option>
                                         <?php foreach ($sap_no as $v){ ?>
                                             <option value="<?php echo $v['po_no'];?>"><?php echo $v['po_no'];?></option>
                                         <?php } ?>
@@ -112,9 +112,9 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <select class="form-control select" name="table" id="table" required >
-                                        <option value="">Select table...</option>
+                                        <option value="">Select Table...</option>
                                         <?php foreach ($tables as $t){?>
-                                            <option value="<?php echo $t['table_name'];?>"><?php echo $t['table_name'];?></option>
+                                            <option value="<?php echo $t['id'];?>"><?php echo $t['table_name'];?></option>
                                         <?php } ?>
                                     </select>
                                     <span style="font-size: 11px;">* Select Table</span>

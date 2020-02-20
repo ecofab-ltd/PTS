@@ -4048,6 +4048,15 @@ class Dashboard extends CI_Controller {
         $this->load->view('reports/master', $data);
     }
 
+    public function getBalanceToCutDetailReport($po_no){
+        $data['title']='Balance to Cut Report';
+
+        $data['cut_report'] = $this->dashboard_model->getBalanceToCutDetailReport($po_no);
+
+        $data['maincontent'] = $this->load->view('reports/balance_to_cut_report', $data, true);
+        $this->load->view('reports/master', $data);
+    }
+
     public function getDailyPackageReportDetail($search_date){
         $data['title']='Package Ready Report';
 

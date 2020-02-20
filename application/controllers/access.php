@@ -5425,13 +5425,12 @@ class Access extends CI_Controller {
         $data['user_name'] = $this->session->userdata('user_name');
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
+
+        $data['tables'] = $this->access_model->getTables();
+
         $data['msg'] = '';
         $data['session_out'] = $this->session_out;
 
-        $where = '';
-        if($line_id != 0 && $line_id != ''){
-            $where .= " AND t5.line_id=$line_id order by t3.max_mid_line_qc_date_time DESC";
-        }
         $data['maincontent'] = $this->load->view('lay_scan', $data, true);
         $this->load->view('master', $data);
     }
@@ -5455,6 +5454,7 @@ class Access extends CI_Controller {
         $line_id = $this->session->userdata('line_id');
 
         $carelabel_tracking_no = $this->input->post('care_label_no');
+        $table_no = $this->input->post('table_no');
 
         $chk_lay=$this->access_model->chk_lay($carelabel_tracking_no);
         if(sizeof($chk_lay) > 0)
@@ -5463,11 +5463,10 @@ class Access extends CI_Controller {
         }
         else
         {
-            $this->access_model->inputToLay($carelabel_tracking_no, $date_time);
+            $this->access_model->inputToLay($carelabel_tracking_no, $table_no, $date_time);
 
             echo 'done';
         }
-
 
     }
 

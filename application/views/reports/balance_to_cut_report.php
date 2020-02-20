@@ -13,35 +13,37 @@
         <div class="block-web" id="tableWrap" style="overflow-x:auto;">
             <table class="display table table-bordered table-striped" id="" border="1">
                 <thead>
-                <tr>
-                    <th class="hidden-phone center" colspan="10"><h4>Package Ready Report</h4></th>
-                    <th class="hidden-phone center"><h4><?php echo $date;?></h4></th>
-                </tr>
-                <tr style="font-size: 16px;">
-                    <th class="hidden-phone center">Group SO</th>
-                    <th class="hidden-phone center">SO</th>
-                    <th class="hidden-phone center">Brand</th>
-                    <th class="hidden-phone center">Purchase Order</th>
-                    <th class="hidden-phone center">Item</th>
-                    <th class="hidden-phone center">Style</th>
-                    <th class="hidden-phone center">Quality</th>
-                    <th class="hidden-phone center">Color</th>
-                    <th class="hidden-phone center">Ex-Fac</th>
-                    <th class="hidden-phone center">Order</th>
-                    <th class="hidden-phone center">Package Ready</th>
-                </tr>
+                    <tr>
+                        <th class="hidden-phone center" colspan="12"><h4>Balance to Cut Report</h4></th>
+                    </tr>
+                    <tr style="font-size: 16px;">
+                        <th class="hidden-phone center">Group SO</th>
+                        <th class="hidden-phone center">SO</th>
+                        <th class="hidden-phone center">Brand</th>
+                        <th class="hidden-phone center">Purchase Order</th>
+                        <th class="hidden-phone center">Item</th>
+                        <th class="hidden-phone center">Style</th>
+                        <th class="hidden-phone center">Quality</th>
+                        <th class="hidden-phone center">Color</th>
+                        <th class="hidden-phone center">Ex-Fac</th>
+                        <th class="hidden-phone center">Order</th>
+                        <th class="hidden-phone center">Cut No</th>
+                        <th class="hidden-phone center">Balance to Cut</th>
+                    </tr>
                 </thead>
 
                 <tbody>
                 <?php
 
                 $total_order_qty = 0;
+                $total_lay_complete_cut_pending_qty = 0;
                 $total_lay_qty = 0;
                 $total_cut_qty = 0;
                 $total_package_ready_qty = 0;
 
                 foreach ($cut_report as $v){
                 $total_order_qty += $v['total_order_qty'];
+                $total_lay_complete_cut_pending_qty += $v['lay_complete_cut_pending_qty'];
                 $total_lay_qty += $v['lay_complete_qty'];
                 $total_cut_qty += $v['cut_complete_qty'];
                 $total_package_ready_qty += $v['package_ready_qty'];
@@ -57,7 +59,10 @@
                         <td class="center"><?php echo $v['color'];?></td>
                         <td class="center"><?php echo $v['ex_factory_date']; ?></td>
                         <td class="center"><?php echo $v['total_order_qty'];?></td>
-                        <td class="center"><?php echo $v['package_ready_qty'];?></td>
+                        <td class="center"><?php echo $v['cut_no'];?></td>
+                        <td class="center">
+                            <?php echo $v['lay_complete_cut_pending_qty'];?>
+                        </td>
                     </tr>
 
                     <?php
@@ -68,8 +73,8 @@
 
                 <tfoot>
                     <tr>
-                        <td class="" align="right" colspan="10"><h5><b>Total Qty</b></h5></td>
-                        <td class="center"><h5><b><?php echo $total_package_ready_qty;?></b></h5></td>
+                        <td class="" align="right" colspan="11"><h5><b>Total Qty</b></h5></td>
+                        <td class="center"><h5><b><?php echo $total_lay_complete_cut_pending_qty;?></b></h5></td>
                     </tr>
                 </tfoot>
 
