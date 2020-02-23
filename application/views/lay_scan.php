@@ -52,10 +52,10 @@
             </select>
         </div>
 
-
         <div class="col-md-1">
-            <input type="text" class="form-control" name="carelabel_tracking_no" autofocus autocomplete="off" required id="carelabel_tracking_no" onkeyup="clickToSubmitBtn();" />
-
+            <input type="text" class="form-control" name="cut_tracking_no" autofocus autocomplete="off" required id="cut_tracking_no" onkeyup="clickToSubmitBtn();" />
+        </div>
+        <div class="col-md-1">
             <div class="col-md-1" id="loader" style="display: none;"><div class="loader"></div></div>
         </div>
 
@@ -97,8 +97,8 @@
 <script type="text/javascript">
     $('.select').select2();
 
-    $("#carelabel_tracking_no").blur(function(){
-        $("#carelabel_tracking_no").focus();
+    $("#cut_tracking_no").blur(function(){
+        $("#cut_tracking_no").focus();
     });
 
     function clickToSubmitBtn(){
@@ -107,42 +107,45 @@
         $("#e_message").empty();
 
         var table_no = $("#table_no").val();
-        var cl_no = $("#carelabel_tracking_no").val();
+        var cl_no = $("#cut_tracking_no").val();
 
         var last_variable = cl_no.slice(-1);
 
-        if((last_variable == '.') && (table_no != '')){
-            $("#carelabel_tracking_no").attr('readonly', true);
+        if((last_variable == '.')){
+            if(table_no != ''){
+                $("#loader").css("display", "block");
+                $("#cut_tracking_no").attr('readonly', true);
 
-            $.ajax({
-                type: "POST",
-                url: "<?php echo base_url();?>access/inputToLay/",
-                data: {care_label_no: cl_no, table_no: table_no},
-                dataType: "html",
-                success: function (data) {
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url();?>access/inputToLay/",
+                    data: {cut_tracking_no: cl_no, table_no: table_no},
+                    dataType: "html",
+                    success: function (data) {
 
-                    if(data == 'done'){
-                        $("#carelabel_tracking_no").val('');
-                        $("#carelabel_tracking_no").attr('readonly', false);
+                        if(data == 'done'){
+                            $("#cut_tracking_no").val('');
+                            $("#cut_tracking_no").attr('readonly', false);
+                            $("#loader").css("display", "none");
 
-                        $("#s_message").text("Successfully Lay Complete: "+ cl_no);
+                            $("#s_message").text("Successfully Lay Complete: "+ cl_no);
+                        }
+                        if(data == 'already pass'){
+                            $("#cut_tracking_no").val('');
+                            $("#cut_tracking_no").attr('readonly', false);
+                            $("#loader").css("display", "none");
+
+                            $("#s_message").text("Already Lay Complete: "+ cl_no);
+                        }
+
                     }
-                    if(data == 'already pass'){
-                        $("#carelabel_tracking_no").val('');
-                        $("#carelabel_tracking_no").attr('readonly', false);
-
-                        $("#s_message").text("Already Lay Complete: "+ cl_no);
-                    }
-
-                }
-            });
-
+                });
+            }else{
+                alert("Please Select Table!");
+                $("#cut_tracking_no").val('');
+            }
         }
-        else
-        {
-            alert("Please Select Table!");
-            $("#carelabel_tracking_no").val('');
-        }
+
 
     }
 

@@ -93,9 +93,9 @@ class Dashboard_model extends CI_Model {
 
     public function getTodayCutQty($date){
 
-        $sql = "SELECT COUNT(id) as today_cut_qty 
-                FROM `tb_care_labels` 
-                WHERE DATE_FORMAT(date_time, '%Y-%m-%d') LIKE '%$date%'";
+        $sql = "SELECT SUM(cut_qty) as today_cut_qty 
+                FROM `tb_cut_summary` 
+                WHERE DATE_FORMAT(cutting_complete_date_time, '%Y-%m-%d') = '$date'";
 
         $query = $this->db->query($sql)->result_array();
         return $query;
@@ -437,6 +437,30 @@ class Dashboard_model extends CI_Model {
         return $query;
     }
 
+    public function cuttingTableWiseDailyReport($date){
+        $sql = "SELECT t1.table_name, t2.balance_to_cut_qty, t2.cut_complete_qty
+
+                FROM
+                (SELECT * FROM `tb_cut_table` WHERE status=1) AS t1
+                
+                LEFT JOIN
+                (SELECT cut_table,
+                SUM(CASE WHEN is_lay_complete=1 AND is_cutting_complete=0
+                THEN cut_qty
+                ELSE 0 end) AS balance_to_cut_qty,
+
+                SUM(CASE WHEN is_cutting_complete=1 AND DATE_FORMAT(cutting_complete_date_time, '%Y-%m-%d')='$date'
+                THEN cut_qty
+                ELSE 0 end) AS cut_complete_qty
+                  
+                FROM tb_cut_summary GROUP BY cut_table) AS t2
+                
+                ON t1.id=t2.cut_table";
+
+        $query = $this->db->query($sql)->result_array();
+        return $query;
+    }
+
     public function getDailyFusingReport($date)
     {
         $sql = "Select A.*, B.part_codes FROM (SELECT t1.*, t2.total_order_qty
@@ -508,10 +532,11 @@ class Dashboard_model extends CI_Model {
     }
 
     public function getBalanceToCutDetailReport($po_no){
-        $sql = "SELECT t1.*, t2.total_order_qty
+        $sql = "SELECT t1.*, t2.total_order_qty, t3.table_name
               
-                FROM (
-                SELECT po_no,so_no,item,quality,color,purchase_order,ex_factory_date,brand,style_no,style_name, cut_no,
+                FROM 
+                (SELECT po_no,so_no,item,quality,color,purchase_order, cut_table,
+                ex_factory_date,brand,style_no,style_name, cut_no, lay_complete_date_time, cutting_complete_date_time,
                     
                 SUM(CASE WHEN is_lay_complete=1 AND is_cutting_complete=0
                 THEN cut_qty
@@ -519,11 +544,15 @@ class Dashboard_model extends CI_Model {
                   
                 FROM tb_cut_summary 
                 WHERE po_no='$po_no'
-                GROUP BY po_no,so_no,item,quality,color,purchase_order, cut_no
-                )  as t1
+                GROUP BY po_no,so_no,item,quality,color,purchase_order, cut_no)  as t1
+                
                 LEFT JOIN
                 vt_po_summary as t2
                 ON t1.so_no=t2.so_no
+                
+                LEFT JOIN
+                tb_cut_table as t3
+                ON t1.cut_table=t3.id
                 WHERE t1.lay_complete_cut_pending_qty > 0";
 
         $query = $this->db->query($sql)->result_array();
@@ -1442,7 +1471,6 @@ class Dashboard_model extends CI_Model {
     }
 
     public function getDailyPerformanceDetail($line_id, $date){
-
         $sql = "SELECT t1.*, t2.smv, t2.order_qty, t3.count_end_line_qc_pass
                 From
                 (SELECT so_no, po_no, brand, purchase_order, style_no, style_name, item, quality, color, ex_factory_date, 
@@ -1450,8 +1478,8 @@ class Dashboard_model extends CI_Model {
                 FROM `tb_care_labels` 
                 WHERE 
                 access_points=4 AND access_points_status=4
-                AND DATE_FORMAT(end_line_qc_date_time, '%Y-%m-%d') = '$date' 
-                AND line_id=$line_id
+                AND DATE_FORMAT(end_line_qc_date_time, '%Y-%m-%d') = '$date'
+                AND line_id=$line_id AND manually_closed=0
                 GROUP BY so_no, po_no, purchase_order, item, quality, color, line_id) AS t1
                 
                 LEFT JOIN 

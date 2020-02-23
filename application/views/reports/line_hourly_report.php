@@ -6,13 +6,18 @@
     <meta http-equiv="refresh" content="300">
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/images/favicon.ico" type="image/x-icon" />
 
-    <style type="text/css">
-        table {
-            border-collapse: collapse;
+    <style>
+        table, td, th {
+            border: 1px solid #ddd;
         }
 
-        table, th, td {
-            border: 1px solid black;
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 2px;
         }
     </style>
 </head>

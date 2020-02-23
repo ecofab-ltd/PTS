@@ -4911,7 +4911,6 @@ class Access extends CI_Controller {
         $actual_cut_qty = $this->input->post('actual_cut_qty');
         $planned_cut_qty = $this->input->post('planned_cut_qty');
         $quality = $this->input->post('quality');
-        $table = $this->input->post('table');
         $po_type = $this->input->post('po_type');
 
         $size_field = "size";
@@ -5080,7 +5079,6 @@ class Access extends CI_Controller {
                                 $data_cl['size'] = "$size";
                                 $data_cl['color'] = "$color";
                                 $data_cl['ex_factory_date'] = "$ex_factory_date";
-                                $data_cl['cut_table'] = $table;
                                 $data_cl['cut_no'] = "$cut_no";
                                 $data_cl['bundle_no'] = $b_count;
                                 $data_cl['bundle_tracking_no'] = $bundle_tracking_no.'.';
@@ -5106,7 +5104,6 @@ class Access extends CI_Controller {
                         'ex_factory_date' => "$ex_factory_date",
                         'brand' => "$brand",
                         'bundle' => $b_count,
-                        'cut_table' => $table,
                         'cut_no' => "$cut_no",
                         'cut_tracking_no' => $cut_tracking_no.'.',
                         'bundle_tracking_no' => $bundle_tracking_no.'.',
@@ -5453,17 +5450,18 @@ class Access extends CI_Controller {
         $access_points = $this->session->userdata('access_points');
         $line_id = $this->session->userdata('line_id');
 
-        $carelabel_tracking_no = $this->input->post('care_label_no');
+        $cut_tracking_no = $this->input->post('cut_tracking_no');
         $table_no = $this->input->post('table_no');
 
-        $chk_lay=$this->access_model->chk_lay($carelabel_tracking_no);
+        $chk_lay=$this->access_model->chk_lay($cut_tracking_no);
         if(sizeof($chk_lay) > 0)
         {
             echo 'already pass';
         }
         else
         {
-            $this->access_model->inputToLay($carelabel_tracking_no, $table_no, $date_time);
+            $this->access_model->inputToLay($cut_tracking_no, $table_no, $date_time);
+            $this->access_model->inputToLayCareLabelTable($cut_tracking_no, $table_no);
 
             echo 'done';
         }
@@ -6580,37 +6578,6 @@ class Access extends CI_Controller {
 //            echo '<h1 style="color: green;">Already Care Labels are Generated!</h1>';
         }
 
-    }
-
-    public function cuttingTableWiseReport(){
-        $data['title'] = 'Cut-Table Report';
-        $data['user_name'] = $this->session->userdata('user_name');
-        $data['user_description'] = $this->session->userdata('user_description');
-        $data['access_points'] = $this->session->userdata('access_points');
-
-        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
-        
-        $date_time=$datex->format('Y-m-d H:i:s');
-        $date=$datex->format('Y-m-d');
-//        $date='2017-12-31';
-
-        $data['date'] = $date;
-
-        $where = '';
-
-        if($date != '' && $date != '1970-01-01'){
-            $where .= "AND DATE_FORMAT(date_time, '%Y-%m-%d') LIKE '%$date%'";
-        }
-
-        $data['table_qty'] = $this->access_model->cuttingTableWiseDailyReport($where);
-
-        $this->load->view('cutting_table_wise_report', $data);
-    }
-
-    public function cutting_table_wise_report_detail($table){
-        echo '<pre>';
-        print_r($table);
-        echo '</pre>';
     }
 
     public function getSummaryReportbyPo(){

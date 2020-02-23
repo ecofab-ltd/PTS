@@ -3096,6 +3096,25 @@ class Dashboard extends CI_Controller {
 //        $this->load->view('master_line', $data);
     }
 
+    public function cuttingTableWiseReport($date){
+        $data['title'] = 'Cut-Table Report';
+        $data['user_name'] = $this->session->userdata('user_name');
+        $data['user_description'] = $this->session->userdata('user_description');
+        $data['access_points'] = $this->session->userdata('access_points');
+
+        $data['date'] = $date;
+
+        $data['table_report'] = $this->dashboard_model->cuttingTableWiseDailyReport($date);
+
+        $this->load->view('cutting_table_wise_report', $data);
+    }
+
+    public function cutting_table_wise_report_detail($table){
+        echo '<pre>';
+        print_r($table);
+        echo '</pre>';
+    }
+
     public function lineInputReportChart_1(){
         $data['title'] = 'Line Pass Report';
         $data['user_name'] = $this->session->userdata('user_name');
@@ -3268,11 +3287,12 @@ class Dashboard extends CI_Controller {
 
         $where = '';
 
-        $data['cut_wip_report'] = $this->dashboard_model->getCuttingReportForChart($date);
-
+//        $data['cut_wip_report'] = $this->dashboard_model->getCuttingReportForChart($date);
         $data['cut_ready_package'] = $this->dashboard_model->getCuttingReadyPackageQty();
         $data['today_cut_ready_package'] = $this->dashboard_model->getTodayPackageReadyQty($date);
-//        $data['today_cut'] = $this->dashboard_model->getTodayCutQty($date);
+        $data['today_cut'] = $this->dashboard_model->getTodayCutQty($date);
+
+        $data['table_report'] = $this->dashboard_model->cuttingTableWiseDailyReport($date);
 
         $this->load->view('reports/line_wip_graph_report', $data);
     }
@@ -3636,7 +3656,7 @@ class Dashboard extends CI_Controller {
         $this->load->view('reports/master', $data);
     }
 
-    public function lineHourlyreport(){
+    public function lineHourlyReport(){
         $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
         
         $date_time=$datex->format('Y-m-d H:i:s');

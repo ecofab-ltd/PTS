@@ -6,6 +6,10 @@
     <div class="col-md-1">
         <button type="button" onclick="printDiv('print_div')" class="print_cl_btn" style="border-style: none; width: 80px; height: 30px; background-color: green; color: white; border-radius: 5px;">Print</button>
     </div>
+    <div class="col-md-8"></div>
+    <div class="col-md-2">
+        <a href="<?php echo base_url();?>dashboard/cuttingTableWiseReport/<?php echo $date?>" target="_blank" class="btn btn-warning">Table Wise Chart</a>
+    </div>
 </div>
 <br />
 <div class="row">

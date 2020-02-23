@@ -228,7 +228,7 @@
                   <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>dashboard/dailyFusingReport"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Fusing Report</b> </a> </li>
                   <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>dashboard/package_ready_report"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Ready Summary </b> </a> </li>
                   <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>dashboard/packageReadyByPO"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>PO Ready Package</b> </a> </li>
-                  <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>dashboard/cutPackageReportChart" target="_blank"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Package Ready Chart</b> </a> </li>
+                  <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>dashboard/cutPackageReportChart" target="_blank"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Cutting Dashboard</b> </a> </li>
               </ul>
             </li>
 
@@ -242,7 +242,7 @@
 <!--                    <li> <a style="margin-bottom: 1px;" target="_blank" href="--><?php //echo base_url();?><!--dashboard/lineDefectReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Defect Report Graph</b> </a> </li>-->
 <!--                    <li> <a style="margin-bottom: 1px;" target="_blank" href="--><?php //echo base_url();?><!--dashboard/lineSummaryReport"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Line Summary Report</b> </a> </li>-->
                     <li> <a style="margin-bottom: 1px;" target="_blank" href="<?php echo base_url();?>dashboard/allLinePerformanceDashboard"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Line Summary Report</b> </a> </li>
-                    <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>dashboard/lineHourlyreport" target="_blank"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Line Hourly Report</b> </a> </li>
+                    <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>dashboard/lineHourlyReport" target="_blank"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Line Hourly Report</b> </a> </li>
                 </ul>
             </li>
 

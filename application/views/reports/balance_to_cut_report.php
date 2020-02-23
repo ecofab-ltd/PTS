@@ -14,7 +14,7 @@
             <table class="display table table-bordered table-striped" id="" border="1">
                 <thead>
                     <tr>
-                        <th class="hidden-phone center" colspan="12"><h4>Balance to Cut Report</h4></th>
+                        <th class="hidden-phone center" colspan="14"><h4>Balance to Cut Report</h4></th>
                     </tr>
                     <tr style="font-size: 16px;">
                         <th class="hidden-phone center">Group SO</th>
@@ -27,7 +27,9 @@
                         <th class="hidden-phone center">Color</th>
                         <th class="hidden-phone center">Ex-Fac</th>
                         <th class="hidden-phone center">Order</th>
+                        <th class="hidden-phone center">Table</th>
                         <th class="hidden-phone center">Cut No</th>
+                        <th class="hidden-phone center">Lay Date</th>
                         <th class="hidden-phone center">Balance to Cut</th>
                     </tr>
                 </thead>
@@ -59,7 +61,9 @@
                         <td class="center"><?php echo $v['color'];?></td>
                         <td class="center"><?php echo $v['ex_factory_date']; ?></td>
                         <td class="center"><?php echo $v['total_order_qty'];?></td>
+                        <td class="center"><?php echo $v['table_name'];?></td>
                         <td class="center"><?php echo $v['cut_no'];?></td>
+                        <td class="center"><?php echo $v['lay_complete_date_time'];?></td>
                         <td class="center">
                             <?php echo $v['lay_complete_cut_pending_qty'];?>
                         </td>
@@ -73,7 +77,7 @@
 
                 <tfoot>
                     <tr>
-                        <td class="" align="right" colspan="11"><h5><b>Total Qty</b></h5></td>
+                        <td class="" align="right" colspan="13"><h5><b>Total Qty</b></h5></td>
                         <td class="center"><h5><b><?php echo $total_lay_complete_cut_pending_qty;?></b></h5></td>
                     </tr>
                 </tfoot>

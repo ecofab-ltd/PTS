@@ -4714,14 +4714,6 @@ class Access_model extends CI_Model {
         return $query;
     }
 
-    public function cuttingTableWiseDailyReport($where){
-        $sql = "SELECT cut_table, COUNT(pc_tracking_no) as count_total_pc FROM `tb_care_labels` 
-                WHERE 1 $where GROUP BY cut_table";
-
-        $query = $this->db->query($sql)->result_array();
-        return $query;
-    }
-
     public function getSummaryReportbyPo($where){
         $sql = "SELECT A.*, B.count_sent_prod_care_label 
                 From (SELECT purchase_order, item, quality, style_no, style_name, brand, color, cut_no, cut_tracking_no, 
@@ -4842,13 +4834,23 @@ class Access_model extends CI_Model {
         return $query;
     }
 
-    public function inputToLay($carelabel_tracking_no, $table_no, $date_time)
+    public function inputToLay($cut_tracking_no, $table_no, $date_time)
     {
         $sql="UPDATE tb_cut_summary 
               SET is_lay_complete=1,
               cut_table='$table_no',
               lay_complete_date_time='$date_time'             
-              WHERE cut_tracking_no = '$carelabel_tracking_no'";
+              WHERE cut_tracking_no = '$cut_tracking_no'";
+
+        $query = $this->db->query($sql);
+        return $query;
+    }
+
+    public function inputToLayCareLabelTable($cut_tracking_no, $table_no)
+    {
+        $sql="UPDATE vt_few_days_po_pcs 
+              SET cut_table='$table_no'       
+              WHERE cut_tracking_no = '$cut_tracking_no'";
 
         $query = $this->db->query($sql);
         return $query;
