@@ -3291,6 +3291,7 @@ class Dashboard extends CI_Controller {
         $data['cut_ready_package'] = $this->dashboard_model->getCuttingReadyPackageQty();
         $data['today_cut_ready_package'] = $this->dashboard_model->getTodayPackageReadyQty($date);
         $data['today_cut'] = $this->dashboard_model->getTodayCutQty($date);
+        $data['lay_qty'] = $this->dashboard_model->getLayQty();
 
         $data['table_report'] = $this->dashboard_model->cuttingTableWiseDailyReport($date);
 

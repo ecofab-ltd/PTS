@@ -59,7 +59,8 @@
         'cut_target' => ($cutting_target[0]['target'] != '' ? $cutting_target[0]['target'] : 0),
 //        'normal_output' => ($cutting_prod[0]['normal_hour_cutting_output'] != '' ? $cutting_prod[0]['normal_hour_cutting_output'] : 0),
 //        'eot_output' => ($eot_cut_pass != '' ? $eot_cut_pass : 0),
-        'cut_output' => ($cutting_prod[0]['package_ready_qty'] != '' ? $cutting_prod[0]['package_ready_qty'] : 0),
+        'cut_output' => ($cutting_prod[0]['cut_complete_qty'] != '' ? $cutting_prod[0]['cut_complete_qty'] : 0),
+        'cut_package_ready' => ($cutting_prod[0]['package_ready_qty'] != '' ? $cutting_prod[0]['package_ready_qty'] : 0),
         'date' => $previous_date
 
     );

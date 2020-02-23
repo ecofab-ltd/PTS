@@ -95,7 +95,18 @@ class Dashboard_model extends CI_Model {
 
         $sql = "SELECT SUM(cut_qty) as today_cut_qty 
                 FROM `tb_cut_summary` 
-                WHERE DATE_FORMAT(cutting_complete_date_time, '%Y-%m-%d') = '$date'";
+                WHERE is_cutting_complete=1 
+                AND DATE_FORMAT(cutting_complete_date_time, '%Y-%m-%d') = '$date'";
+
+        $query = $this->db->query($sql)->result_array();
+        return $query;
+    }
+
+    public function getLayQty(){
+
+        $sql = "SELECT SUM(cut_qty) as total_lay_qty
+                FROM `tb_cut_summary` 
+                WHERE is_lay_complete=1 AND is_cutting_complete=0";
 
         $query = $this->db->query($sql)->result_array();
         return $query;
