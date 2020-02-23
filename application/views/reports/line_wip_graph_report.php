@@ -67,6 +67,7 @@
                 title: {
                     text: "CUT TABLE REPORT: <?php echo $date;?>"
                 },
+                dataPointWidth: 80,
                 axisX: {
                     valueFormatString: ""
                 },
