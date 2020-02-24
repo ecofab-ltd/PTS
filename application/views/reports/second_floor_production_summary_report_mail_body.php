@@ -28,12 +28,13 @@
     <table width="100%">
         <thead>
         <tr style="background-color: #615000; color: #FFFFFF;">
-            <th colspan="2" class="center"><h2>Cutting Ready Package</h2></th>
+            <th colspan="3" class="center"><h2>Cutting Ready Package</h2></th>
         </tr>
         <tr style="background-color: #f7ffb0;">
             <th>Target</th>
 <!--            <th>Plan Hour Output</th>-->
 <!--            <th>Extra Output</th>-->
+            <th>Cut Qty</th>
             <th>Package Ready QTY</th>
         </tr>
         </thead>
@@ -42,7 +43,8 @@
             <th><?php echo $cutting_report[0]['cut_target'];?></th>
 <!--            <th>--><?php //echo $cutting_report[0]['normal_output'];?><!--</th>-->
 <!--            <th>--><?php //echo $cutting_report[0]['eot_output'];?><!--</th>-->
-            <th><?php echo $cutting_report[0]['cut_output'];?></th>
+            <th><?php echo $cutting_prod[0]['cut_output'];?></th>
+            <th><?php echo $cutting_prod[0]['cut_package_ready'];?></th>
         </tr>
         </tbody>
     </table>

@@ -3073,7 +3073,7 @@ class Access_model extends CI_Model {
         return $query;
     }
 
-    public function getLastSoNo()
+    public function getManualUploadLastSoNo()
     {
         $sql = "SELECT * FROM `tb_po_detail` WHERE is_manual_upload=1 ORDER BY ID DESC LIMIT 1";
 

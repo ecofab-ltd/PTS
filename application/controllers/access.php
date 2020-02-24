@@ -3996,7 +3996,7 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
-        $last_so_no = $this->access_model->getLastSoNo();
+        $last_so_no = $this->access_model->getManualUploadLastSoNo();
         $data['last_so_no'] = $last_so_no[0]['so_no'];
         $data['upload_date'] = $last_so_no[0]['upload_date'];
 
@@ -4144,7 +4144,7 @@ class Access extends CI_Controller {
                     }
                     else{
 
-                        $last_so_no = $this->access_model->getLastSoNo();
+                        $last_so_no = $this->access_model->getManualUploadLastSoNo();
                         $extended_so_no = $last_so_no[0]['so_no'];
 
 

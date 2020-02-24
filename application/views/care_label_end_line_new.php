@@ -501,6 +501,7 @@ $('#defect_code_tbl tbody').find('tr:last').remove();
             if(rowCount > 0){
 
                 $.ajax({
+                    async: false,
                     type: "POST",
                     url: "<?php echo base_url();?>access/careLabelEndDefectSave/",
                     data: {defect_codes_array: defect_codes_array, cl_track_no_defect: carelabel_tracking_no, access_points_status: 2},
