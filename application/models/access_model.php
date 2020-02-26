@@ -3399,6 +3399,16 @@ class Access_model extends CI_Model {
         return $query;
     }
 
+    public function checkUserAuthorization($access_level, $cur_url)
+    {
+        $sql = "SELECT * FROM `tb_access_control` WHERE access_level='$access_level'
+                AND url='$cur_url'
+                AND status=1";
+
+        $query = $this->db->query($sql)->result_array();
+        return $query;
+    }
+
     public function isSeasonExist($season){
         $sql = "Select * From tb_season 
                 WHERE season =  '$season'";

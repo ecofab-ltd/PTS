@@ -40,7 +40,7 @@
         </thead>
         <tbody>
         <tr>
-            <th><?php echo $cutting_report[0]['cut_target'];?></th>
+            <th><?php echo $cutting_prod[0]['cut_target'];?></th>
 <!--            <th>--><?php //echo $cutting_report[0]['normal_output'];?><!--</th>-->
 <!--            <th>--><?php //echo $cutting_report[0]['eot_output'];?><!--</th>-->
             <th><?php echo $cutting_prod[0]['cut_output'];?></th>

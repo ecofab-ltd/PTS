@@ -3521,12 +3521,46 @@ class Dashboard_model extends CI_Model {
     }
 
     public function getBrandWiseShipDates($where){
-        $sql = "SELECT ex_factory_date 
-                 FROM `tb_po_detail` 
-                 WHERE ex_factory_date 
-                 BETWEEN (CURDATE() - INTERVAL 60 day) AND (CURDATE() + INTERVAL 30 day)
+        $sql = "SELECT ex_factory_date
+                 FROM `tb_po_detail`
+                 WHERE 1
                  $where
                  GROUP BY ex_factory_date";
+
+        $query = $this->db->query($sql)->result_array();
+        return $query;
+    }
+
+    public function getDailyLineOutputReport($where){
+        $sql = "SELECT A.*, B.line_code, C.total_order_qty
+                FROM 
+                (SELECT po_no,so_no,item,quality,color,purchase_order,line_id,brand,
+                ex_factory_date,style_no,style_name, line_output_date,
+                    
+                  COUNT(line_output) as line_output_qty,
+                  COUNT(line_manual_output) as line_manual_output_qty
+                  
+                 
+                FROM (
+                  SELECT
+                    so_no,po_no,item,quality,color,purchase_order,line_id,brand,ex_factory_date,line_input_date_time,style_no,style_name,
+                    DATE_FORMAT(end_line_qc_date_time, '%Y-%m-%d') AS line_output_date,                   
+                    
+                   CASE WHEN access_points=4 AND access_points_status=4 AND manually_closed=0 AND line_id != 0 THEN id END line_output,
+                   CASE WHEN access_points=4 AND access_points_status=4 AND manually_closed=1 AND line_id != 0 THEN id END line_manual_output
+                   
+                  FROM tb_care_labels 
+                ) tb_care_labels 
+                WHERE 1 $where 
+                GROUP BY so_no, line_id, line_output_date) AS A
+                
+                LEFT JOIN
+                tb_line AS B
+                ON A.line_id=B.id
+                
+                LEFT JOIN
+                tb_production_summary AS C
+                ON A.so_no=C.so_no";
 
         $query = $this->db->query($sql)->result_array();
         return $query;

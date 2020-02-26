@@ -42,6 +42,10 @@ class Access extends CI_Controller {
         echo $inactivation_time;
     }
 
+    public function checkAuthorization($access_level, $cur_url){
+        return $this->access_model->checkUserAuthorization($access_level, $cur_url);
+    }
+
     public function index() {
         $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
         
@@ -128,6 +132,11 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
 //        $condition = '';
 //        if($data['access_points'] == 300){
 //            $condition .= " ORDER BY t16.max_warehouse_last_action_date_time DESC";
@@ -138,6 +147,10 @@ class Access extends CI_Controller {
 
         $data['maincontent'] = $this->load->view('other_purpose', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function season(){
@@ -146,10 +159,19 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['seasons'] = $this->access_model->getAllSeasons();
 
         $data['maincontent'] = $this->load->view('seasons', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function add_season(){
@@ -186,10 +208,19 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['databases'] = $this->access_model->getAllDatabases();
 
         $data['maincontent'] = $this->load->view('backup_db', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function backUpCareLabelTable(){
@@ -228,10 +259,19 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['cut_no'] = $this->access_model->getCutNoList();
 
         $data['maincontent'] = $this->load->view('delete_cutting', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function getCuttingSummary(){
@@ -264,12 +304,21 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['cut_no'] = $this->access_model->getCutNoList();
 
 //        $data['sap_no'] = $this->access_model->getAllSoFromCutSummary();
         $data['sap_no'] = $this->access_model->getAllSOs();
         $data['maincontent'] = $this->load->view('active_print_label',$data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function activeCareLabel()
@@ -333,12 +382,11 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
-//        $condition = '';
-//        $condition_1 = '';
-//
-//        $user_info = $this->access_model->getUserBrands($user_id);
-//        $user_brands = $user_info[0]['buyer_condition'];
-//
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['wh_types'] = $this->dashboard_model->getWarehouseTypes();
         $data['seasons'] = $this->dashboard_model->getSeasons();
 
@@ -353,6 +401,10 @@ class Access extends CI_Controller {
 
         $data['maincontent'] = $this->load->view('qa_warehouse_new', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function qa_warehouse_data(){
@@ -430,10 +482,19 @@ class Access extends CI_Controller {
         $data['access_points'] = $this->session->userdata('access_points');
         $data['msg'] = '';
 
-        $data['so_list'] = $this->access_model->getAllSOs();
+        $cur_url = __METHOD__;
 
-        $data['maincontent'] = $this->load->view('smv_form', $data, true);
-        $this->load->view('master', $data);
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
+
+            $data['so_list'] = $this->access_model->getAllSOs();
+
+            $data['maincontent'] = $this->load->view('smv_form', $data, true);
+            $this->load->view('master', $data);
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function save_smv(){
@@ -501,8 +562,17 @@ class Access extends CI_Controller {
         $data['access_points'] = $this->session->userdata('access_points');
         $data['msg'] = '';
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['maincontent'] = $this->load->view('care_label_print_sticker', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function rediSamePage(){
@@ -903,6 +973,11 @@ class Access extends CI_Controller {
         $data['access_points'] = $this->session->userdata('access_points');
         $data['msg'] = '';
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['so_list'] = $this->access_model->getAllSOs();
         $data['po_list'] = $this->access_model->getAllPOs();
         $data['item_list'] = $this->access_model->getAllItems();
@@ -912,6 +987,10 @@ class Access extends CI_Controller {
 
         $data['maincontent'] = $this->load->view('group_po_item_making', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function isValidSo(){
@@ -1016,9 +1095,18 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['so_nos'] = $this->access_model->getAllSOs();
         $data['maincontent'] = $this->load->view('change_ex_factory', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function getExfactory()
@@ -1069,6 +1157,11 @@ class Access extends CI_Controller {
         $data['msg'] = '';
         $data['session_out'] = $this->session_out;
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $res = $this->access_model->isReadyTodayLineOutputTable($line_id, $date);
 
         if(sizeof($res) == 0){
@@ -1112,6 +1205,10 @@ class Access extends CI_Controller {
 
         $data['maincontent'] = $this->load->view('care_label_end_line_new', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function lineFinishingAlter(){
@@ -1178,10 +1275,19 @@ class Access extends CI_Controller {
         $data['access_points'] = $this->session->userdata('access_points');
         $data['msg'] = '';
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['prod_summary'] = $this->access_model->getProducitonSummaryReport();
 
         $data['maincontent'] = $this->load->view('care_label_finishing', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function care_label_mid_line_new(){
@@ -1202,6 +1308,11 @@ class Access extends CI_Controller {
         $data['msg'] = '';
         $data['session_out'] = $this->session_out;
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $where = '';
         if($line_id != 0 && $line_id != ''){
             $where .= " AND t5.line_id=$line_id order by t3.max_mid_line_qc_date_time DESC";
@@ -1212,6 +1323,10 @@ class Access extends CI_Controller {
 
         $data['maincontent'] = $this->load->view('care_label_mid_line_new', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function care_label_mid_line(){
@@ -1493,6 +1608,11 @@ class Access extends CI_Controller {
         $data['access_points'] = $this->session->userdata('access_points');
         $data['msg'] = '';
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
 //        $where = '';
 //        if($line_id != 0 && $line_id != ''){
 //            $where .= " AND t5.line_id=$line_id order by t3.max_line_input_date_time desc";
@@ -1503,6 +1623,10 @@ class Access extends CI_Controller {
 
         $data['maincontent'] = $this->load->view('care_label_input_line', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function line_input_prod_data(){
@@ -1534,10 +1658,18 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
-        $data['purchase_order_nos'] = $this->access_model->getAllPurchaseOrders();
+        $cur_url = __METHOD__;
 
-        $data['maincontent'] = $this->load->view('wash_control', $data, true);
-        $this->load->view('master', $data);
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
+            $data['purchase_order_nos'] = $this->access_model->getAllPurchaseOrders();
+
+            $data['maincontent'] = $this->load->view('wash_control', $data, true);
+            $this->load->view('master', $data);
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function sms_file_upload(){
@@ -1732,6 +1864,11 @@ class Access extends CI_Controller {
         $data['msg'] = '';
         $data['session_out'] = $this->session_out;
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
 //        $condition = '';
 //        if($data['access_points'] == 6){
 //            $condition .= " ORDER BY t10.max_washing_date_time DESC";
@@ -1743,6 +1880,10 @@ class Access extends CI_Controller {
 
         $data['maincontent'] = $this->load->view('care_label_washing', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function care_label_going_wash(){
@@ -1762,6 +1903,11 @@ class Access extends CI_Controller {
         $data['msg'] = '';
         $data['session_out'] = $this->session_out;
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
 //        $condition = '';
 //        if($data['access_points'] == 6){
 //            $condition .= " ORDER BY t10.max_washing_date_time DESC";
@@ -1773,6 +1919,10 @@ class Access extends CI_Controller {
 
         $data['maincontent'] = $this->load->view('care_label_going_wash', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function wash_return_data(){
@@ -1820,6 +1970,11 @@ class Access extends CI_Controller {
         $data['msg'] = '';
 
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
 //        $condition = '';
 //        if($data['access_points'] == 7){
 //            $condition .= " ORDER BY t11.max_packing_date_time DESC";
@@ -1831,6 +1986,10 @@ class Access extends CI_Controller {
 
         $data['maincontent'] = $this->load->view('care_label_finishing_alter', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function finishingAlterSave(){
@@ -1893,6 +2052,11 @@ class Access extends CI_Controller {
         $data['msg'] = '';
         $data['session_out'] = $this->session_out;
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
 //        $res = $this->access_model->isReadyTodayLineOutputTable($floor_id, $date);
         $res = $this->access_model->isReadyTodayFinishingOutputTable($floor_id, $date);
 
@@ -1948,6 +2112,9 @@ class Access extends CI_Controller {
 
         $data['maincontent'] = $this->load->view('care_label_packing', $data, true);
         $this->load->view('master', $data);
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function packing_data(){
@@ -2049,6 +2216,11 @@ class Access extends CI_Controller {
         $data['msg'] = '';
         $data['session_out'] = $this->session_out;
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
 //        $condition = '';
 //        if($data['access_points'] == 9){
 //            $condition .= " ORDER BY t12.max_carton_date_time DESC";
@@ -2060,6 +2232,10 @@ class Access extends CI_Controller {
 
         $data['maincontent'] = $this->load->view('care_label_carton', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function care_label_carton_data_load(){
@@ -2105,10 +2281,19 @@ class Access extends CI_Controller {
         $data['access_points'] = $this->session->userdata('access_points');
         $data['msg'] = '';
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['sap_no'] = $this->access_model->getSapPoNo();
 
         $data['maincontent'] = $this->load->view('cutting_summary', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function getProductionSummaryReport(){
@@ -2275,12 +2460,21 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['so_nos'] = $this->access_model->getAllSOs();
         $data['lines'] = $this->access_model->getLines();
         $data['cut_no'] = $this->access_model->getCutNoList();
 
         $data['maincontent'] = $this->load->view('change_line', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function getAllSizesByCutNo(){
@@ -2374,6 +2568,11 @@ class Access extends CI_Controller {
         $data['access_points'] = $this->session->userdata('access_points');
         $data['msg'] = '';
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
 //        $where = '';
 //        if($line_id != 0 && $line_id != ''){
 //            $where .= " AND t13.line_id=$line_id";
@@ -2384,6 +2583,10 @@ class Access extends CI_Controller {
 
         $data['maincontent'] = $this->load->view('bundle_collar_cuff_track', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function bundle_collar_cuff_data(){
@@ -2445,8 +2648,8 @@ class Access extends CI_Controller {
                 $data=array(
                     'pc_tracking_no' => $pc_no1,
                     'reprint_reason' => $reasons,
-                    'referenced_by' => $request_by_name
-
+                    'referenced_by' => $request_by_name,
+                    'request_date_time' => $date_time
                 );
 
                 $this->access_model->insertingData('tb_label_reprint_log', $data);
@@ -2484,9 +2687,19 @@ class Access extends CI_Controller {
         $data['user_name'] = $this->session->userdata('user_name');
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
+
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['reprint_cl'] = $this->access_model->getReprintCl();
         $data['maincontent'] = $this->load->view('reprint_request', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function otherLineCollarBundleScanned($po_no, $so_no, $purchase_order, $item, $quality, $color){
@@ -2915,10 +3128,19 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['purchase_order_nos'] = $this->access_model->getAllPurchaseOrdersForOlymp();
 
         $data['maincontent'] = $this->load->view('po_close_by_merchent', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function po_closed()
@@ -3149,9 +3371,19 @@ class Access extends CI_Controller {
         $data['user_name'] = $this->session->userdata('user_name');
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
+
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['get_req'] = $this->access_model->getReprintRequest();
         $data['maincontent'] = $this->load->view('unapproved_request', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function approveRequest()
@@ -3180,9 +3412,19 @@ class Access extends CI_Controller {
         $data['user_name'] = $this->session->userdata('user_name');
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
+
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['get_req'] = $this->access_model->getReprintRequest();
         $data['maincontent'] = $this->load->view('approve_reprint_request', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
 //    public function careLabelEndDefectSave(){
@@ -3996,6 +4238,11 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $last_so_no = $this->access_model->getManualUploadLastSoNo();
         $data['last_so_no'] = $last_so_no[0]['so_no'];
         $data['upload_date'] = $last_so_no[0]['upload_date'];
@@ -4004,6 +4251,10 @@ class Access extends CI_Controller {
 
         $data['maincontent'] = $this->load->view('sms_file_upload_test', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function smsFileUploadTest()
@@ -4200,10 +4451,19 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['sap_no'] = $this->access_model->getAllSOs();
         $data['part_name'] = $this->access_model->getAllPart();
         $data['maincontent'] = $this->load->view('po_part_detail', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function poPartInsert()
@@ -4861,12 +5121,21 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $get_data['sap_no'] = $this->access_model->getSapPoNo();
         $get_data['tables'] = $this->access_model->getTables();
         $get_data['cut_no'] = $this->access_model->getCutNoList();
 
         $data['maincontent'] = $this->load->view('cutting', $get_data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function multiple_po_item_remain_qty_excel(){
@@ -4875,10 +5144,19 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $get_data['so_list'] = $this->access_model->getSapPoNo();
 
         $data['maincontent'] = $this->load->view('multiple_po_item_remain_qty_excel', $get_data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function getPoItemSizeRemainQty(){
@@ -5278,11 +5556,20 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['sap_no'] = $this->access_model->getSapPoNo();
         $data['cut_no'] = $this->access_model->getCutNoList();
 
         $data['maincontent'] = $this->load->view('print_input_ticket', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function print_bundle_summary_page(){
@@ -5296,11 +5583,20 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['sap_no'] = $this->access_model->getSapPoNo();
         $data['cut_no'] = $this->access_model->getCutNoList();
 
         $data['maincontent'] = $this->load->view('print_bundle_summary_page', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function getPoCutInputSummaryTicket($po_no, $cut_no){
@@ -5423,6 +5719,11 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['tables'] = $this->access_model->getTables();
 
         $data['msg'] = '';
@@ -5430,6 +5731,10 @@ class Access extends CI_Controller {
 
         $data['maincontent'] = $this->load->view('lay_scan', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function inputToLay()
@@ -5487,12 +5792,21 @@ class Access extends CI_Controller {
         $data['msg'] = '';
         $data['session_out'] = $this->session_out;
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $where = '';
         if($line_id != 0 && $line_id != ''){
             $where .= " AND t5.line_id=$line_id order by t3.max_mid_line_qc_date_time DESC";
         }
         $data['maincontent'] = $this->load->view('cut_scan', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function inputToCut()
@@ -5654,8 +5968,17 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['maincontent'] = $this->load->view('assign_cutting_target', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function assignCuttingTarget(){
@@ -5714,6 +6037,11 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $where = '';
         if($floor_id != '' && $floor_id != 0){
             $where .= " AND id = $floor_id";
@@ -5723,6 +6051,10 @@ class Access extends CI_Controller {
 
         $data['maincontent'] = $this->load->view('assign_finishing_target', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function assignFinishingTarget(){
@@ -5784,6 +6116,11 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $where = '';
         if($floor_id != '' && $floor_id != 0){
             $where .= " AND floor = $floor_id";
@@ -5799,6 +6136,10 @@ class Access extends CI_Controller {
 
         $data['maincontent'] = $this->load->view('assign_line_target', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function getLineTargetInfo(){
@@ -6687,12 +7028,21 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
 //        $get_data['po_cut_list'] = $this->access_model->getPOCutListForCareLabel();
 
         $get_data['purchase_order_nos'] = $this->access_model->getAllPurchaseOrders();
 
         $data['maincontent'] = $this->load->view('po_cut_list_for_carelabel', $get_data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function search_care_label(){
@@ -6701,10 +7051,19 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
 //        $get_data['care_label_list'] = $this->access_model->getCareLabelList();
 
         $data['maincontent'] = $this->load->view('search_care_label', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function cut_line_distribution(){
@@ -6913,10 +7272,19 @@ class Access extends CI_Controller {
         $data['access_points'] = $this->session->userdata('access_points');
         $data['msg'] = '';
 
-        $data['so_list'] = $this->access_model->getAllSOs();
+        $cur_url = __METHOD__;
 
-        $data['maincontent'] = $this->load->view('aql_plan', $data, true);
-        $this->load->view('master', $data);
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
+
+            $data['so_list'] = $this->access_model->getAllSOs();
+
+            $data['maincontent'] = $this->load->view('aql_plan', $data, true);
+            $this->load->view('master', $data);
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function saveAqlPlan(){
@@ -6958,10 +7326,19 @@ class Access extends CI_Controller {
         $data['access_points'] = $this->session->userdata('access_points');
         $data['msg'] = '';
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['aql_summary'] = $this->access_model->getAqlSummaryList($date);
 
         $data['maincontent'] = $this->load->view('aql_summary_list', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function aqlListDetail($brand){
@@ -7057,12 +7434,21 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['lines'] = $this->access_model->getLines();
 
 //        $data['prod_summary'] = $this->access_model->getCuttingCollarCuffReport();
 
         $data['maincontent'] = $this->load->view('package_send_to_sew', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function sendingPackageToProduction(){
@@ -7322,18 +7708,26 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
-        $data['lines'] = $this->access_model->getLines();
+        $cur_url = __METHOD__;
 
-        $condition = '';
-        if($data['access_points'] == 1){
-            $condition .= " ORDER BY t3.cut_prod_date_time DESC";
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
+            $data['lines'] = $this->access_model->getLines();
+
+            $condition = '';
+            if ($data['access_points'] == 1) {
+                $condition .= " ORDER BY t3.cut_prod_date_time DESC";
 //            $data['prod_summary'] = $this->access_model->getProducitonSummaryReportCut($condition);
-        }else{
+            } else {
 //            $data['prod_summary'] = $this->access_model->getProducitonSummaryReport();
-        }
+            }
 
-        $data['maincontent'] = $this->load->view('care_label_send_to_production_individual', $data, true);
-        $this->load->view('master', $data);
+            $data['maincontent'] = $this->load->view('care_label_send_to_production_individual', $data, true);
+            $this->load->view('master', $data);
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function care_label_send_to_production_bundle(){
@@ -7354,12 +7748,21 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['lines'] = $this->access_model->getLines();
 
 //        $data['prod_summary'] = $this->access_model->getCuttingCollarCuffReport();
 
         $data['maincontent'] = $this->load->view('collar_cuff_send_to_production', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
     public function get_collar_cuff_send_to_prod_data(){
@@ -11353,12 +11756,21 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['so_nos'] = $this->access_model->getAllSOs();
         $data['lines'] = $this->access_model->getLines();
         $data['cut_no'] = $this->access_model->getCutNoList();
 
         $data['maincontent'] = $this->load->view('change_planned_line', $data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
     public function getTotalScannedQtyBundle()
     {
@@ -11410,10 +11822,19 @@ class Access extends CI_Controller {
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
 
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
         $data['sap_no'] = $this->access_model->getAllSos();
 
         $data['maincontent'] = $this->load->view('manual_closing',$data, true);
         $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
     }
 
 //  Manual Closing End

@@ -2271,7 +2271,7 @@ class Dashboard extends CI_Controller {
         $condition2 .= " AND floor_id in (2)";
 
 
-        $data['cutting_report'] = $this->dashboard_model->getCuttingReport($previous_date);
+        $data['cutting_prod'] = $this->dashboard_model->getCuttingReport($previous_date);
         $data['line_prod'] = $this->dashboard_model->getSecondFloorLineProductionSummary($previous_date, $condition);
         $data['finishing_prod'] = $this->dashboard_model->getSecondFloorFinishingProductionSummary($previous_date,  $condition2);
 
@@ -4219,6 +4219,21 @@ class Dashboard extends CI_Controller {
         $data['dates'] = $this->dashboard_model->getSearchedDates($where);
 
         echo $maincontent = $this->load->view('reports/po_wise_report_by_shipping_date', $data);
+    }
+
+    public function getDailyLineOutputReport($so_no){
+        $data['title']='Daily Line Output Report';
+
+        $where = "";
+
+        if($so_no != ''){
+            $where .= " AND so_no='$so_no'";
+        }
+
+        $data['daily_output'] = $this->dashboard_model->getDailyLineOutputReport($where);
+
+        $data['maincontent'] = $this->load->view('reports/po_wise_daily_line_output_report', $data, true);
+        $this->load->view('reports/master', $data);
     }
 
     public function getShipDateWiseReport(){
