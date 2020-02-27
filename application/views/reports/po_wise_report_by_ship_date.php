@@ -81,7 +81,11 @@
             <td class="center"><?php echo $v['total_order_qty'];?></td>
             <td class="center"><?php echo $v['total_cut_qty'];?></td>
             <td class="center"><?php echo $v['total_cut_input_qty'];?></td>
-            <td class="center"><?php echo $v['count_end_line_qc_pass'];?></td>
+            <td class="center">
+                <a href="<?php echo base_url();?>dashboard/getDailyLineOutputReport/<?php echo $v['so_no'];?>" target="_blank">
+                    <?php echo $v['count_end_line_qc_pass'];?>
+                </a>
+            </td>
             <td class="center" <?php if($sew_balance_qty > 0){ ?>style="background-color: #ffbcbf" <?php } ?>><?php echo $sew_balance_qty;?></td>
             <td class="center"><?php echo $v['count_washing_pass'];?></td>
             <td class="center"><?php echo $v['count_packing_pass'];?></td>

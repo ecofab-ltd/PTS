@@ -202,15 +202,15 @@
             <?php
             if($access_points == 0){
             ?>
-                <li> <a href="<?php echo base_url();?>access/changeExfactory"><i class="fa fa-circle"></i> Change ExFacDate </a></li>
-                <li> <a href="<?php echo base_url();?>access/change_line"><i class="fa fa-circle"></i> Change Line </a></li>
-                <li> <a href="<?php echo base_url();?>access/change_bundle_planned_line"><i class="fa fa-circle"></i> Bundle Change Line </a></li>
-                <li> <a href="<?php echo base_url();?>access/search_care_label"><i class="fa fa-circle"></i> Search Care Label </a></li>
-                <li> <a href="<?php echo base_url();?>access/manual_closing"><i class="fa fa-circle"></i> Manual Closing </a></li>
-                <li> <a href="<?php echo base_url();?>access/active_print_label"><i class="fa fa-circle"></i> Active Print Label </a></li>
-                <li> <a href="<?php echo base_url();?>access/delete_cutting"><i class="fa fa-circle"></i> Delete Cutting </a></li>
-                <li> <a href="<?php echo base_url();?>access/sms_file_upload_test"><i class="fa fa-circle"></i> Manual File Upload </a></li>
-                <li> <a href="<?php echo base_url();?>access/backup_db"><i class="fa fa-circle"></i> Backup DB </a></li>
+                <li> <a href="<?php echo base_url();?>access/changeExfactory"><i class="fa fa-calendar"></i> Change ExFacDate </a></li>
+                <li> <a href="<?php echo base_url();?>access/change_line"><i class="fa fa-exchange"></i> Change Line </a></li>
+                <li> <a href="<?php echo base_url();?>access/change_bundle_planned_line"><i class="fa fa-stack-exchange"></i> Bundle Change Line </a></li>
+                <li> <a href="<?php echo base_url();?>access/search_care_label"><i class="fa fa-search"></i> Search Care Label </a></li>
+                <li> <a href="<?php echo base_url();?>access/manual_closing"><i class="fa fa-minus-circle"></i> Manual Closing </a></li>
+                <li> <a href="<?php echo base_url();?>access/active_print_label"><i class="fa fa-print"></i> Active Print Label </a></li>
+                <li> <a href="<?php echo base_url();?>access/delete_cutting"><i class="fa fa-trash-o"></i> Delete Cutting </a></li>
+                <li> <a href="<?php echo base_url();?>access/sms_file_upload_test"><i class="fa fa-cloud-upload"></i> Manual File Upload </a></li>
+                <li> <a href="<?php echo base_url();?>access/backup_db"><i class="fa fa-archive"></i> Backup DB </a></li>
             <?php
             }
 

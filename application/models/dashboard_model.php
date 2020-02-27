@@ -3560,7 +3560,9 @@ class Dashboard_model extends CI_Model {
                 
                 LEFT JOIN
                 tb_production_summary AS C
-                ON A.so_no=C.so_no";
+                ON A.so_no=C.so_no
+                
+                WHERE A.line_output_date != '0000-00-00'";
 
         $query = $this->db->query($sql)->result_array();
         return $query;
