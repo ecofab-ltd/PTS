@@ -2150,15 +2150,20 @@ class Access extends CI_Controller {
     }
 
     public function getFinishingAlterReport(){
+        $user_id = $this->session->userdata('id');
         $line_id = $this->session->userdata('line_id');
         $floor_id = $this->session->userdata('floor_id');
+
+        $res = $this->access_model->getUserBrands($user_id);
+        $buyer_condition = $res[0]['buyer_condition'];
 
         $where = '';
 
         if($floor_id != ''){
             $where .= " AND finishing_floor_id=$floor_id";
-            $prod_summary = $this->access_model->getFinishingAlterReport($where);
         }
+
+        $prod_summary = $this->access_model->getFinishingAlterReport($where);
 
         $data['prod_summary'] = $prod_summary;
 
@@ -7481,7 +7486,6 @@ class Access extends CI_Controller {
             echo 'CANCEL';
         }
 
-
     }
 
     public function getPackageSentToSewReport()
@@ -11815,9 +11819,9 @@ class Access extends CI_Controller {
         echo 'done';
     }
 
-    public function manual_closing()
+    public function pc_manual_closing()
     {
-        $data['title'] = 'PO Manual Close';
+        $data['title'] = 'Piece Manual Close';
         $data['user_name'] = $this->session->userdata('user_name');
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
@@ -11835,6 +11839,47 @@ class Access extends CI_Controller {
         }else{
             echo $this->load->view('404');
         }
+    }
+
+    public function po_manual_closing()
+    {
+        $data['title'] = 'PO Manual Close';
+        $data['user_name'] = $this->session->userdata('user_name');
+        $data['user_description'] = $this->session->userdata('user_description');
+        $data['access_points'] = $this->session->userdata('access_points');
+
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
+        $data['sap_no'] = $this->access_model->getAllSos();
+
+        $data['maincontent'] = $this->load->view('po_manual_closing',$data, true);
+        $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
+    }
+
+    public function poManualClose(){
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $so_no_array = $this->input->post('so_no');
+
+        $so_no = "'" . implode("', '", $so_no_array) . "'";
+
+        $where = '';
+        if($so_no != ''){
+            $where .= " AND so_no IN ($so_no) AND carton_status=0 AND warehouse_qa_type=0";
+        }
+
+        $this->access_model->poManualClose($where, $date_time);
+
+        echo 'done';
     }
 
 //  Manual Closing End

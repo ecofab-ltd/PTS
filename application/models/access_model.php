@@ -297,7 +297,7 @@ class Access_model extends CI_Model {
     public function updateDefectStatus($carelabel_tracking_no, $line, $access_points, $access_points_status, $date_time){
         $sql = "UPDATE `tb_defects_tracking` 
                 SET defect_recovered=1, defect_recovered_date_time='$date_time' 
-                WHERE pc_tracking_no LIKE '%$carelabel_tracking_no%' 
+                WHERE pc_tracking_no = '$carelabel_tracking_no' 
                 AND line_id=$line AND qc_point=$access_points";
 
         $query = $this->db->query($sql);
@@ -448,7 +448,7 @@ class Access_model extends CI_Model {
 //                WHERE sent_to_production = 1 and access_points=0
 //                and line_id=0 and pc_tracking_no LIKE '$carelabel_tracking_no'";
 
-        $sql = "SELECT t1.*, t2.line_name FROM `vt_running_po_pcs` as t1 
+        $sql = "SELECT t1.*, t2.line_name FROM `tb_care_labels` as t1 
                 LEFT  JOIN 
                 `tb_line` as t2
                 ON  t1.line_id=t2.id
@@ -1420,31 +1420,31 @@ class Access_model extends CI_Model {
     }
 
     public function getFinishingAlterReport($where){
-        $sql1="SELECT so_no, finishing_floor_id, purchase_order, item, quality, color, style_no, style_name,
+        $sql="SELECT so_no, finishing_floor_id, purchase_order, item, quality, color, style_no, style_name,
                brand, ex_factory_date, COUNT(id) as total_finishing_alter_qty
                FROM `vt_running_po_pcs`
                WHERE finishing_qc_status=2
                $where
-               GROUP BY so_no, finishing_floor_id";
+               GROUP BY so_no";
 
-        $query = $this->db->query($sql1)->result_array();
+        $query = $this->db->query($sql)->result_array();
         return $query;
     }
 
     public function getFinishingAlterLineReport($where){
-        $sql1="SELECT so_no, line_id, purchase_order, item, quality, color, style_no, style_name,
+        $sql="SELECT so_no, line_id, purchase_order, item, quality, color, style_no, style_name,
                brand, ex_factory_date, COUNT(id) as total_finishing_alter_qty
                FROM `vt_running_po_pcs`
                WHERE finishing_qc_status=2
                $where
-               GROUP BY so_no, line_id";
+               GROUP BY so_no";
 
-        $query = $this->db->query($sql1)->result_array();
+        $query = $this->db->query($sql)->result_array();
         return $query;
     }
 
     public function getRemainingFinishingAlterPcs($where){
-        $sql1="SELECT t1.*, t2.line_code 
+        $sql1="SELECT t1.*, t2.line_code
                FROM (SELECT pc_tracking_no, so_no, purchase_order, item, size, 
                quality, color, style_no, style_name, ex_factory_date, line_id
                FROM `vt_running_po_pcs` 
@@ -1989,13 +1989,21 @@ class Access_model extends CI_Model {
     }
 
     public function warehouseTrashUpdate($care_label_no, $warehouse_type, $season, $user_id, $date_time, $remarks){
-        $sql = "UPDATE `tb_care_labels` 
-                SET access_points=4, access_points_status=4, line_input_date_time='$date_time', 
-                mid_line_qc_date_time='$date_time', end_line_qc_date_time='$date_time', 
-                packing_status=1, packing_date_time='$date_time', warehouse_qa_type=$warehouse_type,
+        $sql = "UPDATE `tb_care_labels`
+                SET access_points=4, access_points_status=4,
+                packing_status=1, warehouse_qa_type=$warehouse_type,
                 other_purpose_remarks='$remarks', warehouse_trash_date_time='$date_time', 
                 season_id=$season, warehouse_qa_by=$user_id
                 WHERE pc_tracking_no='$care_label_no'";
+
+        $query = $this->db->query($sql);
+        return $query;
+    }
+
+    public function poManualClose($where, $date_time){
+        $sql = "UPDATE `tb_care_labels`
+                SET manually_closed=1, lost_date_time='$date_time'
+                WHERE 1 $where";
 
         $query = $this->db->query($sql);
         return $query;
@@ -4008,7 +4016,7 @@ class Access_model extends CI_Model {
     }
 
     public function lineValidation($carelabel_tracking_no){
-        $sql = "SELECT * FROM `vt_running_po_pcs` 
+        $sql = "SELECT * FROM `tb_care_labels`
                 WHERE pc_tracking_no='$carelabel_tracking_no'";
 
         $query = $this->db->query($sql)->result_array();
@@ -4978,7 +4986,7 @@ class Access_model extends CI_Model {
 
     public function isPrintedCL($care_label_no)
     {
-        $sql = "SELECT * FROM `vt_running_po_pcs` 
+        $sql = "SELECT * FROM `tb_care_labels` 
                 WHERE pc_tracking_no = '$care_label_no' and is_printed=1";
 
         $query = $this->db->query($sql)->result_array();
@@ -5004,7 +5012,7 @@ class Access_model extends CI_Model {
 
     public function sendingToProductionCareLabel($care_label_no, $date_time, $line_id)
     {
-        $sql = "Update `vt_running_po_pcs` 
+        $sql = "Update `tb_care_labels` 
                 Set sent_to_production=1, access_points=1, access_points_status=1, 
                 sent_to_production_date_time='$date_time', planned_line_id=$line_id
                 WHERE pc_tracking_no = '$care_label_no'";
@@ -5620,7 +5628,7 @@ class Access_model extends CI_Model {
 
     public function inputToLine($carelabel_tracking_no, $line_id, $access_points, $access_point_status, $date_time)
     {
-        $sql = "Update `vt_running_po_pcs` 
+        $sql = "Update `tb_care_labels` 
                 SET line_id = $line_id, 
                 access_points = 2,
                 access_points_status = 1,
@@ -5686,7 +5694,7 @@ class Access_model extends CI_Model {
 //                mid_line_qc_date_time = '$date_time'
 //                where pc_tracking_no = '$carelabel_tracking_no'";
 
-        $sql = "Update `vt_running_po_pcs` 
+        $sql = "Update `tb_care_labels` 
                 SET 
                 access_points = $access_points,
                 access_points_status = $access_point_status,
@@ -5706,7 +5714,7 @@ class Access_model extends CI_Model {
 //                end_line_qc_date_time = '$date_time'
 //                where pc_tracking_no = '$carelabel_tracking_no'";
 
-        $sql = "Update `vt_running_po_pcs` 
+        $sql = "Update `tb_care_labels`
                 SET 
                 access_points = '$access_points',
                 access_points_status = '$access_point_status',
@@ -5743,7 +5751,7 @@ class Access_model extends CI_Model {
 
     public function washReturn($carelabel_tracking_no, $status, $date_time)
     {
-        $sql = "Update `vt_running_po_pcs` 
+        $sql = "Update `tb_care_labels`
                 SET 
                 washing_status = $status,
                 washing_date_time = '$date_time'
@@ -5755,7 +5763,7 @@ class Access_model extends CI_Model {
 
     public function packingShirt($carelabel_tracking_no, $status, $floor_id, $date_time)
     {
-        $sql = "Update `vt_running_po_pcs` 
+        $sql = "Update `tb_care_labels` 
                 SET 
                 packing_status = $status,
                 packing_date_time = '$date_time',
@@ -5931,7 +5939,7 @@ class Access_model extends CI_Model {
 
     public function cartonShirt($carelabel_tracking_no, $status, $date_time, $floor_id)
     {
-        $sql = "Update `vt_running_po_pcs` 
+        $sql = "Update `tb_care_labels` 
                 SET 
                 carton_status = $status,
                 finishing_floor_id = $floor_id,
@@ -5944,7 +5952,7 @@ class Access_model extends CI_Model {
 
     public function warehouseRelease($carelabel_tracking_no, $status)
     {
-        $sql = "Update `vt_running_po_pcs` 
+        $sql = "Update `tb_care_labels` 
                 SET 
                 warehouse_qa_type = $status
                 where pc_tracking_no = '$carelabel_tracking_no'";

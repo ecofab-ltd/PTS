@@ -64,7 +64,7 @@ class Dashboard extends CI_Controller {
         $order_by_condition .= " ORDER BY t1.ex_factory_date, t18.responsible_line ASC";
 
 
-        $prod_summary = $this->dashboard_model->getProducitonSummaryReport($where, $order_by_condition);
+        $prod_summary = $this->dashboard_model->getProductionSummaryReport($where, $order_by_condition);
 
 //        $content_data = $this->load->view('reports/report_file_export', $data);
 
@@ -97,7 +97,7 @@ class Dashboard extends CI_Controller {
 
         foreach ($prod_summary as $k => $v){
 
-            $total_finishing_wh_qa = $v['count_carton_pass'] + $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'];
+            $total_finishing_wh_qa = $v['count_carton_pass'] + $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'] + $v['total_manual_close_qty'];
             $total_wh_qa = $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'];
 
 //            $total_finishing_wh_qa = $v['count_carton_pass'] + $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_other_purpose'] + $v['count_lost_qty'];
@@ -162,7 +162,7 @@ class Dashboard extends CI_Controller {
                 $object->getActiveSheet()->setCellValueByColumnAndRow(18, $excel_row, $v["count_packing_pass"]);
                 $object->getActiveSheet()->setCellValueByColumnAndRow(19, $excel_row, $pack_balance_qty);
                 $object->getActiveSheet()->setCellValueByColumnAndRow(20, $excel_row, $v["count_carton_pass"]);
-                $object->getActiveSheet()->setCellValueByColumnAndRow(21, $excel_row, $total_po_item_balance);
+                $object->getActiveSheet()->setCellValueByColumnAndRow(21, $excel_row, ($total_po_item_balance > 0 ? $total_po_item_balance : 0));
                 $object->getActiveSheet()->setCellValueByColumnAndRow(22, $excel_row, $v["status"]);
                 $excel_row++;
 
@@ -226,7 +226,7 @@ class Dashboard extends CI_Controller {
         $order_by_condition = '';
         $order_by_condition .= " ORDER BY t1.ex_factory_date DESC";
 
-        $prod_summary = $this->dashboard_model->getProducitonSummaryReport($where, $order_by_condition);
+        $prod_summary = $this->dashboard_model->getProductionSummaryReport($where, $order_by_condition);
 
 //        $content_data = $this->load->view('reports/report_file_export', $data);
 
@@ -258,7 +258,7 @@ class Dashboard extends CI_Controller {
         $till_date = date("Y-m-d", strtotime("+ 30 days"));
 
         foreach ($prod_summary as $k => $v){
-            $total_finishing_wh_qa = $v['count_carton_pass'] + $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'];
+            $total_finishing_wh_qa = $v['count_carton_pass'] + $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'] + $v['total_manual_close_qty'];
             $total_wh_qa = $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'];
 
 //            if((($v['total_cut_qty'] - $total_finishing_wh_qa) != 0) && ($v['responsible_line'] != '')){
@@ -351,7 +351,7 @@ class Dashboard extends CI_Controller {
 	{
 		$data['title']='Production Summary Report';
 
-		$data['prod_summary'] = $this->dashboard_model->getProducitonSummaryReport();
+		$data['prod_summary'] = $this->dashboard_model->getProductionSummaryReport();
 
         $data['maincontent'] = $this->load->view('reports/report_index', $data, true);
         $this->load->view('reports/master', $data);
@@ -365,7 +365,7 @@ class Dashboard extends CI_Controller {
         $where = '';
         $where .= " AND brand in ('BBD', 'BMB', 'BBS', 'BGM', 'BMA', 'BMC', 'BMS', 'BOM', 'HUGO', 'HUM', 'M&S T11', 'M&ST11', 'M&S', 'TIMBERLAND')";
 
-//        $data['prod_summary'] = $this->dashboard_model->getProducitonSummaryReport($where);
+//        $data['prod_summary'] = $this->dashboard_model->getProductionSummaryReport($where);
 
         $data['maincontent'] = $this->load->view('reports/report_index_pc', $data, true);
         $this->load->view('reports/master', $data);
@@ -393,7 +393,7 @@ class Dashboard extends CI_Controller {
 //        $where = '';
 //        $where .= " AND ex_factory_date='$ex_factory_date' AND brand in ($brands)";
 ////
-//        $data['prod_summary'] = $this->dashboard_model->getProducitonSummaryReport($where);
+//        $data['prod_summary'] = $this->dashboard_model->getProductionSummaryReport($where);
 
         $data['maincontent'] = $this->load->view('reports/report_index_1', $data, true);
         $this->load->view('reports/master', $data);
@@ -409,7 +409,7 @@ class Dashboard extends CI_Controller {
             $where .= " AND ex_factory_date='$ex_factory_date'";
         }
 
-        $data['prod_summary'] = $this->dashboard_model->getProducitonSummaryReport($where);
+        $data['prod_summary'] = $this->dashboard_model->getProductionSummaryReport($where);
 
         echo $data['maincontent'] = $this->load->view('reports/care_label_line_prod_summary_report', $data);
     }
@@ -484,7 +484,7 @@ class Dashboard extends CI_Controller {
         $where = '';
         $where .= " AND brand in ('BBD', 'BMB', 'BBS', 'BGM', 'BMA', 'BMC', 'BMS', 'BOM', 'HUGO', 'HUM', 'M&S T11', 'M&ST11', 'M&S', 'TIMBERLAND', 'CONBIPEL', 'MOSS')";
 
-//        $data['prod_summary'] = $this->dashboard_model->getProducitonSummaryReport($where);
+//        $data['prod_summary'] = $this->dashboard_model->getProductionSummaryReport($where);
         $data['prod_summary'] = $this->dashboard_model->getProductionReport($where);
 
 //        $this->output->cache(1);
@@ -495,7 +495,7 @@ class Dashboard extends CI_Controller {
     public function getProductionReport(){
         $where = '';
 
-        $data['prod_summary'] = $this->dashboard_model->getProducitonSummaryReport($where);
+        $data['prod_summary'] = $this->dashboard_model->getProductionSummaryReport($where);
 
         $truncate_result = $this->dashboard_model->truncateProductionSummary();
 
@@ -509,7 +509,7 @@ class Dashboard extends CI_Controller {
             $till_date = date("Y-m-d", strtotime("+ 30 days"));
             foreach($data['prod_summary'] as $k => $v) {
 
-                $total_finishing_wh_qa = $v['count_carton_pass'] + $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'] + $v['count_wh_size_set'];
+                $total_finishing_wh_qa = $v['count_carton_pass'] + $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'] + $v['count_wh_size_set'] + $v['total_manual_close_qty'];
                 $total_wh_qa = $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'] + $v['count_wh_size_set'];
                 $balance = $v['total_cut_qty'] - $total_finishing_wh_qa;
 
@@ -545,6 +545,7 @@ class Dashboard extends CI_Controller {
                 $idata['count_washing_pass'] = ($v['count_washing_pass'] != NULL ? $v['count_washing_pass'] : 0);
                 $idata['count_packing_pass'] = ($v['count_packing_pass'] != NULL ? $v['count_packing_pass'] : 0);
                 $idata['count_carton_pass'] = ($v['count_carton_pass'] != NULL ? $v['count_carton_pass'] : 0);
+                $idata['count_manual_close_qty'] = ($v['total_manual_close_qty'] != NULL ? $v['total_manual_close_qty'] : 0);
                 $idata['total_wh_qa'] = ($total_wh_qa != NULL ? $total_wh_qa : 0);
                 $idata['balance'] = ($balance != NULL ? $balance : 0);
                 $idata['max_carton_date_time'] = (($v['max_carton_date_time'] != NULL || $v['max_carton_date_time'] != '') ? $v['max_carton_date_time'] : '0000-00-00 00:00:00');
@@ -583,7 +584,7 @@ class Dashboard extends CI_Controller {
         $where = '';
         $where .= " AND t1.brand in ('OLYMP')";
 
-//        $data['prod_summary'] = $this->dashboard_model->getProducitonSummaryReport($where);
+//        $data['prod_summary'] = $this->dashboard_model->getProductionSummaryReport($where);
 
         $data['maincontent'] = $this->load->view('reports/report_index_pc_2', $data, true);
         $this->load->view('reports/master', $data);
@@ -595,7 +596,7 @@ class Dashboard extends CI_Controller {
         $where = '';
         $where .= " AND brand in ('OLYMP')";
 
-//        $data['prod_summary'] = $this->dashboard_model->getProducitonSummaryReport($where);
+//        $data['prod_summary'] = $this->dashboard_model->getProductionSummaryReport($where);
         $data['prod_summary'] = $this->dashboard_model->getProductionReport($where);
 
 //        $this->output->cache(3);
@@ -615,7 +616,7 @@ class Dashboard extends CI_Controller {
         $where = '';
         $where .= " AND t1.brand in ('BBD', 'BBS', 'BGM', 'BMA', 'BMC', 'BMS', 'BOM', 'HUGO', 'HUM')";
 
-        $prod_summary = $this->dashboard_model->getProducitonSummaryReport($where);
+        $prod_summary = $this->dashboard_model->getProductionSummaryReport($where);
 
 //        $content_data = $this->load->view('reports/report_file_export', $data);
 
@@ -1002,7 +1003,7 @@ class Dashboard extends CI_Controller {
 //        $where = '';
 //        $where .= " AND t1.brand in ('BBD', 'BBS', 'BGM', 'BMA', 'BMC', 'BMS', 'BOM', 'HUGO', 'HUM')";
 //
-//        $prod_summary = $this->dashboard_model->getProducitonSummaryReport($where);
+//        $prod_summary = $this->dashboard_model->getProductionSummaryReport($where);
 //
 ////        $content_data = $this->load->view('reports/report_file_export', $data);
 //
@@ -1184,7 +1185,7 @@ class Dashboard extends CI_Controller {
 //        $where = '';
 //        $where .= " AND t1.brand in ('BBD', 'BBS', 'BGM', 'BMA', 'BMC', 'BMS', 'BOM', 'HUGO', 'HUM')";
 //
-//        $prod_summary = $this->dashboard_model->getProducitonSummaryReport($where);
+//        $prod_summary = $this->dashboard_model->getProductionSummaryReport($where);
 //
 ////        $content_data = $this->load->view('reports/report_file_export', $data);
 //
@@ -1382,7 +1383,7 @@ class Dashboard extends CI_Controller {
 //        $where = '';
 //        $where .= " AND t1.brand in ('BBD', 'BBS', 'BGM', 'BMA', 'BMC', 'BMS', 'BOM', 'HUGO', 'HUM')";
 //
-//        $prod_summary = $this->dashboard_model->getProducitonSummaryReport($where);
+//        $prod_summary = $this->dashboard_model->getProductionSummaryReport($where);
 
 //        $content_data = $this->load->view('reports/report_file_export', $data);
 
@@ -1571,7 +1572,7 @@ class Dashboard extends CI_Controller {
 //        $where = '';
 //        $where .= " AND t1.brand in ('BBD', 'BBS', 'BGM', 'BMA', 'BMC', 'BMS', 'BOM', 'HUGO', 'HUM')";
 //
-//        $prod_summary = $this->dashboard_model->getProducitonSummaryReport($where);
+//        $prod_summary = $this->dashboard_model->getProductionSummaryReport($where);
 //
 ////        $content_data = $this->load->view('reports/report_file_export', $data);
 //
@@ -1753,7 +1754,7 @@ class Dashboard extends CI_Controller {
 //        $where = '';
 //        $where .= " AND t1.brand in ('BBD', 'BBS', 'BGM', 'BMA', 'BMC', 'BMS', 'BOM', 'HUGO', 'HUM')";
 //
-//        $prod_summary = $this->dashboard_model->getProducitonSummaryReport($where);
+//        $prod_summary = $this->dashboard_model->getProductionSummaryReport($where);
 //
 ////        $content_data = $this->load->view('reports/report_file_export', $data);
 //
@@ -2834,7 +2835,7 @@ class Dashboard extends CI_Controller {
 //        $parnode = $dom->appendChild($node);
 //
 //
-//        $prod_summary = $this->dashboard_model->getProducitonSummaryReport();
+//        $prod_summary = $this->dashboard_model->getProductionSummaryReport();
 //
 ////        $content_data = $this->load->view('reports/report_file_export', $data);
 //
@@ -3010,7 +3011,7 @@ class Dashboard extends CI_Controller {
 
 
     public function getProductionSummaryReportDashboard(){
-        $data['prod_summary'] = $this->dashboard_model->getProducitonSummaryReport();
+        $data['prod_summary'] = $this->dashboard_model->getProductionSummaryReport();
         $data['maincontent'] = $this->load->view('reports/care_label_line_prod_summary_report_dashboard', $data);
     }
 
@@ -4289,6 +4290,57 @@ class Dashboard extends CI_Controller {
         return $po_close_report = $this->dashboard_model->getProductionReport($where);
     }
 
+    public function shipDateWiseDailyProductionReport()
+    {
+        $data['title']='Ship Date Wise Daily Production';
+
+        $data['brands'] = $this->access_model->getAllBrands();
+
+        $data['ship_dates'] = $this->dashboard_model->getAllShipDates();
+
+        $data['maincontent'] = $this->load->view('reports/ship_date_wise_production_report', $data, true);
+        $this->load->view('reports/master', $data);
+    }
+
+    public function getShipDateWiseDailyReport()
+    {
+        $po_type = $this->input->post('po_type');
+        $brands_string = $this->input->post('brands');
+//        $data['brands_string'] = implode(", ", $brands);
+//        $brands_string = $data['brands_string'];
+
+        $ship_date = $this->input->post('ship_date');
+
+        $data['ex_factory_date'] = $ship_date;
+
+//        echo '<pre>';
+//        print_r($po_type);
+//        print_r($brands_string);
+//        print_r($ship_date);
+//        echo '</pre>';
+
+        $where = '';
+        $where_1 = '';
+
+        if($brands_string != ''){
+//            $where_1 .= " AND brand in ($brands_string)";
+            $where .= " AND brand in ($brands_string)";
+        }
+
+        if($po_type != ''){
+            $where .= " AND po_type = $po_type";
+        }
+
+        if($ship_date != '' && $ship_date != '1970-01-01'){
+            $where .= " AND ex_factory_date='$ship_date'";
+        }
+
+//        $data['po_close_report'] = $this->dashboard_model->getPoShippingDateWiseReport($where, $where_1);
+        $data['daily_output'] = $this->dashboard_model->getShipDateWiseDailyReport($where);
+
+        echo $maincontent = $this->load->view('reports/ship_date_wise_daily_performance_report', $data);
+    }
+
     public function poClosingReport(){
         $data['title']='PO Closing Report';
 
@@ -4740,7 +4792,7 @@ class Dashboard extends CI_Controller {
     public function cutVsOutpotReportByDateRange(){
         $data['title']='Cut Vs Output Report';
 
-        $data['prod_summary'] = $this->dashboard_model->getProducitonSummaryReport();
+        $data['prod_summary'] = $this->dashboard_model->getProductionSummaryReport();
 
         $data['maincontent'] = $this->load->view('reports/report_cut_output', $data, true);
         $this->load->view('reports/master', $data);

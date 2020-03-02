@@ -2820,7 +2820,7 @@ class Dashboard_model extends CI_Model {
         return $query;
     }
 
-    public function getProducitonSummaryReport($where, $order_by_condition){
+    public function getProductionSummaryReport($where, $order_by_condition){
         $sql = "SELECT t1.*, t2.bundle_start, t2.bundle_end, t3.total_cut_input_qty, 
                 t4.total_cut_qty, t5.count_input_qty_line, IFNULL(t7.count_mid_line_qc_pass, 0) as count_mid_line_qc_pass,
                 IFNULL(t8.count_end_line_qc_pass, 0) as count_end_line_qc_pass,
@@ -2828,7 +2828,7 @@ class Dashboard_model extends CI_Model {
                 t12.count_carton_pass, t12.max_carton_date_time,
                 t13.count_wh_prod_sample, t14.count_wh_buyer, t15.count_wh_factory, t17.count_wh_trash,
                 t18.responsible_line, t19.collar_bndl_qty, t20.cuff_bndl_qty, t22.planned_lines, t23.count_wh_others,
-                t24.count_washing_qty, t25.count_wh_lost, t26.count_wh_size_set
+                t24.count_washing_qty, t25.count_wh_lost, t26.count_wh_size_set, t27.total_manual_close_qty
                 
                 From (SELECT * FROM `vt_po_summary`
                 WHERE 1 $where) as t1
@@ -2881,7 +2881,7 @@ class Dashboard_model extends CI_Model {
                 (SELECT * FROM `vt_carton` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t12
                 ON t1.po_no=t12.po_no AND t1.so_no=t12.so_no AND t1.purchase_order=t12.purchase_order AND t1.item=t12.item
                 AND t1.quality=t12.quality AND t1.color=t12.color
-
+                
                 LEFT JOIN
                 (SELECT * FROM `vt_wh_prod_sample` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t13
                 ON t1.po_no=t13.po_no AND t1.so_no=t13.so_no AND t1.purchase_order=t13.purchase_order AND t1.item=t13.item
@@ -2961,6 +2961,13 @@ class Dashboard_model extends CI_Model {
                 (SELECT * FROM `vt_wh_size_set` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t26
                 ON t1.po_no=t26.po_no AND t1.so_no=t26.so_no AND t1.purchase_order=t26.purchase_order AND t1.item=t26.item
                 AND t1.quality=t26.quality AND t1.color=t26.color
+                
+                
+                LEFT JOIN
+                (SELECT po_no, so_no, purchase_order, item, quality, color, COUNT(id) as total_manual_close_qty
+                FROM vt_few_days_po_pcs WHERE manually_closed=1 GROUP BY po_no, so_no, purchase_order, item, quality, color) as t27
+                ON t1.po_no=t27.po_no AND t1.so_no=t27.so_no AND t1.purchase_order=t27.purchase_order AND t1.item=t27.item
+                AND t1.quality=t27.quality AND t1.color=t27.color
                 
                 $order_by_condition";
 
@@ -3552,6 +3559,44 @@ class Dashboard_model extends CI_Model {
                   FROM tb_care_labels 
                 ) tb_care_labels 
                 WHERE 1 $where 
+                GROUP BY so_no, line_id, line_output_date) AS A
+                
+                LEFT JOIN
+                tb_line AS B
+                ON A.line_id=B.id
+                
+                LEFT JOIN
+                tb_production_summary AS C
+                ON A.so_no=C.so_no
+                
+                WHERE A.line_output_date != '0000-00-00'";
+
+        $query = $this->db->query($sql)->result_array();
+        return $query;
+    }
+
+    public function getShipDateWiseDailyReport($where)
+    {
+        $sql = "SELECT A.*, B.line_code, C.total_order_qty
+                FROM 
+                (SELECT po_no,so_no,item,quality,color,purchase_order,line_id,brand,
+                ex_factory_date,style_no,style_name, line_output_date,
+                    
+                  COUNT(line_output) as line_output_qty,
+                  COUNT(line_manual_output) as line_manual_output_qty
+                  
+                 
+                FROM (
+                  SELECT
+                    so_no,po_no,item,quality,color,purchase_order,line_id,brand,ex_factory_date,line_input_date_time,style_no,style_name,po_type,
+                    DATE_FORMAT(end_line_qc_date_time, '%Y-%m-%d') AS line_output_date,                   
+                    
+                   CASE WHEN access_points=4 AND access_points_status=4 AND manually_closed=0 AND line_id != 0 THEN id END line_output,
+                   CASE WHEN access_points=4 AND access_points_status=4 AND manually_closed=1 AND line_id != 0 THEN id END line_manual_output
+                   
+                  FROM tb_care_labels 
+                ) tb_care_labels 
+                WHERE 1 $where
                 GROUP BY so_no, line_id, line_output_date) AS A
                 
                 LEFT JOIN

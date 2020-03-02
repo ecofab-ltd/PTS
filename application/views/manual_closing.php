@@ -6,7 +6,7 @@
     <div class="pull-right">
         <ol class="breadcrumb">
             <li><a href="<?php echo base_url();?>">Home</a></li>
-            <li class="active">Cutting</li>
+            <li class="active">Manual Closing</li>
         </ol>
     </div>
 </div>
