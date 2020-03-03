@@ -3067,35 +3067,17 @@ class Access extends CI_Controller {
         $line_id = $line_check[0]['line_id'];
         $last_access_points = $line_check[0]['access_points'];
         $last_access_points_status = $line_check[0]['access_points_status'];
+        $manually_closed = $line_check[0]['manually_closed'];
 
         if($line == $line_id){
-            if(($last_access_points == 2) && ($last_access_points_status == 1)){
-                $this->access_model->midLineQC($carelabel_tracking_no, $access_points, $access_points_status, $date_time);
+            if($manually_closed == 1){
+                echo 'closed';
+            }else{
+                if(($last_access_points == 2) && ($last_access_points_status == 1)){
+                    $this->access_model->midLineQC($carelabel_tracking_no, $access_points, $access_points_status, $date_time);
 
-                foreach ($defect_part_array as $k => $v){
+                    foreach ($defect_part_array as $k => $v){
 
-                    $defect_data = array(
-                        'pc_tracking_no' => $carelabel_tracking_no,
-                        'line_id' => $line,
-                        'qc_point' => $access_points,
-                        'defect_part' => $v,
-                        'defect_code' => $defect_codes_array[$k],
-                        'defect_date_time' => $date_time
-                    );
-
-                    $this->access_model->insertingData('tb_defects_tracking', $defect_data);
-
-                }
-
-                $this->access_model->midLineQC($carelabel_tracking_no, $access_points, $access_points_status, $date_time);
-                echo 'Defect Tracked!';
-            }
-            elseif (($last_access_points == $access_points) && ($last_access_points_status == 2)){
-                foreach ($defect_part_array as $k => $v){
-
-                    $res_def = $this->access_model->isDefectAvailable($carelabel_tracking_no, $line, $access_points, $v, $defect_codes_array[$k]);
-
-                    if(empty($res_def)){
                         $defect_data = array(
                             'pc_tracking_no' => $carelabel_tracking_no,
                             'line_id' => $line,
@@ -3106,20 +3088,44 @@ class Access extends CI_Controller {
                         );
 
                         $this->access_model->insertingData('tb_defects_tracking', $defect_data);
-                    }
-                }
 
-                echo 'Defects Updated!';
+                    }
+
+                    $this->access_model->midLineQC($carelabel_tracking_no, $access_points, $access_points_status, $date_time);
+                    echo 'Defect Tracked!';
+                }
+                elseif (($last_access_points == $access_points) && ($last_access_points_status == 2)){
+                    foreach ($defect_part_array as $k => $v){
+
+                        $res_def = $this->access_model->isDefectAvailable($carelabel_tracking_no, $line, $access_points, $v, $defect_codes_array[$k]);
+
+                        if(empty($res_def)){
+                            $defect_data = array(
+                                'pc_tracking_no' => $carelabel_tracking_no,
+                                'line_id' => $line,
+                                'qc_point' => $access_points,
+                                'defect_part' => $v,
+                                'defect_code' => $defect_codes_array[$k],
+                                'defect_date_time' => $date_time
+                            );
+
+                            $this->access_model->insertingData('tb_defects_tracking', $defect_data);
+                        }
+                    }
+
+                    echo 'Defects Updated!';
+                }
+                elseif (($last_access_points == $access_points) && ($last_access_points_status == 1)){
+                    echo 'Already Passed!';
+                }
+                elseif ($last_access_points > $access_points){
+                    echo 'This Process already passed!';
+                }
+                else{
+                    echo 'Previous process in WIP!';
+                }
             }
-            elseif (($last_access_points == $access_points) && ($last_access_points_status == 1)){
-                echo 'Already Passed!';
-            }
-            elseif ($last_access_points > $access_points){
-                echo 'This Process already passed!';
-            }
-            else{
-                echo 'Previous process in WIP!';
-            }
+
         }else{
             echo 'Line mismatch found!';
         }
@@ -3190,40 +3196,46 @@ class Access extends CI_Controller {
         $line_id = $line_check[0]['line_id'];
         $last_access_points = $line_check[0]['access_points'];
         $last_access_points_status = $line_check[0]['access_points_status'];
+        $manually_closed = $line_check[0]['manually_closed'];
 
         if(sizeof($line_check) > 0) {
-            if ($line == $line_id) {
-                if (($last_access_points == 3) && ($last_access_points_status == 1)) {
-                    $this->access_model->endLineQC($carelabel_tracking_no, $access_points, 4, $date_time);
+            if($manually_closed == 1){
+                echo 'closed';
+            }else{
+                if ($line == $line_id) {
+                    if (($last_access_points == 3) && ($last_access_points_status == 1)) {
+                        $this->access_model->endLineQC($carelabel_tracking_no, $access_points, 4, $date_time);
 
-                    $this->access_model->updateTodayLineOutputQty($line, $date, $time);
+                        $this->access_model->updateTodayLineOutputQty($line, $date, $time);
 
-                    echo 'Successfully Passed!';
-                } elseif (($last_access_points == $access_points) && ($last_access_points_status == 2)) {
-                    $this->access_model->updateDefectStatus($carelabel_tracking_no, $line, $access_points, $access_points_status, $date_time);
+                        echo 'Successfully Passed!';
+                    } elseif (($last_access_points == $access_points) && ($last_access_points_status == 2)) {
+                        $this->access_model->updateDefectStatus($carelabel_tracking_no, $line, $access_points, $access_points_status, $date_time);
 
-                    $this->access_model->updateTodayLineOutputQty($line, $date, $time);
+                        $this->access_model->updateTodayLineOutputQty($line, $date, $time);
 
-                    $this->access_model->endLineQC($carelabel_tracking_no, $access_points, $access_points_status, $date_time);
-                    echo 'Successfully Passed!';
-                }
+                        $this->access_model->endLineQC($carelabel_tracking_no, $access_points, $access_points_status, $date_time);
+                        echo 'Successfully Passed!';
+                    }
 //            elseif (($last_access_points == $access_points) && ($last_access_points_status == 3)){
 //                $this->access_model->endLineQC($carelabel_tracking_no, $access_points, $access_points_status, $date_time);
 //                echo 'Successfully Passed!';
 //            }
-                elseif (($last_access_points == $access_points) && ($last_access_points_status == 4)) {
-                    echo 'Already Passed!';
-                }
+                    elseif (($last_access_points == $access_points) && ($last_access_points_status == 4)) {
+                        echo 'Already Passed!';
+                    }
 
 //            elseif ($last_access_points > $access_points){
 //                echo 'This Process already passed!';
 //            }
-                else {
-                    echo 'Previous process in WIP!';
+                    else {
+                        echo 'Previous process in WIP!';
+                    }
+                } else {
+                    echo "Line mismatch found!";
                 }
-            } else {
-                echo "Line mismatch found!";
             }
+
         }
         else{
             echo 'Not Found';
@@ -3250,39 +3262,44 @@ class Access extends CI_Controller {
         $line_id = $line_check[0]['line_id'];
         $last_access_points = $line_check[0]['access_points'];
         $last_access_points_status = $line_check[0]['access_points_status'];
+        $manually_closed = $line_check[0]['manually_closed'];
 
         if(sizeof($line_check) > 0){
-        if($line == $line_id){
-            if(($last_access_points == 2) && ($last_access_points_status == 1)){
-                $this->access_model->midLineQC($carelabel_tracking_no, $access_points, $access_points_status, $date_time);
-                echo 'Successfully Passed!';
-            }
-            elseif (($last_access_points == $access_points) && ($last_access_points_status == 2)){
-                $this->access_model->updateDefectStatus($carelabel_tracking_no, $line, $access_points, $access_points_status, $date_time);
+            if($manually_closed == 1){
+                echo 'closed';
+            }else{
+                if($line == $line_id){
+                    if(($last_access_points == 2) && ($last_access_points_status == 1)){
+                        $this->access_model->midLineQC($carelabel_tracking_no, $access_points, $access_points_status, $date_time);
+                        echo 'Successfully Passed!';
+                    }
+                    elseif (($last_access_points == $access_points) && ($last_access_points_status == 2)){
+                        $this->access_model->updateDefectStatus($carelabel_tracking_no, $line, $access_points, $access_points_status, $date_time);
 
-                $this->access_model->midLineQC($carelabel_tracking_no, $access_points, $access_points_status, $date_time);
-                echo 'Successfully Passed!';
-            }
-//            elseif (($last_access_points == $access_points) && ($last_access_points_status == 3)){
-//                $this->access_model->midLineQC($carelabel_tracking_no, $access_points, $access_points_status, $date_time);
-//                echo 'Successfully Passed!';
-//            }
-            elseif (($last_access_points >= $access_points) && ($last_access_points_status == 1)){
-                echo 'Already Passed!';
-            }
+                        $this->access_model->midLineQC($carelabel_tracking_no, $access_points, $access_points_status, $date_time);
+                        echo 'Successfully Passed!';
+                    }
+                    //            elseif (($last_access_points == $access_points) && ($last_access_points_status == 3)){
+                    //                $this->access_model->midLineQC($carelabel_tracking_no, $access_points, $access_points_status, $date_time);
+                    //                echo 'Successfully Passed!';
+                    //            }
+                    elseif (($last_access_points >= $access_points) && ($last_access_points_status == 1)){
+                        echo 'Already Passed!';
+                    }
 
-            elseif (($last_access_points >= $access_points) && ($last_access_points_status == 4)){
-                echo 'Already Passed!';
+                    elseif (($last_access_points >= $access_points) && ($last_access_points_status == 4)){
+                        echo 'Already Passed!';
+                    }
+                    //            elseif ($last_access_points > $access_points){
+                    //                echo 'This Process already passed!';
+                    //            }
+                    else{
+                        echo 'Previous process in WIP!';
+                    }
+                }else{
+                    echo 'Line mismatch found!';
+                }
             }
-//            elseif ($last_access_points > $access_points){
-//                echo 'This Process already passed!';
-//            }
-            else{
-                echo 'Previous process in WIP!';
-            }
-        }else{
-            echo 'Line mismatch found!';
-        }
     }else{
         echo 'Not Found';
     }
@@ -3309,62 +3326,68 @@ class Access extends CI_Controller {
         $line_id = $line_check[0]['line_id'];
         $last_access_points = $line_check[0]['access_points'];
         $last_access_points_status = $line_check[0]['access_points_status'];
+        $manually_closed = $line_check[0]['manually_closed'];
 
         if($line == $line_id){
-            if(($last_access_points == 3) && ($last_access_points_status == 1)){
+            if($manually_closed == 1){
+                echo 'closed';
+            }else{
+                if(($last_access_points == 3) && ($last_access_points_status == 1)){
 
-                foreach ($defect_codes_array as $k => $v){
-                    $res_def = $this->access_model->isDefectAvailable($carelabel_tracking_no, $line, $access_points, $defect_codes_array[$k], $date_time);
-                    $count_def_row = sizeof($res_def);
+                    foreach ($defect_codes_array as $k => $v){
+                        $res_def = $this->access_model->isDefectAvailable($carelabel_tracking_no, $line, $access_points, $defect_codes_array[$k], $date_time);
+                        $count_def_row = sizeof($res_def);
 
-                    if($count_def_row == 0){
-                        $defect_data = array(
-                            'pc_tracking_no' => $carelabel_tracking_no,
-                            'line_id' => $line,
-                            'qc_point' => $access_points,
+                        if($count_def_row == 0){
+                            $defect_data = array(
+                                'pc_tracking_no' => $carelabel_tracking_no,
+                                'line_id' => $line,
+                                'qc_point' => $access_points,
 //                            'defect_part' => $v,
-                            'defect_code' => $defect_codes_array[$k],
-                            'defect_date_time' => $date_time
-                        );
+                                'defect_code' => $defect_codes_array[$k],
+                                'defect_date_time' => $date_time
+                            );
 
-                        $this->access_model->insertingData('tb_defects_tracking', $defect_data);
+                            $this->access_model->insertingData('tb_defects_tracking', $defect_data);
+                        }
                     }
+
+                    $this->access_model->endLineQC($carelabel_tracking_no, $access_points, $access_points_status, $date_time);
+                    echo 'Defect Tracked!';
                 }
+                elseif (($last_access_points == $access_points) && ($last_access_points_status == 2)){
+                    foreach ($defect_codes_array as $k => $v){
 
-                $this->access_model->endLineQC($carelabel_tracking_no, $access_points, $access_points_status, $date_time);
-                echo 'Defect Tracked!';
-            }
-            elseif (($last_access_points == $access_points) && ($last_access_points_status == 2)){
-                foreach ($defect_codes_array as $k => $v){
+                        $res_def = $this->access_model->isDefectAvailable($carelabel_tracking_no, $line, $access_points, $defect_codes_array[$k], $date_time);
+                        $count_def_row = sizeof($res_def);
 
-                    $res_def = $this->access_model->isDefectAvailable($carelabel_tracking_no, $line, $access_points, $defect_codes_array[$k], $date_time);
-                    $count_def_row = sizeof($res_def);
-
-                    if($count_def_row == 0){
-                        $defect_data = array(
-                            'pc_tracking_no' => $carelabel_tracking_no,
-                            'line_id' => $line,
-                            'qc_point' => $access_points,
+                        if($count_def_row == 0){
+                            $defect_data = array(
+                                'pc_tracking_no' => $carelabel_tracking_no,
+                                'line_id' => $line,
+                                'qc_point' => $access_points,
 //                            'defect_part' => $v,
-                            'defect_code' => $defect_codes_array[$k],
-                            'defect_date_time' => $date_time
-                        );
+                                'defect_code' => $defect_codes_array[$k],
+                                'defect_date_time' => $date_time
+                            );
 
-                        $this->access_model->insertingData('tb_defects_tracking', $defect_data);
+                            $this->access_model->insertingData('tb_defects_tracking', $defect_data);
+                        }
                     }
-                }
 
-                echo 'Defects Updated!';
+                    echo 'Defects Updated!';
+                }
+                elseif (($last_access_points == $access_points) && ($last_access_points_status == 1)){
+                    echo 'Already Passed!';
+                }
+                elseif ($last_access_points >= $access_points){
+                    echo 'This Process already passed!';
+                }
+                else{
+                    echo 'Previous process in WIP!';
+                }
             }
-            elseif (($last_access_points == $access_points) && ($last_access_points_status == 1)){
-                echo 'Already Passed!';
-            }
-            elseif ($last_access_points >= $access_points){
-                echo 'This Process already passed!';
-            }
-            else{
-                echo 'Previous process in WIP!';
-            }
+
         }else{
             echo 'Line mismatch found!';
         }
@@ -3771,14 +3794,18 @@ class Access extends CI_Controller {
         $sent_to_production = $line_check[0]['sent_to_production'];
         $last_access_points = $line_check[0]['access_points'];
         $access_points_status = $line_check[0]['access_points_status'];
+        $manually_closed = $line_check[0]['manually_closed'];
 
         if(sizeof($line_check) > 0){
             // re-program
-            if(($id == 0) && ($sent_to_production == 1)){
-                $this->access_model->inputToLine($carelabel_tracking_no, $line_id, 2, 1, $date_time);
+            if ($manually_closed == 1){
+                echo 'closed';
+            }else{
+                if(($id == 0) && ($sent_to_production == 1)){
+                    $this->access_model->inputToLine($carelabel_tracking_no, $line_id, 2, 1, $date_time);
 
-                echo 'successfully inputed';
-            }
+                    echo 'successfully inputed';
+                }
 
 //        if($id == $line_id){
 //            if(($last_access_points == 2) && ($access_points_status == 1)){
@@ -3786,25 +3813,27 @@ class Access extends CI_Controller {
 //                $this->session->set_userdata($data);
 //            }
 
-            if (($id == $line_id) && ($last_access_points == $access_points)){
-                echo 'successfully inputed 2';
-            }
+                if (($id == $line_id) && ($last_access_points == $access_points) && ($manually_closed == 0)){
+                    echo 'successfully inputed 2';
+                }
 //        }
-            if (($id == $line_id) && ($last_access_points > 2)){
-                echo 'successfully inputted already';
+                if (($id == $line_id) && ($last_access_points > 2) && ($manually_closed == 0)){
+                    echo 'successfully inputted already';
+                }
+
+                if (($id != $line_id)){
+                    if($sent_to_production == 0){
+                        echo 'cutting process not finished';
+                    }
+                    if($id != 0){
+                        $line_info = $this->access_model->getLineInfo($id);
+                        $line_name = $line_info[0]['line_name'];
+
+                        echo "line mismatch~$line_name";
+                    }
+                }
             }
 
-            if (($id != $line_id)){
-                if($sent_to_production == 0){
-                    echo 'cutting process not finished';
-                }
-                if($id != 0){
-                    $line_info = $this->access_model->getLineInfo($id);
-                    $line_name = $line_info[0]['line_name'];
-
-                    echo "line mismatch~$line_name";
-                }
-            }
         }else{
             echo 'Not Found';
         }
@@ -3887,27 +3916,33 @@ class Access extends CI_Controller {
         $washing_status = $line_check[0]['washing_status'];
         $is_wash_gmt = $line_check[0]['is_wash_gmt'];
         $is_going_wash = $line_check[0]['is_going_wash'];
+        $manually_closed = $line_check[0]['manually_closed'];
 
         if(sizeof($line_check) > 0){
-            // re-program
-            if(($last_access_points == 4) && ($access_points_status == 4)){
-                if($is_wash_gmt == 1 && $is_going_wash == 0){
-                    $this->access_model->goingWash($carelabel_tracking_no, 1, $date_time);
+            if($manually_closed == 1){
+                echo 'closed';
+            }else{
+                // re-program
+                if(($last_access_points == 4) && ($access_points_status == 4)){
+                    if($is_wash_gmt == 1 && $is_going_wash == 0){
+                        $this->access_model->goingWash($carelabel_tracking_no, 1, $date_time);
 
-                    echo 'successful';
+                        echo 'successful';
+                    }
+
+                    if($is_wash_gmt == 1 && $is_going_wash == 1){
+                        echo 'already';
+                    }
+
+                    if($is_wash_gmt == 0){
+                        echo 'non-wash';
+                    }
                 }
-
-                if($is_wash_gmt == 1 && $is_going_wash == 1){
-                    echo 'already';
-                }
-
-                if($is_wash_gmt == 0){
-                    echo 'non-wash';
+                else{
+                    echo 'previous process wip';
                 }
             }
-            else{
-                echo 'previous process wip';
-            }
+
         }else{
             echo 'Not Found';
         }
@@ -4035,23 +4070,29 @@ class Access extends CI_Controller {
         $is_going_wash = $line_check[0]['is_going_wash'];
         $washing_status = $line_check[0]['washing_status'];
         $is_wash_gmt = $line_check[0]['is_wash_gmt'];
+        $manually_closed = $line_check[0]['manually_closed'];
 
         if(sizeof($line_check) > 0){
-            // re-program
-            if($is_wash_gmt == 1){
-                if(($is_going_wash == 1) && ($washing_status == 0)){
-                    $this->access_model->washReturn($carelabel_tracking_no, 1, $date_time);
-                    echo 'successfully wash returned';
-                }
-                if(($is_going_wash == 1) && ($washing_status == 1)){
-                    echo 'returned already';
-                }
-                if($is_going_wash == 0){
-                    echo 'previous process not finished';
-                }
+            if($manually_closed == 1){
+                echo 'closed';
             }else{
-                echo 'non-wash gmt';
+                // re-program
+                if($is_wash_gmt == 1){
+                    if(($is_going_wash == 1) && ($washing_status == 0)){
+                        $this->access_model->washReturn($carelabel_tracking_no, 1, $date_time);
+                        echo 'successfully wash returned';
+                    }
+                    if(($is_going_wash == 1) && ($washing_status == 1)){
+                        echo 'returned already';
+                    }
+                    if($is_going_wash == 0){
+                        echo 'previous process not finished';
+                    }
+                }else{
+                    echo 'non-wash gmt';
+                }
             }
+
         }else{
             echo 'Not Found';
         }
@@ -4095,130 +4136,137 @@ class Access extends CI_Controller {
         $finishing_qc_status = $line_check[0]['finishing_qc_status'];
         $size = $line_check[0]['size'];
         $line = $line_check[0]['line_name'];
+        $manually_closed = $line_check[0]['manually_closed'];
 
         $po_last_four_digit = substr($line_check[0]['purchase_order'], -4);
         $item_last_three_digit = substr($line_check[0]['item'], 0, 3);
         $color_first_three_digit = substr($line_check[0]['color'], 0, 3);
 
         if(sizeof($line_check) > 0){
-            if($is_wash_gmt == 1){
-                if(($washing_status == 1) && ($last_access_points == 4) && ($access_points_status == 4) && ($packing_status == 0) && ($finishing_qc_status != 2)){
-                    $this->access_model->packingShirt($carelabel_tracking_no, 1, $floor_id, $date_time);
+            if($manually_closed == 1){
+                $data['exception']="$carelabel_tracking_no is Closed!";
+                $this->session->set_userdata($data);
+            }else{
+                if($is_wash_gmt == 1){
+                    if(($washing_status == 1) && ($last_access_points == 4) && ($access_points_status == 4) && ($packing_status == 0) && ($finishing_qc_status != 2)){
+                        $this->access_model->packingShirt($carelabel_tracking_no, 1, $floor_id, $date_time);
 //                    $this->access_model->updateTodayLineOutputQty($floor_id, $date, $time);
-                    $this->access_model->updateTodayFinishingOutputQty($floor_id, $date, $time);
+                        $this->access_model->updateTodayFinishingOutputQty($floor_id, $date, $time);
 //
 
-                    $data['message']="$carelabel_tracking_no Successfully Packed!";
-                    $this->session->set_userdata($data);
+                        $data['message']="$carelabel_tracking_no Successfully Packed!";
+                        $this->session->set_userdata($data);
 
-                    if($print_status == 1){
-                        echo '<script>
+                        if($print_status == 1){
+                            echo '<script>
                             window.open("'.base_url().'access/printSticker/'.$carelabel_tracking_no.'/'.$po_last_four_digit.'/'.$item_last_three_digit.'/'.$color_first_three_digit.'/'.$size.'");
                             window.location.href = "'.base_url().'access/care_label_packing/'.'";
         //                </script>';
-                    }else{
-                        echo '<script>
+                        }else{
+                            echo '<script>
                             window.location.href = "'.base_url().'access/care_label_packing/'.'";
         //                </script>';
-                    }
-                }elseif(($washing_status == 1) && ($last_access_points == 4) && ($access_points_status == 4) && ($packing_status == 1) && ($finishing_qc_status != 2)){
-                    $data['message']="$carelabel_tracking_no Packed Already!";
-                    $this->session->set_userdata($data);
+                        }
+                    }elseif(($washing_status == 1) && ($last_access_points == 4) && ($access_points_status == 4) && ($packing_status == 1) && ($finishing_qc_status != 2)){
+                        $data['message']="$carelabel_tracking_no Packed Already!";
+                        $this->session->set_userdata($data);
 
-                    if($print_status == 1){
-                        echo '<script>
+                        if($print_status == 1){
+                            echo '<script>
                             window.open("'.base_url().'access/printSticker/'.$carelabel_tracking_no.'/'.$po_last_four_digit.'/'.$item_last_three_digit.'/'.$color_first_three_digit.'/'.$size.'");
                             window.location.href = "'.base_url().'access/care_label_packing/'.'";
         //                </script>';
-                    }else{
-                        echo '<script>
+                        }else{
+                            echo '<script>
                             window.location.href = "'.base_url().'access/care_label_packing/'.'";
         //                </script>';
-                    }
-                }elseif(($washing_status == 1) && ($last_access_points == 4) && ($access_points_status == 4) && ($finishing_qc_status == 2)){
-                    $data['exception']="$carelabel_tracking_no $line Alter Not completed!";
-                    $this->session->set_userdata($data);
+                        }
+                    }elseif(($washing_status == 1) && ($last_access_points == 4) && ($access_points_status == 4) && ($finishing_qc_status == 2)){
+                        $data['exception']="$carelabel_tracking_no $line Alter Not completed!";
+                        $this->session->set_userdata($data);
 
-                    echo '<script>
-                    window.location.href = "'.base_url().'access/care_label_packing/'.'";
-                    </script>';
-                }
-                elseif(($last_access_points != 4) && ($access_points_status != 4)){
-                    $data['exception']="$carelabel_tracking_no $line Process Not completed!";
-                    $this->session->set_userdata($data);
-
-                    echo '<script>
-                    window.location.href = "'.base_url().'access/care_label_packing/'.'";
-                    </script>';
-                }
-                elseif(($washing_status == 0) && ($last_access_points == 4) && ($access_points_status == 4)){
-                    $data['exception']="$carelabel_tracking_no Wash-Return not completed!";
-                    $this->session->set_userdata($data);
-
-                    echo '<script>
-                    window.location.href = "'.base_url().'access/care_label_packing/'.'";
-                    </script>';
-                }
-            }
-            if($is_wash_gmt == 0){
-                if(($last_access_points == 4) && ($access_points_status == 4) && ($packing_status == 0) && ($finishing_qc_status != 2)){
-                    $this->access_model->packingShirt($carelabel_tracking_no, 1, $floor_id, $date_time);
-                    $this->access_model->updateTodayFinishingOutputQty($floor_id, $date, $time);
-
-                    $data['message']="$carelabel_tracking_no Successfully Packed!";
-                    $this->session->set_userdata($data);
-
-                    if($print_status == 1){
                         echo '<script>
+                    window.location.href = "'.base_url().'access/care_label_packing/'.'";
+                    </script>';
+                    }
+                    elseif(($last_access_points != 4) && ($access_points_status != 4)){
+                        $data['exception']="$carelabel_tracking_no $line Process Not completed!";
+                        $this->session->set_userdata($data);
+
+                        echo '<script>
+                    window.location.href = "'.base_url().'access/care_label_packing/'.'";
+                    </script>';
+                    }
+                    elseif(($washing_status == 0) && ($last_access_points == 4) && ($access_points_status == 4)){
+                        $data['exception']="$carelabel_tracking_no Wash-Return not completed!";
+                        $this->session->set_userdata($data);
+
+                        echo '<script>
+                    window.location.href = "'.base_url().'access/care_label_packing/'.'";
+                    </script>';
+                    }
+                }
+                if($is_wash_gmt == 0){
+                    if(($last_access_points == 4) && ($access_points_status == 4) && ($packing_status == 0) && ($finishing_qc_status != 2)){
+                        $this->access_model->packingShirt($carelabel_tracking_no, 1, $floor_id, $date_time);
+                        $this->access_model->updateTodayFinishingOutputQty($floor_id, $date, $time);
+
+                        $data['message']="$carelabel_tracking_no Successfully Packed!";
+                        $this->session->set_userdata($data);
+
+                        if($print_status == 1){
+                            echo '<script>
                             window.open("'.base_url().'access/printSticker/'.$carelabel_tracking_no.'/'.$po_last_four_digit.'/'.$item_last_three_digit.'/'.$color_first_three_digit.'/'.$size.'");
                             window.location.href = "'.base_url().'access/care_label_packing/'.'";
         //                </script>';
-                    }else{
-                        echo '<script>
+                        }else{
+                            echo '<script>
                             window.location.href = "'.base_url().'access/care_label_packing/'.'";
         //                </script>';
+                        }
                     }
-                }
-                elseif(($last_access_points == 4) && ($access_points_status == 4) && ($packing_status == 1) && ($finishing_qc_status != 2)){
-                    $data['message']="$carelabel_tracking_no Packed Already!";
-                    $this->session->set_userdata($data);
+                    elseif(($last_access_points == 4) && ($access_points_status == 4) && ($packing_status == 1) && ($finishing_qc_status != 2)){
+                        $data['message']="$carelabel_tracking_no Packed Already!";
+                        $this->session->set_userdata($data);
 
-                    if($print_status == 1){
-                        echo '<script>
+                        if($print_status == 1){
+                            echo '<script>
                             window.open("'.base_url().'access/printSticker/'.$carelabel_tracking_no.'/'.$po_last_four_digit.'/'.$item_last_three_digit.'/'.$color_first_three_digit.'/'.$size.'");
                             window.location.href = "'.base_url().'access/care_label_packing/'.'";
         //                </script>';
-                    }else{
-                        echo '<script>
+                        }else{
+                            echo '<script>
                             window.location.href = "'.base_url().'access/care_label_packing/'.'";
         //                </script>';
+                        }
                     }
-                }
-                elseif(($last_access_points == 4) && ($access_points_status == 4) && ($finishing_qc_status == 2)){
-                    $data['exception']="$carelabel_tracking_no $line Alter Not completed!";
-                    $this->session->set_userdata($data);
+                    elseif(($last_access_points == 4) && ($access_points_status == 4) && ($finishing_qc_status == 2)){
+                        $data['exception']="$carelabel_tracking_no $line Alter Not completed!";
+                        $this->session->set_userdata($data);
 
-                    echo '<script>
+                        echo '<script>
                     window.location.href = "'.base_url().'access/care_label_packing/'.'";
                     </script>';
-                }
-                elseif(($last_access_points != 4) && ($access_points_status != 4)){
-                    $data['exception']="$carelabel_tracking_no $line Process Not completed!";
-                    $this->session->set_userdata($data);
+                    }
+                    elseif(($last_access_points != 4) && ($access_points_status != 4)){
+                        $data['exception']="$carelabel_tracking_no $line Process Not completed!";
+                        $this->session->set_userdata($data);
 
-                    echo '<script>
+                        echo '<script>
                     window.location.href = "'.base_url().'access/care_label_packing/'.'";
                     </script>';
-                }
-                else{
-                    $data['exception']="$carelabel_tracking_no $line Processes Not Completed!";
-                    $this->session->set_userdata($data);
+                    }
+                    else{
+                        $data['exception']="$carelabel_tracking_no $line Processes Not Completed!";
+                        $this->session->set_userdata($data);
 
-                    echo '<script>
+                        echo '<script>
                     window.location.href = "'.base_url().'access/care_label_packing/'.'";
                 </script>';
+                    }
                 }
             }
+
         }else{
             $data['exception']="$carelabel_tracking_no $line Not Found!";
             $this->session->set_userdata($data);
@@ -4784,26 +4832,32 @@ class Access extends CI_Controller {
         $packing_status = $line_check[0]['packing_status'];
         $carton_status = $line_check[0]['carton_status'];
         $warehouse_qa_type = $line_check[0]['warehouse_qa_type'];
+        $manually_closed = $line_check[0]['manually_closed'];
 
 
 
         if(sizeof($line_check) > 0){
-            if($packing_status == 1){
-                if(($packing_status == 1) && ($carton_status != 1) && ($warehouse_qa_type != 3)){
-                    $this->access_model->cartonShirt($carelabel_tracking_no, 1, $date_time, $floor_id);
-                    $this->access_model->warehouseRelease($carelabel_tracking_no, 0);
+            if($manually_closed == 1){
+                echo 'closed';
+            }else{
+                if($packing_status == 1){
+                    if(($packing_status == 1) && ($carton_status != 1) && ($warehouse_qa_type != 3)){
+                        $this->access_model->cartonShirt($carelabel_tracking_no, 1, $date_time, $floor_id);
+                        $this->access_model->warehouseRelease($carelabel_tracking_no, 0);
 
-                    echo "Successfully in Carton!";
-                }elseif(($carton_status == 1) && ($packing_status == 1) && ($warehouse_qa_type != 3)){
-                    echo "Already in Carton!";
-                }else{
-                    echo "In Trash!";
+                        echo "Successfully in Carton!";
+                    }elseif(($carton_status == 1) && ($packing_status == 1) && ($warehouse_qa_type != 3)){
+                        echo "Already in Carton!";
+                    }else{
+                        echo "In Trash!";
+                    }
+                }
+
+                if($packing_status == 0){
+                    echo "Packing Not Completed!";
                 }
             }
 
-            if($packing_status == 0){
-                echo "Packing Not Completed!";
-            }
         }else{
             echo "Not Found!";
         }

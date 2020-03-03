@@ -254,6 +254,10 @@
                             $("#e_message").text(cl_no+" Line Mismatch ("+data_2+")");
                         }
 
+                        if((data == 'closed')){
+                            $("#e_message").text(cl_no+" is Closed!");
+                        }
+
                         if((data == 'Not Found')){
                             $("#e_message").text(cl_no+" Not Found!");
                         }

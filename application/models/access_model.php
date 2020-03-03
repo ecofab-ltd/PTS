@@ -1406,7 +1406,7 @@ class Access_model extends CI_Model {
                CASE WHEN end_line_qc_date_time !='0000-00-00 00:00:00' THEN end_line_qc_date_time END end_line_qc_date_time,    
                CASE WHEN sent_to_production_date_time !='0000-00-00 00:00:00' THEN sent_to_production_date_time END sent_to_production_date_time,
                 CASE WHEN packing_status = 1 THEN packing_status END packing_status,
-                CASE WHEN washing_status = 1 THEN washing_status END washing_status 
+                CASE WHEN washing_status = 1 THEN washing_status END washing_status
               FROM vt_few_days_po_pcs    
             ) vt_few_days_po_pcs WHERE 1 $condition_1  GROUP BY so_no,po_no,item,quality,color,purchase_order) as t1
             LEFT JOIN
@@ -1422,7 +1422,7 @@ class Access_model extends CI_Model {
     public function getFinishingAlterReport($where){
         $sql="SELECT so_no, finishing_floor_id, purchase_order, item, quality, color, style_no, style_name,
                brand, ex_factory_date, COUNT(id) as total_finishing_alter_qty
-               FROM `vt_running_po_pcs`
+               FROM `vt_few_days_po_pcs`
                WHERE finishing_qc_status=2
                $where
                GROUP BY so_no";

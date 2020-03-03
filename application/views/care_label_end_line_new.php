@@ -482,6 +482,10 @@ $('#defect_code_tbl tbody').find('tr:last').remove();
                                 $("#er_msg").text(carelabel_tracking_no+' '+data);
                             }
 
+                            if((data == 'closed')){
+                                $("#er_msg").text(carelabel_tracking_no+' is Closed!');
+                            }
+
                             $('#defect_code_tbl tbody tr').remove();
 
                             $("#carelabel_tracking_no_defect").val('');
@@ -519,6 +523,10 @@ $('#defect_code_tbl tbody').find('tr:last').remove();
 
                             if((data == 'This Process already passed!') || (data == 'Already Passed!') || (data == 'Defect Tracked!') || (data == 'Defects Updated!')){
                                 $("#s_msg").text(carelabel_tracking_no+' '+data);
+                            }
+
+                            if(data == 'closed'){
+                                $("#er_msg").text(carelabel_tracking_no+' is Closed!');
                             }
 
                             $('#defect_code_tbl tbody tr').remove();

@@ -61,7 +61,8 @@ class Dashboard extends CI_Controller {
         $where .= " AND brand in ('OLYMP') AND status != 'CLOSE' AND po_type = 0";
 
         $order_by_condition = '';
-        $order_by_condition .= " ORDER BY t1.ex_factory_date, t18.responsible_line ASC";
+//        $order_by_condition .= " ORDER BY t1.ex_factory_date, t18.responsible_line ASC";
+        $order_by_condition .= " ORDER BY t1.ex_factory_date, t3.responsible_line ASC";
 
 
         $prod_summary = $this->dashboard_model->getProductionSummaryReport($where, $order_by_condition);
@@ -97,11 +98,10 @@ class Dashboard extends CI_Controller {
 
         foreach ($prod_summary as $k => $v){
 
-            $total_finishing_wh_qa = $v['count_carton_pass'] + $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'] + $v['total_manual_close_qty'];
-            $total_wh_qa = $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'];
+            $total_finishing_wh_qa = $v['count_carton_pass'] + $v['total_wh_qa'] + $v['count_manual_close_qty'];
 
-//            $total_finishing_wh_qa = $v['count_carton_pass'] + $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_other_purpose'] + $v['count_lost_qty'];
-//            $total_wh_qa = $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_other_purpose'] + $v['count_lost_qty'];
+//            $total_finishing_wh_qa = $v['count_carton_pass'] + $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'] + $v['total_manual_close_qty'];
+//            $total_wh_qa = $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'];
 
 //            if((($v['total_cut_qty'] - $total_finishing_wh_qa) != 0) && ($v['responsible_line'] != '')){
 //            if(($today <= $v['ex_factory_date']) || ($till_date <= $v['ex_factory_date']) || (($v['total_cut_qty'] - $total_finishing_wh_qa) > 0)){
@@ -242,7 +242,7 @@ class Dashboard extends CI_Controller {
 
         $object->setActiveSheetIndex(0);
 
-        $table_columns = array("PO", "ITEM", "Plan Line", "Lines", "Brand", "STYLE", "QLTY-CLR", "ORDER", "ExFac", "CUT", "CUT BLNC", "CUT PASS", "INPUT", "Collar", "Cuff", "MID", "END", "WASH", "PACK", "CARTON", "WH BUYER", "WH FACTORY", "WH SAMPLE", "WH TRASH", "LOST", "OTHER", "BALANCE", "PO TYPE");
+        $table_columns = array("PO", "ITEM", "Plan Line", "Lines", "Brand", "STYLE", "QLTY-CLR", "ORDER", "ExFac", "CUT", "CUT BLNC", "CUT PASS", "INPUT", "Collar", "Cuff", "MID", "END", "WASH", "PACK", "CARTON", "Warehouse", "BALANCE", "PO TYPE");
 
         $column = 0;
 
@@ -258,8 +258,9 @@ class Dashboard extends CI_Controller {
         $till_date = date("Y-m-d", strtotime("+ 30 days"));
 
         foreach ($prod_summary as $k => $v){
-            $total_finishing_wh_qa = $v['count_carton_pass'] + $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'] + $v['total_manual_close_qty'];
-            $total_wh_qa = $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'];
+            $total_finishing_wh_qa = $v['count_carton_pass'] + $v['total_wh_qa'] + $v['count_manual_close_qty'];
+//            $total_finishing_wh_qa = $v['count_carton_pass'] + $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'] + $v['total_manual_close_qty'];
+//            $total_wh_qa = $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'];
 
 //            if((($v['total_cut_qty'] - $total_finishing_wh_qa) != 0) && ($v['responsible_line'] != '')){
 //            if(($today <= $v['ex_factory_date']) || ($till_date <= $v['ex_factory_date']) || (($v['total_cut_qty'] - $total_finishing_wh_qa) > 0)){
@@ -318,14 +319,9 @@ class Dashboard extends CI_Controller {
                 $object->getActiveSheet()->setCellValueByColumnAndRow(17, $excel_row, $v["count_washing_pass"]);
                 $object->getActiveSheet()->setCellValueByColumnAndRow(18, $excel_row, $v["count_packing_pass"]);
                 $object->getActiveSheet()->setCellValueByColumnAndRow(19, $excel_row, $v["count_carton_pass"]);
-                $object->getActiveSheet()->setCellValueByColumnAndRow(20, $excel_row, $v["count_wh_buyer"]);
-                $object->getActiveSheet()->setCellValueByColumnAndRow(21, $excel_row, $v["count_wh_factory"]);
-                $object->getActiveSheet()->setCellValueByColumnAndRow(22, $excel_row, $v["count_wh_prod_sample"]);
-                $object->getActiveSheet()->setCellValueByColumnAndRow(23, $excel_row, $v["count_wh_trash"]);
-                $object->getActiveSheet()->setCellValueByColumnAndRow(24, $excel_row, $v["count_wh_lost"]);
-                $object->getActiveSheet()->setCellValueByColumnAndRow(25, $excel_row, $v["count_wh_others"]);
-                $object->getActiveSheet()->setCellValueByColumnAndRow(26, $excel_row, $total_po_item_balance);
-                $object->getActiveSheet()->setCellValueByColumnAndRow(27, $excel_row, $po_type);
+                $object->getActiveSheet()->setCellValueByColumnAndRow(20, $excel_row, $v["total_wh_qa"]);
+                $object->getActiveSheet()->setCellValueByColumnAndRow(21, $excel_row, $total_po_item_balance);
+                $object->getActiveSheet()->setCellValueByColumnAndRow(22, $excel_row, $po_type);
                 $excel_row++;
 
             }
@@ -509,8 +505,9 @@ class Dashboard extends CI_Controller {
             $till_date = date("Y-m-d", strtotime("+ 30 days"));
             foreach($data['prod_summary'] as $k => $v) {
 
-                $total_finishing_wh_qa = $v['count_carton_pass'] + $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'] + $v['count_wh_size_set'] + $v['total_manual_close_qty'];
-                $total_wh_qa = $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'] + $v['count_wh_size_set'];
+                $total_finishing_wh_qa = $v['count_carton_pass'] + $v['total_wh_qa'] + $v['count_manual_close_qty'];
+//                $total_finishing_wh_qa = $v['count_carton_pass'] + $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'] + $v['count_wh_size_set'] + $v['total_manual_close_qty'];
+//                $total_wh_qa = $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'] + $v['count_wh_size_set'];
                 $balance = $v['total_cut_qty'] - $total_finishing_wh_qa;
 
 //            if(((($v['total_cut_qty'] - $total_finishing_wh_qa) != 0) && ($v['responsible_line'] != ''))){
@@ -545,8 +542,8 @@ class Dashboard extends CI_Controller {
                 $idata['count_washing_pass'] = ($v['count_washing_pass'] != NULL ? $v['count_washing_pass'] : 0);
                 $idata['count_packing_pass'] = ($v['count_packing_pass'] != NULL ? $v['count_packing_pass'] : 0);
                 $idata['count_carton_pass'] = ($v['count_carton_pass'] != NULL ? $v['count_carton_pass'] : 0);
-                $idata['count_manual_close_qty'] = ($v['total_manual_close_qty'] != NULL ? $v['total_manual_close_qty'] : 0);
-                $idata['total_wh_qa'] = ($total_wh_qa != NULL ? $total_wh_qa : 0);
+                $idata['count_manual_close_qty'] = ($v['count_manual_close_qty'] != NULL ? $v['count_manual_close_qty'] : 0);
+                $idata['total_wh_qa'] = ($v['total_wh_qa'] != NULL ? $v['total_wh_qa'] : 0);
                 $idata['balance'] = ($balance != NULL ? $balance : 0);
                 $idata['max_carton_date_time'] = (($v['max_carton_date_time'] != NULL || $v['max_carton_date_time'] != '') ? $v['max_carton_date_time'] : '0000-00-00 00:00:00');
                 $idata['po_type'] = ($v['po_type'] != NULL ? $v['po_type'] : '');

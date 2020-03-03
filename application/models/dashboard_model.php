@@ -1702,8 +1702,8 @@ class Dashboard_model extends CI_Model {
     public function getPoOrderPackingInfobyPo($where){
         $sql="SELECT t1.*,t2.cut_qty, t3.cut_pass_qty,t4.sew_qty,t5.total_packing_qty,t6.total_carton_qty
                 FROM
-                (SELECT po_no,so_no,item,quality,color,purchase_order,style_no,style_name, ex_factory_date, 
-                size,SUM(quantity) AS order_qty from tb_po_detail
+                (SELECT po_no,so_no,item,quality,color,purchase_order,style_no,style_name, ex_factory_date, status, 
+                `size`,SUM(quantity) AS order_qty from tb_po_detail
                   WHERE 1 $where
                  GROUP BY po_no,so_no,item,quality,color,purchase_order,size) as t1
                  
@@ -2821,153 +2821,230 @@ class Dashboard_model extends CI_Model {
     }
 
     public function getProductionSummaryReport($where, $order_by_condition){
-        $sql = "SELECT t1.*, t2.bundle_start, t2.bundle_end, t3.total_cut_input_qty, 
-                t4.total_cut_qty, t5.count_input_qty_line, IFNULL(t7.count_mid_line_qc_pass, 0) as count_mid_line_qc_pass,
-                IFNULL(t8.count_end_line_qc_pass, 0) as count_end_line_qc_pass,
-                t10.count_washing_pass, t11.count_packing_pass, t11.max_packing_date_time,
-                t12.count_carton_pass, t12.max_carton_date_time,
-                t13.count_wh_prod_sample, t14.count_wh_buyer, t15.count_wh_factory, t17.count_wh_trash,
-                t18.responsible_line, t19.collar_bndl_qty, t20.cuff_bndl_qty, t22.planned_lines, t23.count_wh_others,
-                t24.count_washing_qty, t25.count_wh_lost, t26.count_wh_size_set, t27.total_manual_close_qty
-                
-                From (SELECT * FROM `vt_po_summary`
-                WHERE 1 $where) as t1
+//        $sql = "SELECT t1.*, t2.bundle_start, t2.bundle_end, t3.total_cut_input_qty,
+//                t4.total_cut_qty, t5.count_input_qty_line, IFNULL(t7.count_mid_line_qc_pass, 0) as count_mid_line_qc_pass,
+//                IFNULL(t8.count_end_line_qc_pass, 0) as count_end_line_qc_pass,
+//                t10.count_washing_pass, t11.count_packing_pass, t11.max_packing_date_time,
+//                t12.count_carton_pass, t12.max_carton_date_time,
+//                t13.count_wh_prod_sample, t14.count_wh_buyer, t15.count_wh_factory, t17.count_wh_trash,
+//                t18.responsible_line, t19.collar_bndl_qty, t20.cuff_bndl_qty, t22.planned_lines, t23.count_wh_others,
+//                t24.count_washing_qty, t25.count_wh_lost, t26.count_wh_size_set, t27.total_manual_close_qty
+//
+//                From (SELECT * FROM `vt_po_summary`
+//                WHERE 1 $where) as t1
+//
+//                LEFT JOIN
+//                `vt_cut` as t2
+//                ON t1.po_no=t2.po_no AND t1.so_no=t2.so_no AND t1.purchase_order=t2.purchase_order AND t1.item=t2.item
+//                AND t1.quality=t2.quality AND t1.color=t2.color
+//
+//                LEFT JOIN
+//                `vt_cut_pass` as t3
+//                ON t1.po_no=t3.po_no AND t1.so_no=t3.so_no AND t1.purchase_order=t3.purchase_order AND t1.item=t3.item
+//                AND t1.quality=t3.quality AND t1.color=t3.color
+//
+//                LEFT JOIN
+//                (SELECT po_no, so_no, purchase_order, item, quality, color, COUNT(id) as total_cut_qty
+//                FROM vt_few_days_po_pcs GROUP BY po_no, so_no, purchase_order, item, quality, color) as t4
+//                ON t1.po_no=t4.po_no AND t1.so_no=t4.so_no AND t1.purchase_order=t4.purchase_order AND t1.item=t4.item
+//                AND t1.quality=t4.quality AND t1.color=t4.color
+//
+//                LEFT JOIN
+//                (SELECT po_no, so_no, purchase_order, item, quality, color, SUM(count_input_qty_line) as count_input_qty_line
+//                FROM vt_input_line GROUP BY po_no, so_no, purchase_order, item, quality, color) as t5
+//                ON t1.po_no=t5.po_no AND t1.so_no=t5.so_no AND t1.purchase_order=t5.purchase_order AND t1.item=t5.item
+//                AND t1.quality=t5.quality AND t1.color=t5.color
+//
+//                LEFT JOIN
+//                (SELECT po_no, so_no, purchase_order, item, quality, color, SUM(count_mid_line_qc_pass) as count_mid_line_qc_pass
+//                FROM vt_mid_line_pass GROUP BY po_no, so_no, purchase_order, item, quality, color) as t7
+//                ON t1.po_no=t7.po_no AND t1.so_no=t7.so_no AND t1.purchase_order=t7.purchase_order AND t1.item=t7.item
+//                AND t1.quality=t7.quality AND t1.color=t7.color
+//
+//                LEFT JOIN
+//                (SELECT po_no, so_no, purchase_order, item, quality, color, SUM(count_end_line_qc_pass) as count_end_line_qc_pass
+//                FROM `vt_end_line_pass` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t8
+//                ON t1.po_no=t8.po_no AND t1.so_no=t8.so_no AND t1.purchase_order=t8.purchase_order AND t1.item=t8.item
+//                AND t1.quality=t8.quality AND t1.color=t8.color
+//
+//                LEFT JOIN
+//                (SELECT * FROM `vt_wash_return` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t10
+//                ON t1.po_no=t10.po_no AND t1.so_no=t10.so_no AND t1.purchase_order=t10.purchase_order AND t1.item=t10.item
+//                AND t1.quality=t10.quality AND t1.color=t10.color
+//
+//                LEFT JOIN
+//                (SELECT * FROM `vt_packing` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t11
+//                ON t1.po_no=t11.po_no AND t1.so_no=t11.so_no AND t1.purchase_order=t11.purchase_order AND t1.item=t11.item
+//                AND t1.quality=t11.quality AND t1.color=t11.color
+//
+//                LEFT JOIN
+//                (SELECT * FROM `vt_carton` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t12
+//                ON t1.po_no=t12.po_no AND t1.so_no=t12.so_no AND t1.purchase_order=t12.purchase_order AND t1.item=t12.item
+//                AND t1.quality=t12.quality AND t1.color=t12.color
+//
+//                LEFT JOIN
+//                (SELECT * FROM `vt_wh_prod_sample` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t13
+//                ON t1.po_no=t13.po_no AND t1.so_no=t13.so_no AND t1.purchase_order=t13.purchase_order AND t1.item=t13.item
+//                AND t1.quality=t13.quality AND t1.color=t13.color
+//
+//                LEFT JOIN
+//                (SELECT * FROM `vt_wh_buyer` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t14
+//                ON t1.po_no=t14.po_no AND t1.so_no=t14.so_no AND t1.purchase_order=t14.purchase_order AND t1.item=t14.item
+//                AND t1.quality=t14.quality AND t1.color=t14.color
+//
+//                LEFT JOIN
+//                (SELECT * FROM `vt_wh_factory` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t15
+//                ON t1.po_no=t15.po_no AND t1.so_no=t15.so_no AND t1.purchase_order=t15.purchase_order AND t1.item=t15.item
+//                AND t1.quality=t15.quality AND t1.color=t15.color
+//
+//                LEFT JOIN
+//                (SELECT * FROM `vt_wh_trash` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t17
+//                ON t1.po_no=t17.po_no AND t1.so_no=t17.so_no AND t1.purchase_order=t17.purchase_order AND t1.item=t17.item
+//                AND t1.quality=t17.quality AND t1.color=t17.color
+//
+//                LEFT JOIN
+//                (SELECT t1.po_no, t1.so_no, t1.purchase_order, t1.item, t1.quality, t1.color,
+//                GROUP_CONCAT(t2.line_code SEPARATOR '; ') as responsible_line
+//                From (SELECT *
+//                FROM `vt_input_line`
+//                GROUP BY po_no, so_no, purchase_order, item, quality, color, line_id) as t1
+//
+//                LEFT JOIN
+//                (SELECT id, line_name, line_code FROM `tb_line`) as t2 On t1.line_id=t2.id
+//                GROUP BY t1.po_no, t1.so_no, t1.purchase_order, t1.item, t1.quality, t1.color) as t18
+//                ON t1.po_no=t18.po_no AND t1.so_no=t18.so_no AND t1.purchase_order=t18.purchase_order AND t1.item=t18.item
+//                AND t1.quality=t18.quality AND t1.color=t18.color
+//
+//                LEFT JOIN
+//                (SELECT po_no, so_no, purchase_order, item, style_no, quality, color,
+//                SUM(cut_qty) as collar_bndl_qty FROM `tb_cut_summary`
+//                WHERE is_bundle_collar_scanned_line=1 GROUP BY po_no, so_no, purchase_order, item, quality, color) as t19
+//                ON t1.po_no=t19.po_no AND t1.so_no=t19.so_no AND t1.purchase_order=t19.purchase_order AND t1.item=t19.item
+//                AND t1.quality=t19.quality AND t1.color=t19.color
+//
+//                LEFT JOIN
+//                (SELECT po_no, so_no, purchase_order, item, style_no, quality, color,
+//                SUM(cut_qty) as cuff_bndl_qty FROM `tb_cut_summary`
+//                WHERE is_bundle_cuff_scanned_line=1 GROUP BY po_no, so_no, purchase_order, item, quality, color) as t20
+//                ON t1.po_no=t20.po_no AND t1.so_no=t20.so_no AND t1.purchase_order=t20.purchase_order AND t1.item=t20.item
+//                AND t1.quality=t20.quality AND t1.color=t20.color
+//
+//                LEFT JOIN
+//                (SELECT t1.po_no, t1.so_no, t1.purchase_order, t1.item, t1.quality, t1.color,
+//                GROUP_CONCAT(t2.line_code SEPARATOR '; ') as planned_lines
+//                From (SELECT po_no, so_no, purchase_order, item, quality, color, planned_line_id
+//                FROM `tb_care_labels` WHERE planned_line_id !=0
+//                GROUP BY po_no, so_no, purchase_order, item, quality, color, planned_line_id) as t1
+//
+//                LEFT JOIN
+//                (SELECT id, line_name, line_code FROM `tb_line`) as t2 On t1.planned_line_id=t2.id
+//                GROUP BY t1.po_no, t1.so_no, t1.purchase_order, t1.item, t1.quality, t1.color) as t22
+//                ON t1.po_no=t22.po_no AND t1.so_no=t22.so_no AND t1.purchase_order=t22.purchase_order AND t1.item=t22.item
+//                AND t1.quality=t22.quality AND t1.color=t22.color
+//
+//                LEFT JOIN
+//                (SELECT * FROM `vt_wh_others` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t23
+//                ON t1.po_no=t23.po_no AND t1.so_no=t23.so_no AND t1.purchase_order=t23.purchase_order AND t1.item=t23.item
+//                AND t1.quality=t23.quality AND t1.color=t23.color
+//
+//                LEFT JOIN
+//                (SELECT * FROM `vt_wash_send` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t24
+//                ON t1.po_no=t24.po_no AND t1.so_no=t24.so_no AND t1.purchase_order=t24.purchase_order AND t1.item=t24.item
+//                AND t1.quality=t24.quality AND t1.color=t24.color
+//
+//                LEFT JOIN
+//                (SELECT * FROM `vt_wh_lost` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t25
+//                ON t1.po_no=t25.po_no AND t1.so_no=t25.so_no AND t1.purchase_order=t25.purchase_order AND t1.item=t25.item
+//                AND t1.quality=t25.quality AND t1.color=t25.color
+//
+//                LEFT JOIN
+//                (SELECT * FROM `vt_wh_size_set` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t26
+//                ON t1.po_no=t26.po_no AND t1.so_no=t26.so_no AND t1.purchase_order=t26.purchase_order AND t1.item=t26.item
+//                AND t1.quality=t26.quality AND t1.color=t26.color
+//
+//
+//                LEFT JOIN
+//                (SELECT po_no, so_no, purchase_order, item, quality, color, COUNT(id) as total_manual_close_qty
+//                FROM vt_few_days_po_pcs WHERE manually_closed=1 GROUP BY po_no, so_no, purchase_order, item, quality, color) as t27
+//                ON t1.po_no=t27.po_no AND t1.so_no=t27.so_no AND t1.purchase_order=t27.purchase_order AND t1.item=t27.item
+//                AND t1.quality=t27.quality AND t1.color=t27.color
+//
+//                $order_by_condition";
+
+        $sql = "SELECT t1.*, t2.*, t3.responsible_line, t4.collar_bndl_qty, t5.cuff_bndl_qty, t6.planned_lines, t7.max_carton_date_time
+                FROM 
+                (SELECT so_no, po_no, brand, purchase_order, item, quality, color, style_no, style_name, 
+                ex_factory_date, SUM(quantity) AS total_order_qty, wash_gmt, po_type, status
+                FROM tb_po_detail 
+                WHERE 1 $where
+                GROUP BY so_no) AS t1
+                 
+                LEFT JOIN
+                (SELECT so_no, COUNT(id) AS total_cut_qty, COUNT(sent_to_production) AS total_cut_input_qty, 
+                COUNT(line_id) AS count_input_qty_line, COUNT(mid_line_qc_date_time) AS count_mid_line_qc_pass, COUNT(end_line_qc_date_time) AS count_end_line_qc_pass,
+                COUNT(is_going_wash) AS count_washing_qty, COUNT(washing_status) AS count_washing_pass, COUNT(packing_status) AS count_packing_pass, 
+                COUNT(carton_status) AS count_carton_pass, COUNT(warehouse_qa_type) AS total_wh_qa, COUNT(manually_closed) AS count_manual_close_qty
+                FROM 
+                (SELECT so_no,
+                 CASE WHEN id > 0 THEN id END id,
+                 CASE WHEN sent_to_production = 1 THEN sent_to_production END sent_to_production,
+                 CASE WHEN line_id != 0 THEN line_id END line_id,
+                 CASE WHEN access_points >= 3 AND access_points_status IN (1, 4) THEN mid_line_qc_date_time END mid_line_qc_date_time,
+                 CASE WHEN access_points = 4 AND access_points_status = 4 THEN end_line_qc_date_time END end_line_qc_date_time,
+                 CASE WHEN is_going_wash = 1 THEN is_going_wash END is_going_wash,
+                 CASE WHEN washing_status = 1 THEN washing_status END washing_status,
+                 CASE WHEN packing_status = 1 THEN packing_status END packing_status,
+                 CASE WHEN carton_status = 1 THEN carton_status END carton_status,
+                 CASE WHEN warehouse_qa_type != 0 THEN warehouse_qa_type END warehouse_qa_type,
+                 CASE WHEN manually_closed = 1 THEN manually_closed END manually_closed
+                 
+                FROM tb_care_labels) tb_care_labels 
+                GROUP BY so_no) AS t2
+                ON t1.so_no=t2.so_no
                 
                 LEFT JOIN
-                `vt_cut` as t2
-                ON t1.po_no=t2.po_no AND t1.so_no=t2.so_no AND t1.purchase_order=t2.purchase_order AND t1.item=t2.item
-                AND t1.quality=t2.quality AND t1.color=t2.color
-                
-                LEFT JOIN
-                `vt_cut_pass` as t3
-                ON t1.po_no=t3.po_no AND t1.so_no=t3.so_no AND t1.purchase_order=t3.purchase_order AND t1.item=t3.item
-                AND t1.quality=t3.quality AND t1.color=t3.color
-                
-                LEFT JOIN
-                (SELECT po_no, so_no, purchase_order, item, quality, color, COUNT(id) as total_cut_qty
-                FROM vt_few_days_po_pcs GROUP BY po_no, so_no, purchase_order, item, quality, color) as t4
-                ON t1.po_no=t4.po_no AND t1.so_no=t4.so_no AND t1.purchase_order=t4.purchase_order AND t1.item=t4.item
-                AND t1.quality=t4.quality AND t1.color=t4.color
-                
-                LEFT JOIN
-                (SELECT po_no, so_no, purchase_order, item, quality, color, SUM(count_input_qty_line) as count_input_qty_line
-                FROM vt_input_line GROUP BY po_no, so_no, purchase_order, item, quality, color) as t5
-                ON t1.po_no=t5.po_no AND t1.so_no=t5.so_no AND t1.purchase_order=t5.purchase_order AND t1.item=t5.item
-                AND t1.quality=t5.quality AND t1.color=t5.color
-                         
-                LEFT JOIN
-                (SELECT po_no, so_no, purchase_order, item, quality, color, SUM(count_mid_line_qc_pass) as count_mid_line_qc_pass 
-                FROM vt_mid_line_pass GROUP BY po_no, so_no, purchase_order, item, quality, color) as t7
-                ON t1.po_no=t7.po_no AND t1.so_no=t7.so_no AND t1.purchase_order=t7.purchase_order AND t1.item=t7.item
-                AND t1.quality=t7.quality AND t1.color=t7.color
-                
-                LEFT JOIN
-                (SELECT po_no, so_no, purchase_order, item, quality, color, SUM(count_end_line_qc_pass) as count_end_line_qc_pass 
-                FROM `vt_end_line_pass` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t8
-                ON t1.po_no=t8.po_no AND t1.so_no=t8.so_no AND t1.purchase_order=t8.purchase_order AND t1.item=t8.item
-                AND t1.quality=t8.quality AND t1.color=t8.color
-                
-                LEFT JOIN
-                (SELECT * FROM `vt_wash_return` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t10
-                ON t1.po_no=t10.po_no AND t1.so_no=t10.so_no AND t1.purchase_order=t10.purchase_order AND t1.item=t10.item
-                AND t1.quality=t10.quality AND t1.color=t10.color
-                
-                LEFT JOIN
-                (SELECT * FROM `vt_packing` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t11
-                ON t1.po_no=t11.po_no AND t1.so_no=t11.so_no AND t1.purchase_order=t11.purchase_order AND t1.item=t11.item
-                AND t1.quality=t11.quality AND t1.color=t11.color
-                
-                LEFT JOIN
-                (SELECT * FROM `vt_carton` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t12
-                ON t1.po_no=t12.po_no AND t1.so_no=t12.so_no AND t1.purchase_order=t12.purchase_order AND t1.item=t12.item
-                AND t1.quality=t12.quality AND t1.color=t12.color
-                
-                LEFT JOIN
-                (SELECT * FROM `vt_wh_prod_sample` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t13
-                ON t1.po_no=t13.po_no AND t1.so_no=t13.so_no AND t1.purchase_order=t13.purchase_order AND t1.item=t13.item
-                AND t1.quality=t13.quality AND t1.color=t13.color
-                
-                LEFT JOIN
-                (SELECT * FROM `vt_wh_buyer` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t14
-                ON t1.po_no=t14.po_no AND t1.so_no=t14.so_no AND t1.purchase_order=t14.purchase_order AND t1.item=t14.item
-                AND t1.quality=t14.quality AND t1.color=t14.color
-                
-                LEFT JOIN
-                (SELECT * FROM `vt_wh_factory` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t15
-                ON t1.po_no=t15.po_no AND t1.so_no=t15.so_no AND t1.purchase_order=t15.purchase_order AND t1.item=t15.item
-                AND t1.quality=t15.quality AND t1.color=t15.color
-                
-                LEFT JOIN
-                (SELECT * FROM `vt_wh_trash` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t17
-                ON t1.po_no=t17.po_no AND t1.so_no=t17.so_no AND t1.purchase_order=t17.purchase_order AND t1.item=t17.item
-                AND t1.quality=t17.quality AND t1.color=t17.color
-                
-                LEFT JOIN
-                (SELECT t1.po_no, t1.so_no, t1.purchase_order, t1.item, t1.quality, t1.color, 
-                GROUP_CONCAT(t2.line_code SEPARATOR '; ') as responsible_line
-                From (SELECT * 
-                FROM `vt_input_line` 
-                GROUP BY po_no, so_no, purchase_order, item, quality, color, line_id) as t1
-                
+                (SELECT t1.so_no, GROUP_CONCAT(t2.line_code SEPARATOR '; ') as responsible_line
+                From (SELECT so_no, line_id 
+                FROM `tb_care_labels` 
+                GROUP BY so_no, line_id) as t1
+                                
                 LEFT JOIN
                 (SELECT id, line_name, line_code FROM `tb_line`) as t2 On t1.line_id=t2.id
-                GROUP BY t1.po_no, t1.so_no, t1.purchase_order, t1.item, t1.quality, t1.color) as t18
-                ON t1.po_no=t18.po_no AND t1.so_no=t18.so_no AND t1.purchase_order=t18.purchase_order AND t1.item=t18.item
-                AND t1.quality=t18.quality AND t1.color=t18.color
+                GROUP BY t1.so_no) as t3
+                ON t1.so_no=t3.so_no
+                
                 
                 LEFT JOIN
-                (SELECT po_no, so_no, purchase_order, item, style_no, quality, color,
-                SUM(cut_qty) as collar_bndl_qty FROM `tb_cut_summary`
-                WHERE is_bundle_collar_scanned_line=1 GROUP BY po_no, so_no, purchase_order, item, quality, color) as t19
-                ON t1.po_no=t19.po_no AND t1.so_no=t19.so_no AND t1.purchase_order=t19.purchase_order AND t1.item=t19.item
-                AND t1.quality=t19.quality AND t1.color=t19.color
-
+                (SELECT so_no, SUM(cut_qty) as collar_bndl_qty 
+                FROM `tb_cut_summary`
+                WHERE is_bundle_collar_scanned_line=1 
+                GROUP BY so_no) as t4
+                ON t1.so_no=t4.so_no
+                
                 LEFT JOIN
-                (SELECT po_no, so_no, purchase_order, item, style_no, quality, color,
-                SUM(cut_qty) as cuff_bndl_qty FROM `tb_cut_summary`
-                WHERE is_bundle_cuff_scanned_line=1 GROUP BY po_no, so_no, purchase_order, item, quality, color) as t20
-                ON t1.po_no=t20.po_no AND t1.so_no=t20.so_no AND t1.purchase_order=t20.purchase_order AND t1.item=t20.item
-                AND t1.quality=t20.quality AND t1.color=t20.color
-
+                (SELECT so_no, SUM(cut_qty) as cuff_bndl_qty 
+                FROM `tb_cut_summary`
+                WHERE is_bundle_cuff_scanned_line=1 
+                GROUP BY so_no) as t5
+                ON t1.so_no=t5.so_no
+                
                 LEFT JOIN
-                (SELECT t1.po_no, t1.so_no, t1.purchase_order, t1.item, t1.quality, t1.color, 
-                GROUP_CONCAT(t2.line_code SEPARATOR '; ') as planned_lines
-                From (SELECT po_no, so_no, purchase_order, item, quality, color, planned_line_id 
+                (SELECT t1.so_no, GROUP_CONCAT(t2.line_code SEPARATOR '; ') as planned_lines
+                From (SELECT so_no, planned_line_id 
                 FROM `tb_care_labels` WHERE planned_line_id !=0 
-                GROUP BY po_no, so_no, purchase_order, item, quality, color, planned_line_id) as t1
-
+                GROUP BY so_no, planned_line_id) as t1
+                
                 LEFT JOIN
                 (SELECT id, line_name, line_code FROM `tb_line`) as t2 On t1.planned_line_id=t2.id
-                GROUP BY t1.po_no, t1.so_no, t1.purchase_order, t1.item, t1.quality, t1.color) as t22
-                ON t1.po_no=t22.po_no AND t1.so_no=t22.so_no AND t1.purchase_order=t22.purchase_order AND t1.item=t22.item
-                AND t1.quality=t22.quality AND t1.color=t22.color
-
-                LEFT JOIN
-                (SELECT * FROM `vt_wh_others` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t23
-                ON t1.po_no=t23.po_no AND t1.so_no=t23.so_no AND t1.purchase_order=t23.purchase_order AND t1.item=t23.item
-                AND t1.quality=t23.quality AND t1.color=t23.color
-
-                LEFT JOIN
-                (SELECT * FROM `vt_wash_send` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t24
-                ON t1.po_no=t24.po_no AND t1.so_no=t24.so_no AND t1.purchase_order=t24.purchase_order AND t1.item=t24.item
-                AND t1.quality=t24.quality AND t1.color=t24.color
+                GROUP BY t1.so_no) as t6
+                ON t1.so_no=t6.so_no
                 
                 LEFT JOIN
-                (SELECT * FROM `vt_wh_lost` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t25
-                ON t1.po_no=t25.po_no AND t1.so_no=t25.so_no AND t1.purchase_order=t25.purchase_order AND t1.item=t25.item
-                AND t1.quality=t25.quality AND t1.color=t25.color
-                
-                LEFT JOIN
-                (SELECT * FROM `vt_wh_size_set` GROUP BY po_no, so_no, purchase_order, item, quality, color) as t26
-                ON t1.po_no=t26.po_no AND t1.so_no=t26.so_no AND t1.purchase_order=t26.purchase_order AND t1.item=t26.item
-                AND t1.quality=t26.quality AND t1.color=t26.color
+                (SELECT so_no, MAX(carton_date_time) AS max_carton_date_time FROM `tb_care_labels` GROUP BY so_no) as t7
+                ON t1.so_no=t7.so_no
                 
                 
-                LEFT JOIN
-                (SELECT po_no, so_no, purchase_order, item, quality, color, COUNT(id) as total_manual_close_qty
-                FROM vt_few_days_po_pcs WHERE manually_closed=1 GROUP BY po_no, so_no, purchase_order, item, quality, color) as t27
-                ON t1.po_no=t27.po_no AND t1.so_no=t27.so_no AND t1.purchase_order=t27.purchase_order AND t1.item=t27.item
-                AND t1.quality=t27.quality AND t1.color=t27.color
+                WHERE t1.ex_factory_date != ''
                 
                 $order_by_condition";
 

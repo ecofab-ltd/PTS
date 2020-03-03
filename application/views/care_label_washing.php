@@ -257,6 +257,9 @@
                         if(data == 'Not Found'){
                             $("#e_message").text(cl_no+" Not Found!");
                         }
+                        if(data == 'closed'){
+                            $("#e_message").text(cl_no+" is Closed!");
+                        }
 
                         $("#carelabel_tracking_no").val('').focus;
                         $("#loader").css("display", "none");
