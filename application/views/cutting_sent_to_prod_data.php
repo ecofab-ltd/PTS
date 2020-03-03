@@ -32,7 +32,7 @@
 
 //                    $cut_balance_qty = ($v['cut_balance_qty'] != '' ? $v['cut_balance_qty'] : 0);
 
-                    if (($v['total_cut_qty'] - $v['total_cut_input_qty']) > 0) {
+                    if (($v['total_cut_qty'] - ($v['total_cut_input_qty'] + $v['count_manual_close_qty'])) > 0) {
 //                    if ($cut_balance_qty > 0) {
                         ?>
                         <tr>

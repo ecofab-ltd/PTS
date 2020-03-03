@@ -72,6 +72,13 @@
             height: 300px;
             overflow: scroll;
         }
+
+        div.scroll7 {
+            /*background-color: #00FFFF;*/
+            width: auto;
+            height: 300px;
+            overflow: scroll;
+        }
     </style>
     <!--Select2 End-->
 

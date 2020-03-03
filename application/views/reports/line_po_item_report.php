@@ -51,7 +51,7 @@
                 foreach ($line_po_items as $v){
                     $total_line_input_qty = $v['count_input_qty_line'] + $v['count_other_input_qty_line'];
 
-                    if($v['count_input_qty_line'] - $v['count_end_line_qc_pass'] > 0) {
+                    if($v['count_input_qty_line'] - ($v['count_end_line_qc_pass'] + $v['count_manual_close']) > 0) {
 
                         $balance = $v['count_input_qty_line'] - $v['count_end_line_qc_pass'];
                         $total_balance += $balance;

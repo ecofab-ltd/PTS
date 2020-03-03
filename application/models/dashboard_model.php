@@ -2431,21 +2431,23 @@ class Dashboard_model extends CI_Model {
     }
 
     public function getLineWiseRunningPOs(){
-        $sql = "SELECT t1.*, (IFNULL(t1.count_input_qty_line, 0) - IFNULL(t1.count_end_line_qc_pass, 0)) as line_po_balance, t2.min_line_input_date_time 
+        $sql = "SELECT t1.*, 
+                (IFNULL(t1.count_input_qty_line, 0)-(IFNULL(t1.count_end_line_qc_pass, 0)+IFNULL(t1.count_end_line_qc_pass, 0))) AS line_po_balance, 
+                t2.min_line_input_date_time 
 
                 FROM 
                 (SELECT po_no,so_no,item,quality,color,purchase_order,line_id,brand,ex_factory_date,style_no,style_name,
  	            COUNT(line_input_date_time) as count_input_qty_line,
-                COUNT(end_line_qc_date_time) as count_end_line_qc_pass
+                COUNT(end_line_qc_date_time) as count_end_line_qc_pass,
+                COUNT(lost_date_time) as count_manual_close
                 
                 FROM (
                   SELECT
                     so_no,po_no,item,quality,color,purchase_order,line_id,brand,ex_factory_date,style_no,style_name,
                     
-                    CASE WHEN sent_to_production = 1 THEN 1 END sent_to_production,
-                              
-                    CASE WHEN line_input_date_time !='0000-00-00 00:00:00' THEN line_input_date_time END line_input_date_time,
-                    CASE WHEN end_line_qc_date_time !='0000-00-00 00:00:00' THEN 1 END end_line_qc_date_time
+                    CASE WHEN line_id != 0 THEN line_input_date_time END line_input_date_time,
+                    CASE WHEN access_points=4 AND access_points_status=4 THEN end_line_qc_date_time END end_line_qc_date_time,
+                    CASE WHEN manually_closed=1 THEN lost_date_time END lost_date_time
                    
                   FROM vt_few_days_po_pcs 
                     

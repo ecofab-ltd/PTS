@@ -117,7 +117,7 @@
                     <br />
                     <div id="remarks_div" style="display: none">
                         <input type="text" class="form-control" id="remarks" name="remarks" placeholder="Remarks" autocomplete="off" onblur="checkRemarksValidation();" />
-                        <span><b>* Remarks</b></span>
+                        <span><b>Remarks</b></span>
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -131,7 +131,7 @@
                     <div class="col-md-1" id="loader" style="display: none;"><div class="loader"></div></div>
                 </div>
                 <div class="col-md-3">
-                    <div class="block-web scroll5">
+                    <div class="block-web scroll7">
                         <div class="porlets-content">
 
                             <div class="table-responsive">
@@ -152,7 +152,7 @@
 
                 </div><!--/block-web-->
                 <div class="col-md-3">
-                    <div class="block-web scroll5">
+                    <div class="block-web scroll7">
                         <div class="porlets-content">
 
                             <div class="table-responsive" id="">
@@ -191,75 +191,7 @@
                 </div><!--/block-web-->
             </div><!--/col-md-12-->
 <!--        </form>-->
-          <div class="row">
-              <div class="col-md-8 scroll2">
-                  <div class="block-web">
 
-                      <div class="porlets-content">
-
-                          <div class="table-responsive" id="size_tbl">
-                              <table class="display table table-bordered table-striped">
-                                  <thead>
-                                  <tr>
-                                      <th class="center">Size</th>
-                                      <th class="center">Cut</th>
-                                      <th class="center">End</th>
-                                      <th class="center">Wash</th>
-                                      <th class="center">Pack</th>
-                                      <th class="center">Carton</th>
-                                      <th class="center">Warehouse</th>
-                                  </tr>
-                                  </thead>
-                                  <tbody>
-                                  <tr>
-                                      <td class="hidden-phone center"></td>
-                                      <td class="hidden-phone center"></td>
-                                      <td class="hidden-phone center"></td>
-                                      <td class="hidden-phone center"></td>
-                                      <td class="hidden-phone center"></td>
-                                      <td class="hidden-phone center"></td>
-                                      <td class="hidden-phone center"></td>
-                                  </tr>
-                                  </tbody>
-                              </table>
-                          </div><!--/table-responsive-->
-                      </div>
-
-                  </div><!--/porlets-content-->
-              </div><!--/block-web-->
-<!--              <div class="col-md-4">-->
-<!--                  <div class="block-web">-->
-<!---->
-<!--                      <div class="porlets-content">-->
-<!---->
-<!--                          <div class="table-responsive">-->
-<!--                              <table class="display table table-bordered table-striped" id="">-->
-<!--                                  <thead>-->
-<!--                                  <tr>-->
-<!--                                      <th class="hidden-phone center"><a target="_blank" href="--><?php //echo base_url();?><!--dashboard/poWiseCuttingReport" class="btn btn-danger">Cutting</a></th>-->
-<!--                                      <th class="hidden-phone center" colspan="2"><a target="_blank" href="--><?php //echo base_url();?><!--dashboard/lineWisePoItemReport" class="btn btn-primary">LINE</a></th>-->
-<!--                                      <th class="hidden-phone center" colspan="3"><a target="_blank" href="--><?php //echo base_url();?><!--dashboard/poWisePackingReport" class="btn btn-success">Packing</a></th>-->
-<!--                                  </tr>-->
-<!--                                  </thead>-->
-<!--                                  <tbody>-->
-<!---->
-<!--                                  </tbody>-->
-<!--                              </table>-->
-<!--                          </div>-->
-<!--                      </div>-->
-<!---->
-<!--                  </div>-->
-<!--              </div>-->
-
-              <div class="col-md-3 scroll4">
-                  <div class="porlets-content">
-                      <div class="table-responsive" id="remain_cl_list">
-
-                      </div>
-                  </div>
-              </div>
-
-          </div><!--/col-md-12-->
       </div>
 
 <script type="text/javascript">
@@ -294,24 +226,26 @@
         var warehouse_type = $("#warehouse_type").val();
 
         if (warehouse_type == 3){
-            $("#remarks_div").css('display', 'block');
-            $("#carelabel_tracking_no").css('display', 'none');
+//            $("#remarks_div").css('display', 'block');
+            $("#carelabel_tracking_no").css('display', 'block');
         }else{
-            $("#remarks_div").css('display', 'none');
+//            $("#remarks_div").css('display', 'none');
             $("#carelabel_tracking_no").css('display', 'block');
         }
+
+        $("#carelabel_tracking_no").focus();
     }
 
     function checkRemarksValidation() {
         var remarks = $("#remarks").val();
 
-        if (remarks != ''){
-            $("#carelabel_tracking_no").css('display', 'block');
-            $("#carelabel_tracking_no").focus();
-        }else{
-            alert("Please Enter Valid Reason!");
-            $("#carelabel_tracking_no").css('display', 'none');
-        }
+//        if (remarks != ''){
+//            $("#carelabel_tracking_no").css('display', 'block');
+//            $("#carelabel_tracking_no").focus();
+//        }else{
+//            alert("Please Enter Valid Reason!");
+//            $("#carelabel_tracking_no").css('display', 'none');
+//        }
     }
     
     function getQaWarehouseReport() {
@@ -385,10 +319,10 @@
                 $("#carelabel_tracking_no").val('');
             }
 
-            if(warehouse_type == 3){
-                $("#carelabel_tracking_no").css('display', 'none');
-                $("#remarks").val('');
-            }
+//            if(warehouse_type == 3){
+//                $("#carelabel_tracking_no").css('display', 'none');
+//                $("#remarks").val('');
+//            }
 
         }
 

@@ -1236,7 +1236,7 @@ class Access_model extends CI_Model {
 
     public function getProducitonSummaryReportWashViewTable($condition){
         $sql = "SELECT t1.*, t2.brand, t2.total_order_qty, t2.ex_factory_date, 
-                t3.count_washing_qty as count_wash_going_qty
+                t3.count_washing_qty as count_wash_going_qty, t4.count_manual_close_qty
                 FROM `vt_wash_return` as t1
                 
                 LEFT JOIN
@@ -1249,6 +1249,10 @@ class Access_model extends CI_Model {
                 `vt_wash_send` as t3
                 ON t1.po_no=t3.po_no AND t1.so_no=t3.so_no AND t1.purchase_order=t3.purchase_order 
                 AND t1.item=t3.item AND t1.quality=t3.quality AND t1.color=t3.color
+                
+                LEFT JOIN 
+                tb_production_summary AS t4
+                ON t1.so_no=t4.so_no
                 
                 $condition";
         
@@ -1337,7 +1341,7 @@ class Access_model extends CI_Model {
 //                $condition";
 
 
-        $sql = "SELECT t1.*, t2.total_order_qty, t2.ex_factory_date, t3.count_end_line_qc_pass
+        $sql = "SELECT t1.*, t2.total_order_qty, t2.ex_factory_date, t3.count_end_line_qc_pass, t4.count_manual_close_qty
                 FROM `vt_wash_send` as t1
                 
                 LEFT JOIN
@@ -1352,6 +1356,10 @@ class Access_model extends CI_Model {
                 GROUP BY po_no, so_no, purchase_order, item, quality, color) as t3
                 ON t1.po_no=t3.po_no AND t1.so_no=t3.so_no AND t1.purchase_order=t3.purchase_order 
                 AND t1.item=t3.item AND t1.quality=t3.quality AND t1.color=t3.color
+                
+                LEFT JOIN 
+                tb_production_summary AS t4
+                ON t1.so_no=t4.so_no
                                 
                 $condition";
 
@@ -1395,18 +1403,21 @@ class Access_model extends CI_Model {
 //
 //                $condition";
 
-        $sql1="SELECT t1.*, t2.total_order_qty FROM (SELECT po_no,so_no,item,quality,color,style_name,style_no,purchase_order,brand,ex_factory_date,packing_date_time,
-              COUNT(packing_status) as count_packing_pass,  
-            COUNT(washing_status) as count_washing_pass, 
-              COUNT(sent_to_production_date_time) as total_cut_input_qty,
-               COUNT(end_line_qc_date_time) as count_end_line_qc_pass
+        $sql1="SELECT t1.*, t2.total_order_qty FROM (SELECT po_no,so_no,item,quality,color,
+               style_name,style_no,purchase_order,brand,ex_factory_date,packing_date_time,
+               COUNT(packing_status) as count_packing_pass,  
+               COUNT(washing_status) as count_washing_pass, 
+               COUNT(sent_to_production_date_time) as total_cut_input_qty,
+               COUNT(end_line_qc_date_time) as count_end_line_qc_pass,
+               COUNT(manually_closed) as count_manual_close
             FROM (
               SELECT
                 so_no,po_no,item,quality,color,purchase_order,brand,ex_factory_date,packing_date_time,style_name,style_no,
-               CASE WHEN end_line_qc_date_time !='0000-00-00 00:00:00' THEN end_line_qc_date_time END end_line_qc_date_time,    
-               CASE WHEN sent_to_production_date_time !='0000-00-00 00:00:00' THEN sent_to_production_date_time END sent_to_production_date_time,
+               CASE WHEN access_points=4 AND access_points_status=4 THEN end_line_qc_date_time END end_line_qc_date_time,    
+               CASE WHEN sent_to_production=1 THEN sent_to_production_date_time END sent_to_production_date_time,
                 CASE WHEN packing_status = 1 THEN packing_status END packing_status,
-                CASE WHEN washing_status = 1 THEN washing_status END washing_status
+                CASE WHEN washing_status = 1 THEN washing_status END washing_status,
+                CASE WHEN manually_closed = 1 THEN manually_closed END manually_closed
               FROM vt_few_days_po_pcs    
             ) vt_few_days_po_pcs WHERE 1 $condition_1  GROUP BY so_no,po_no,item,quality,color,purchase_order) as t1
             LEFT JOIN
@@ -1649,15 +1660,17 @@ class Access_model extends CI_Model {
                   COUNT(packing_status) as count_packing_pass,  
                   COUNT(carton_status) as count_carton_pass, 
                   COUNT(warehouse_qa_type) as total_wh_qa,
-                  COUNT(sent_to_production_date_time) as total_cut_input_qty
+                  COUNT(sent_to_production_date_time) as total_cut_input_qty,
+                  COUNT(manually_closed) as count_manual_close
                 
                 FROM (
                   SELECT
                     so_no,po_no,item,quality,color,purchase_order,line_id,brand,ex_factory_date,carton_date_time,style_no,style_name,  
-                   CASE WHEN sent_to_production_date_time !='0000-00-00 00:00:00' THEN sent_to_production_date_time END sent_to_production_date_time,
+                   CASE WHEN sent_to_production = 1 THEN sent_to_production_date_time END sent_to_production_date_time,
                     CASE WHEN packing_status = 1 THEN packing_status END packing_status,
                      CASE WHEN warehouse_qa_type != 0 THEN warehouse_qa_type END warehouse_qa_type,
-                    CASE WHEN carton_status = 1 THEN carton_status END carton_status 
+                    CASE WHEN carton_status = 1 THEN carton_status END carton_status, 
+                    CASE WHEN manually_closed = 1 THEN manually_closed END manually_closed 
                   FROM vt_few_days_po_pcs    
                 ) vt_few_days_po_pcs WHERE  1 $condition_1  GROUP BY so_no,po_no,item,quality,color,purchase_order) as t1
                 LEFT JOIN
@@ -1990,8 +2003,7 @@ class Access_model extends CI_Model {
 
     public function warehouseTrashUpdate($care_label_no, $warehouse_type, $season, $user_id, $date_time, $remarks){
         $sql = "UPDATE `tb_care_labels`
-                SET access_points=4, access_points_status=4,
-                packing_status=1, warehouse_qa_type=$warehouse_type,
+                SET warehouse_qa_type=$warehouse_type,
                 other_purpose_remarks='$remarks', warehouse_trash_date_time='$date_time', 
                 season_id=$season, warehouse_qa_by=$user_id
                 WHERE pc_tracking_no='$care_label_no'";
@@ -2637,8 +2649,8 @@ class Access_model extends CI_Model {
 
         $sql = "SELECT t1.po_no, t1.so_no, t1.purchase_order, t1.item, t1.quality, t1.color,
                 t1.brand, t1.style_no, t1.style_name, t1.ex_factory_date,
-                t1.total_order_qty, t1.total_cut_qty, t3.total_cut_input_qty, 
-                t3.cut_prod_date_time
+                t1.total_order_qty, t1.total_cut_qty, t1.count_manual_close_qty,
+                t3.total_cut_input_qty, t3.cut_prod_date_time
 
                 FROM
 
@@ -2676,18 +2688,19 @@ class Access_model extends CI_Model {
                     
                   count(line_input_date_time) as count_input_qty_line,
                   COUNT(mid_line_qc_date_time) as count_mid_line_qc_pass,
-                  COUNT(end_line_qc_date_time) as count_end_line_qc_pass
+                  COUNT(end_line_qc_date_time) as count_end_line_qc_pass,
+                  COUNT(lost_date_time) as count_manual_close
                   
                  
                 FROM (
                   SELECT
-                    so_no,po_no,item,quality,color,purchase_order,line_id,brand,ex_factory_date,line_input_date_time,style_no,style_name,
+                    so_no,po_no,item,quality,color,purchase_order,line_id,brand,ex_factory_date,style_no,style_name,
+                                       
                     
-                    CASE WHEN sent_to_production = 1 THEN 1 END sent_to_production,
-                   
-                    
-                   CASE WHEN mid_line_qc_date_time !='0000-00-00 00:00:00' THEN mid_line_qc_date_time END mid_line_qc_date_time,
-                    CASE WHEN end_line_qc_date_time !='0000-00-00 00:00:00' THEN 1 END end_line_qc_date_time
+                   CASE WHEN line_id != 0 THEN line_input_date_time END line_input_date_time,
+                   CASE WHEN access_points >= 3 AND access_points_status IN (1, 4) THEN mid_line_qc_date_time END mid_line_qc_date_time,
+                   CASE WHEN access_points = 4 AND access_points_status = 4 THEN end_line_qc_date_time END end_line_qc_date_time,
+                   CASE WHEN manually_closed = 1 THEN lost_date_time END lost_date_time
                    
                   FROM vt_few_days_po_pcs 
                     
@@ -2870,11 +2883,14 @@ class Access_model extends CI_Model {
                 
                 FROM (SELECT po_no, so_no,line_id FROM `tb_line_running_pos` WHERE line_id=$line_id) as A
                 LEFT JOIN
-                (SELECT t1.*, t2.total_order_qty, t2.smv FROM (SELECT po_no,so_no,item,quality,color,purchase_order,line_id,brand,ex_factory_date,mid_line_qc_date_time,style_no,style_name,
+                (SELECT t1.*, t2.total_order_qty, t2.smv 
+                FROM (SELECT po_no,so_no,item,quality,color,purchase_order,line_id,brand,ex_factory_date,
+                mid_line_qc_date_time,style_no,style_name,
                     
                   count(line_input_date_time) as count_input_qty_line,
                   COUNT(mid_line_qc_date_time) as count_mid_line_qc_pass,
-                  COUNT(end_line_qc_date_time) as count_end_line_qc_pass
+                  COUNT(end_line_qc_date_time) as count_end_line_qc_pass,
+                  COUNT(manually_closed) as count_manual_close
                       
                 FROM (
                   SELECT
@@ -2882,7 +2898,8 @@ class Access_model extends CI_Model {
                     
                     CASE WHEN access_points>=2 AND access_points_status in (1, 4) THEN line_input_date_time END line_input_date_time,
                     CASE WHEN access_points>=3 AND access_points_status in (1, 4) THEN mid_line_qc_date_time END mid_line_qc_date_time,
-                    CASE WHEN access_points=4 AND access_points_status=4 THEN 1 END end_line_qc_date_time
+                    CASE WHEN access_points=4 AND access_points_status=4 THEN end_line_qc_date_time END end_line_qc_date_time,
+                    CASE WHEN manually_closed=1 THEN manually_closed END manually_closed
                    
                   FROM vt_few_days_po_pcs 
                     
@@ -3037,21 +3054,25 @@ class Access_model extends CI_Model {
                 
                 FROM (SELECT po_no, so_no,line_id FROM `tb_line_running_pos` WHERE line_id=$line_id) as A
                 LEFT JOIN
-                (SELECT t1.*, t2.total_order_qty, t2.smv FROM (SELECT po_no,so_no,item,quality,color,purchase_order,line_id,brand,ex_factory_date,mid_line_qc_date_time,style_no,style_name,
+                (SELECT t1.*, t2.total_order_qty, t2.smv 
+                FROM (SELECT po_no,so_no,item,quality,color,purchase_order,line_id,brand,ex_factory_date,
+                mid_line_qc_date_time,style_no,style_name,
                     
                   count(line_input_date_time) as count_input_qty_line,
                   COUNT(mid_line_qc_date_time) as count_mid_line_qc_pass,
-                  COUNT(end_line_qc_date_time) as count_end_line_qc_pass
+                  COUNT(end_line_qc_date_time) as count_end_line_qc_pass,
+                  COUNT(manually_closed) as count_manual_close
                   
                   
                  
                 FROM (
                   SELECT
-                    so_no,po_no,item,quality,color,purchase_order,line_id,brand,ex_factory_date,
-                    line_input_date_time,style_no,style_name,
+                    so_no,po_no,item,quality,color,purchase_order,line_id,brand,ex_factory_date, style_no,style_name,
                     
-                    CASE WHEN mid_line_qc_date_time !='0000-00-00 00:00:00' THEN mid_line_qc_date_time END mid_line_qc_date_time,
-                    CASE WHEN end_line_qc_date_time !='0000-00-00 00:00:00' THEN 1 END end_line_qc_date_time
+                    CASE WHEN line_id != 0 THEN line_input_date_time END line_input_date_time,
+                    CASE WHEN access_points >= 3 AND access_points_status IN (1, 4) THEN mid_line_qc_date_time END mid_line_qc_date_time,
+                    CASE WHEN access_points = 4 AND access_points_status = 4 THEN end_line_qc_date_time END end_line_qc_date_time,
+                    CASE WHEN manually_closed = 1 THEN manually_closed END manually_closed
                    
                   FROM vt_few_days_po_pcs 
                     
@@ -3433,7 +3454,7 @@ class Access_model extends CI_Model {
         return $query;
     }
 
-    public function storeAsWarehouseGoods($care_label_no, $store_type, $season, $user_id, $date_time){
+    public function storeAsWarehouseGoods($care_label_no, $store_type, $season, $user_id, $date_time, $remarks){
         $set_datetime_fld = '';
 
         if($store_type == 1){
@@ -3463,7 +3484,7 @@ class Access_model extends CI_Model {
         $sql = "Update `tb_care_labels` 
                 Set warehouse_qa_type=$store_type, warehouse_qa_by=$user_id 
                 $set_datetime_fld , warehouse_last_action_date_time='$date_time',
-                season_id='$season'
+                season_id='$season', other_purpose_remarks='$remarks'
                 WHERE pc_tracking_no = '$care_label_no'";
 
         $query = $this->db->query($sql);

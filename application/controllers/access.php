@@ -4700,7 +4700,7 @@ class Access extends CI_Controller {
             $care_label_no = $v;
             $remarks = $remarks_array[$k];
 
-            $care_label_info = $this->access_model->getCareLabelShirtInfo($care_label_no);
+            $care_label_info = $this->access_model->getCareLabelDetailByClNo($care_label_no);
             $line_id = $care_label_info[0]['line_id'];
             $packing_status = $care_label_info[0]['packing_status'];
             $carton_status = $care_label_info[0]['carton_status'];
@@ -4709,7 +4709,7 @@ class Access extends CI_Controller {
             if($warehouse_type != 3){
                 if($carton_status==0 && $packing_status==1){
                     if($warehouse_qa_type != 5){
-                        $this->access_model->storeAsWarehouseGoods($care_label_no, $warehouse_type, $season, $user_id, $date_time);
+                        $this->access_model->storeAsWarehouseGoods($care_label_no, $warehouse_type, $season, $user_id, $date_time, $remarks);
                     }
                     if($warehouse_qa_type == 5){
                         $exception="$care_label_no Already Sent as Other Purpose !";
@@ -4730,11 +4730,11 @@ class Access extends CI_Controller {
 
             if($warehouse_type == 3){
 
-                if($line_id != 0){
+                if(sizeof($care_label_info) > 0){
                     $this->access_model->warehouseTrashUpdate($care_label_no, $warehouse_type, $season, $user_id, $date_time, $remarks);
                 }
-                if($line_id == 0){
-                    $exception="Failed! $care_label_no Not Inputed In Any Line!";
+                if(sizeof($care_label_info)==0){
+                    $exception="Failed! $care_label_no Not Found!";
                     array_push($failed_cls, $exception);
                 }
 

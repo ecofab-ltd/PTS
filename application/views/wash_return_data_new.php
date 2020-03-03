@@ -53,7 +53,7 @@
                 </thead>
                 <tbody>
                 <?php foreach($prod_summary as $k => $v) {
-                    if (($v['count_wash_going_qty'] - $v['count_washing_pass']) > 0) {
+                    if (($v['count_wash_going_qty'] - ($v['count_washing_pass']+$v['count_manual_close_qty'])) > 0) {
                         ?>
                         <tr>
                             <td class="hidden-phone center"><span

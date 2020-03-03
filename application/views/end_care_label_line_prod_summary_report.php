@@ -25,7 +25,7 @@
                 <tbody>
                 <?php
                 foreach($prod_summary as $k => $v) {
-                    if (($v['count_input_qty_line'] - $v['count_end_line_qc_pass']) > 0) {
+                    if (($v['count_input_qty_line'] - ($v['count_end_line_qc_pass']+$v['count_manual_close'])) > 0) {
                         ?>
                         <tr>
                             <td class="hidden-phone center"><span

@@ -31,7 +31,7 @@
                 $total_wh_qa = 0;
                 foreach($prod_summary as $k => $v) {
 
-                    $total_finishing_wh_qa = $v['count_carton_pass'] + ($v['total_wh_qa'] != NULL ? $v['total_wh_qa'] : 0);
+                    $total_finishing_wh_qa = $v['count_carton_pass'] + $v['count_manual_close'] + ($v['total_wh_qa'] != NULL ? $v['total_wh_qa'] : 0);
                     $total_wh_qa = ($v['total_wh_qa'] != NULL ? $v['total_wh_qa'] : 0);
 
                     if (($v['total_cut_input_qty'] - $total_finishing_wh_qa) > 0) {
