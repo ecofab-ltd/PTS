@@ -141,6 +141,7 @@
         </div>
         <!--\\\\\\\ inner end\\\\\\-->
     </div>
+    </div>
     <!--\\\\\\\ wrapper end\\\\\\-->
 
 </body>

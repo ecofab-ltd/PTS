@@ -3744,24 +3744,27 @@ class Dashboard extends CI_Controller {
 
         foreach ($line_po_items as $k => $v){
 
-            $idata['po_no'] = $v['po_no'];
-            $idata['so_no'] = $v['so_no'];
-            $idata['purchase_order'] = $v['purchase_order'];
-            $idata['item'] = $v['item'];
-            $idata['quality'] = $v['quality'];
-            $idata['color'] = $v['color'];
-            $idata['ex_factory_date'] = $v['ex_factory_date'];
-            $idata['style_no'] = $v['style_no'];
-            $idata['style_name'] = $v['style_name'];
-            $idata['line_id'] = $v['line_id'];
-            $idata['min_line_input_date_time'] = $v['min_line_input_date_time'];
-            $idata['count_input_qty_line'] = $v['count_input_qty_line'];
-            $idata['count_end_line_qc_pass'] = $v['count_end_line_qc_pass'];
-            $idata['line_po_balance'] = $v['line_po_balance'];
+            if($v['line_po_balance'] > 0){
+                $idata['po_no'] = $v['po_no'];
+                $idata['so_no'] = $v['so_no'];
+                $idata['purchase_order'] = $v['purchase_order'];
+                $idata['item'] = $v['item'];
+                $idata['quality'] = $v['quality'];
+                $idata['color'] = $v['color'];
+                $idata['ex_factory_date'] = $v['ex_factory_date'];
+                $idata['style_no'] = $v['style_no'];
+                $idata['style_name'] = $v['style_name'];
+                $idata['line_id'] = $v['line_id'];
+                $idata['min_line_input_date_time'] = $v['min_line_input_date_time'];
+                $idata['count_input_qty_line'] = $v['count_input_qty_line'];
+                $idata['count_end_line_qc_pass'] = $v['count_end_line_qc_pass'];
+                $idata['line_po_balance'] = $v['line_po_balance'];
 
-            if($res_status == 1){
-                $this->dashboard_model->insertTblData('tb_line_running_pos', $idata);
+                if($res_status == 1){
+                    $this->dashboard_model->insertTblData('tb_line_running_pos', $idata);
+                }
             }
+
         }
 
         echo  "<script type='text/javascript'>";
@@ -4562,7 +4565,7 @@ class Dashboard extends CI_Controller {
             $where .= " AND t1.line_id = '$line_id'";
         }
 
-        $where .= " AND t1.access_points!=4 AND t1.access_points_status!=4";
+        $where .= "  AND t1.access_points IN (2, 3, 4) AND t1.access_points_status IN (1, 2)";
 
         $get_data['remain_pcs'] = $this->dashboard_model->getRemainingCLBySize($where);
 
@@ -5191,7 +5194,7 @@ class Dashboard extends CI_Controller {
         $where = '';
 
         if($date != '' && $line_id != ''){
-            $where .= "WHERE line_id=$line_id AND access_points != 4 AND access_points_status != 4";
+            $where .= " AND line_id=$line_id";
         }
 
 //        $data['line_status'] = $this->dashboard_model->getLineStatusByLineViewTable($line_id, $date);

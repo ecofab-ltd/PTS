@@ -2896,7 +2896,7 @@ class Access_model extends CI_Model {
                   SELECT
                     so_no,po_no,item,quality,color,purchase_order,line_id,brand,ex_factory_date,style_no,style_name,
                     
-                    CASE WHEN access_points>=2 AND access_points_status in (1, 4) THEN line_input_date_time END line_input_date_time,
+                    CASE WHEN line_id != 0 THEN line_input_date_time END line_input_date_time,
                     CASE WHEN access_points>=3 AND access_points_status in (1, 4) THEN mid_line_qc_date_time END mid_line_qc_date_time,
                     CASE WHEN access_points=4 AND access_points_status=4 THEN end_line_qc_date_time END end_line_qc_date_time,
                     CASE WHEN manually_closed=1 THEN manually_closed END manually_closed
@@ -2999,25 +2999,32 @@ class Access_model extends CI_Model {
 
     public function getLineWipReport($where){
 
-        $sql = "SELECT B.*
-                
-                FROM 
-                (SELECT t1.*
-                FROM (SELECT
-                
-                  COUNT(end_line_qc_date_time) as count_wip_qty_line
-                  
-                  
-                 
-                FROM (
-                  SELECT
-                    line_id,                     
-                    CASE WHEN end_line_qc_date_time='0000-00-00 00:00:00' THEN end_line_qc_date_time END end_line_qc_date_time
-                   
-                  FROM vt_few_days_po_pcs 
-                    $where
-                ) vt_few_days_po_pcs ) as t1
-                ) as B";
+//        $sql = "SELECT (B.count_line_input - (B.count_end_line_pass + B.count_manual_close)) AS count_wip_qty_line
+//
+//                FROM
+//                (SELECT t1.*
+//                FROM (SELECT
+//
+//                  COUNT(id) as count_line_input,
+//                  COUNT(end_line_qc_date_time) as count_end_line_pass,
+//                  COUNT(manually_closed) as count_manual_close
+//
+//                FROM (
+//                  SELECT
+//                    line_id,
+//                    CASE WHEN access_points=4 AND access_points_status=4 THEN end_line_qc_date_time END end_line_qc_date_time,
+//                    CASE WHEN line_id != 0 THEN id END id,
+//                    CASE WHEN manually_closed = 1 THEN manually_closed END manually_closed
+//
+//                  FROM vt_few_days_po_pcs
+//                ) vt_few_days_po_pcs ) as t1
+//                ) as B
+//                $where";
+
+
+        $sql = "SELECT SUM(line_po_balance) AS count_wip_qty_line
+                FROM `tb_line_running_pos` 
+                WHERE 1 $where";
 
         $query = $this->db->query($sql)->result_array();
         return $query;

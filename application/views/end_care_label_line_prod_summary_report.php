@@ -44,7 +44,7 @@
                             </td>
                             <td class="hidden-phone center">
                                 <span class="btn btn-danger" data-target="#myModal2" data-toggle="modal" onclick="getRemainingLinePcs('<?php echo $v['po_no']; ?>', '<?php echo $v['so_no']; ?>', '<?php echo $v['purchase_order']; ?>','<?php echo $v['item']; ?>','<?php echo $v['quality']; ?>','<?php echo $v['color']; ?>');">
-                                <?php echo $v['count_mid_line_qc_pass'] - $v['count_end_line_qc_pass']; ?>
+                                <?php echo $v['count_input_qty_line'] - $v['count_end_line_qc_pass']; ?>
                                 </span>
                             </td>
                         </tr>
