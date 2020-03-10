@@ -2973,7 +2973,12 @@ class Dashboard_model extends CI_Model {
 //
 //                $order_by_condition";
 
-        $sql = "SELECT t1.*, t2.*, t3.responsible_line, t4.collar_bndl_qty, t5.cuff_bndl_qty, t6.planned_lines, t7.max_carton_date_time
+        $sql = "SELECT t1.*, t2.total_cut_qty, t2.total_cut_qty, t2.total_cut_input_qty, 
+                t2.count_input_qty_line, t2.count_mid_line_qc_pass, t2.count_end_line_qc_pass,
+                t2.count_washing_qty, t2.count_washing_pass, t2.count_packing_pass, 
+                t2.count_carton_pass, t2.total_wh_qa, t2.count_manual_close_qty, 
+                t3.responsible_line, t4.collar_bndl_qty, t5.cuff_bndl_qty, t6.planned_lines, t7.max_carton_date_time
+                
                 FROM 
                 (SELECT so_no, po_no, brand, purchase_order, item, quality, color, style_no, style_name, 
                 ex_factory_date, SUM(quantity) AS total_order_qty, wash_gmt, po_type, status
