@@ -76,7 +76,7 @@
 
                     <div class="col-md-1">
                         <div class="form-group">
-                            <a href="<?php echo base_url();?>uploads/manual_upload/file_format.csv" class="btn btn-warning">File Format</a>
+                            <a href="<?php echo base_url();?>uploads/manual_upload/file_format_pts.csv" class="btn btn-warning">File Format</a>
                         </div>
                     </div>
                 </div>
