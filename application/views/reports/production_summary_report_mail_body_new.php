@@ -124,10 +124,10 @@
 
             }
             $line_target = $line_pre_info[0]['target'];
-            $work_hour_1 = $line_pre_info[0]['work_hour_1'];
-            $work_hour_2 = $line_pre_info[0]['work_hour_2'];
-            $work_hour_3 = $line_pre_info[0]['work_hour_3'];
-            $work_hour_4 = $line_pre_info[0]['work_hour_4'];
+            $work_hour_1 = ($line_pre_info[0]['work_hour_1'] != '' ? $line_pre_info[0]['work_hour_1'] : 0);
+            $work_hour_2 = ($line_pre_info[0]['work_hour_2'] != '' ? $line_pre_info[0]['work_hour_2'] : 0);
+            $work_hour_3 = ($line_pre_info[0]['work_hour_3'] != '' ? $line_pre_info[0]['work_hour_3'] : 0);
+            $work_hour_4 = ($line_pre_info[0]['work_hour_4'] != '' ? $line_pre_info[0]['work_hour_4'] : 0);
             $sum_of_work_hour=$work_hour_1+$work_hour_2+$work_hour_3+$work_hour_4;
 
 

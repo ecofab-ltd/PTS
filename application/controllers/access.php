@@ -6245,21 +6245,21 @@ class Access extends CI_Controller {
 
                 if($segment_id == 1){
 
-                    $set_fields .= " Set target_hour='$target_hour', target='$target', man_power_1='$mp', man_power_2='$mp', man_power_3='$mp', man_power_4='$mp', remarks='$remarks' ";
+                    $set_fields .= " Set target_hour='$target_hour', target='$target', man_power_1='$mp', remarks='$remarks' ";
 
                     $this->access_model->updateLineTarget($line_id, $target_date, $set_fields);
                 }
 
                 if($segment_id == 2){
 
-                    $set_fields .= " Set target_hour='$target_hour', target='$target', man_power_2='$mp', man_power_3='$mp', man_power_4='$mp', remarks='$remarks' ";
+                    $set_fields .= " Set target_hour='$target_hour', target='$target', man_power_2='$mp', remarks='$remarks' ";
 
                     $this->access_model->updateLineTarget($line_id, $target_date, $set_fields);
                 }
 
                 if($segment_id == 3){
 
-                    $set_fields .= " Set target_hour='$target_hour', target='$target', man_power_3='$mp', man_power_4='$mp', remarks='$remarks' ";
+                    $set_fields .= " Set target_hour='$target_hour', target='$target', man_power_3='$mp', remarks='$remarks' ";
 
                     $this->access_model->updateLineTarget($line_id, $target_date, $set_fields);
                 }
@@ -6279,9 +6279,6 @@ class Access extends CI_Controller {
                         'target' => $target,
                         'date' => $target_date,
                         'man_power_1' => $mp,
-                        'man_power_2' => $mp,
-                        'man_power_3' => $mp,
-                        'man_power_4' => $mp,
                         'remarks' => $remarks
                     );
 
@@ -6295,8 +6292,6 @@ class Access extends CI_Controller {
                         'target' => $target,
                         'date' => $target_date,
                         'man_power_2' => $mp,
-                        'man_power_3' => $mp,
-                        'man_power_4' => $mp,
                         'remarks' => $remarks
                     );
 
@@ -6310,7 +6305,6 @@ class Access extends CI_Controller {
                         'target' => $target,
                         'date' => $target_date,
                         'man_power_3' => $mp,
-                        'man_power_4' => $mp,
                         'remarks' => $remarks
                     );
 

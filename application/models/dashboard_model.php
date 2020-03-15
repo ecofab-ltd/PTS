@@ -2776,7 +2776,7 @@ class Dashboard_model extends CI_Model {
 
         $sql = "SELECT t1.so_no, t1.po_no, t1.purchase_order, t1.item, t1.quality, t1.color, t1.style_no, t1.style_name, 
                 t1.responsible_line, t1.ex_factory_date, t1.status, t1.brand, t1.po_type, t2.line_output_qty, 
-                t3.packing_qty, t4.carton_qty, t5.cut_pass_qty
+                t3.packing_qty, t4.carton_qty, t5.cut_pass_qty, t6.line_mid_pass_qty
                 
                 FROM 
                 (SELECT so_no, po_no, purchase_order, item, quality, color, style_no, style_name, 
@@ -2816,7 +2816,17 @@ class Dashboard_model extends CI_Model {
                 
                 GROUP BY so_no, po_no, purchase_order, item, quality, color) as t5
                 ON t1.so_no=t5.so_no AND t1.purchase_order=t5.purchase_order 
-                AND t1.item=t5.item AND t1.quality=t5.quality AND t1.color=t5.color";
+                AND t1.item=t5.item AND t1.quality=t5.quality AND t1.color=t5.color
+                
+                LEFT JOIN
+                (SELECT so_no, po_no, purchase_order, item, quality, color, COUNT(id) as line_mid_pass_qty 
+                 FROM `vt_few_days_po_pcs` 
+                WHERE DATE_FORMAT(mid_line_qc_date_time, '%Y-%m-%d')='$date' 
+                AND access_points >= 3 AND access_points_status IN (1, 4)
+                
+                GROUP BY so_no, po_no, purchase_order, item, quality, color) as t6
+                ON t1.so_no=t6.so_no AND t1.purchase_order=t6.purchase_order 
+                AND t1.item=t6.item AND t1.quality=t6.quality AND t1.color=t6.color";
 
         $query = $this->db->query($sql)->result_array();
         return $query;
@@ -2985,7 +2995,7 @@ class Dashboard_model extends CI_Model {
                 FROM tb_po_detail 
                 WHERE 1 $where
                 GROUP BY so_no) AS t1
-                 
+                
                 LEFT JOIN
                 (SELECT so_no, COUNT(id) AS total_cut_qty, COUNT(sent_to_production) AS total_cut_input_qty, 
                 COUNT(line_id) AS count_input_qty_line, COUNT(mid_line_qc_date_time) AS count_mid_line_qc_pass, COUNT(end_line_qc_date_time) AS count_end_line_qc_pass,
