@@ -2048,7 +2048,7 @@ class Dashboard extends CI_Controller {
         $date=$datex->format('Y-m-d');
 
         $previous_date = date( "Y-m-d", strtotime( $date . "-1 day"));
-//        $previous_date = "2020-02-16";
+//        $previous_date = "2020-03-16";
         $data['previous_date'] = $previous_date;
 
 //        echo '<pre>';
@@ -5239,8 +5239,8 @@ class Dashboard extends CI_Controller {
 
 
         $time=$datex->format('H:i:s');
+//        $time="19:00:00";
         $data['time'] = $time;
-//        $time="17:30:59";
 
 
         $min_max_hours = $this->access_model->getSegments($time);
@@ -5348,7 +5348,7 @@ class Dashboard extends CI_Controller {
             $data['man_power'] = $man_power;
             $data['line_id'] = $line_id;
 
-            echo $data['maincontent'] = $this->load->view('line_efficiency_reload', $data, true);
+            echo $data['maincontent'] = $this->load->view('line_efficiency_reload_1', $data, true);
         }
 
     }

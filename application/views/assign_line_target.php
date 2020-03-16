@@ -1,3 +1,24 @@
+<style>
+    .loader {
+        border: 20px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 20px solid #3498db;
+        width: 35px;
+        height: 35px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+    }
+
+    @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
 <div class="pull-left breadcrumb_admin clear_both">
     <div class="pull-left page_title theme_color">
         <h1>Line Target</h1>
@@ -75,12 +96,16 @@
             </div>
             <div class="col-md-2">
                 <div class="form-group">
-                    <input type="text" class="form-control form-control-inline input-medium default-date-picker" id="target_date" name="target_date" onblur="getLineTarget();" required />
+                    <input type="text" class="form-control form-control-inline input-medium default-date-picker" id="target_date" name="target_date" required />
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-2">
+                <span class="btn btn-primary" onclick="getLineTarget();">Search</span>
+            </div>
 
+            <div class="col-md-1">
+                <div class="loader" id="loader" style="display: none;"></div>
             </div>
         </div>
 
@@ -159,7 +184,6 @@
     $('select').select2();
 
     function getLineTarget() {
-
         var segment = $("#segments").val();
 
         var date = $("#target_date").val();
@@ -171,61 +195,65 @@
 
         var target_date = yr+'-'+mon+'-'+dt;
 
-        console.log(target_date);
 
         var cur_date = '<?php echo date("Y-m-d");?>';
 
         var count_tr = $('#sample_2 tbody tr').length;
 
-        if(cur_date <= target_date){
-            for(var i=0; i < count_tr; i++){
-                var line_id = $("#line_id"+i).val();
+        if(date != ''){
+            if(cur_date <= target_date){
+                $("#loader").css("display", "block");
 
-                $("#target_hr"+i).val('');
-                $("#target"+i).val('');
-                $("#mp"+i).val('');
-                $("#remarks"+i).val('');
+                for(var i=0; i < count_tr; i++){
+                    var line_id = $("#line_id"+i).val();
 
-                $.ajax({
-                    async: false,
-                    url: "<?php echo base_url();?>access/getLineTargetInfo",
-                    type: "POST",
-                    data: {target_date: target_date, line_id: line_id, segment: segment},
-                    dataType: "json",
-                    success: function (data) {
+                    $("#target_hr"+i).val('');
+                    $("#target"+i).val('');
+                    $("#mp"+i).val('');
+                    $("#remarks"+i).val('');
 
-                        if(data.length > 0){
-                            var target = data[0].target;
-                            var target_hour = data[0].target_hour;
+                    $.ajax({
+                        async: false,
+                        url: "<?php echo base_url();?>access/getLineTargetInfo",
+                        type: "POST",
+                        data: {target_date: target_date, line_id: line_id, segment: segment},
+                        dataType: "json",
+                        success: function (data) {
 
-                            if(segment == 1){
-                                var mp = data[0].man_power_1;
+                            if(data.length > 0){
+                                var target = data[0].target;
+                                var target_hour = data[0].target_hour;
+
+                                if(segment == 1){
+                                    var mp = data[0].man_power_1;
+                                }
+                                if(segment == 2){
+                                    var mp = (data[0].man_power_2 == 0 ? data[0].man_power_1 : data[0].man_power_2);
+                                }
+                                if(segment == 3){
+                                    var mp = (data[0].man_power_3 == 0 ? data[0].man_power_2 : data[0].man_power_3);
+                                }
+                                if(segment == 4){
+                                    var mp = (data[0].man_power_4 == 0 ? data[0].man_power_3 : data[0].man_power_4);
+                                }
+
+                                var remarks = data[0].remarks;
+
+                                $("#target_hr"+i).val(target_hour);
+                                $("#target"+i).val(target);
+                                $("#mp"+i).val(mp);
+                                $("#remarks"+i).val(remarks);
+
+                                $("#loader").css("display", "none");
                             }
-                            if(segment == 2){
-                                var mp = data[0].man_power_2;
-                            }
-                            if(segment == 3){
-                                var mp = data[0].man_power_3;
-                            }
-                            if(segment == 4){
-                                var mp = data[0].man_power_4;
-                            }
-
-                            var remarks = data[0].remarks;
-
-                            console.log(target+' '+mp+' '+remarks);
-
-                            $("#target_hr"+i).val(target_hour);
-                            $("#target"+i).val(target);
-                            $("#mp"+i).val(mp);
-                            $("#remarks"+i).val(remarks);
                         }
-
-                    }
-                });
+                    });
+                }
+            }else{
+                alert("Please Select Up-Coming Dates!");
             }
         }else{
-            alert("Please Select Up-Coming Dates!");
+            alert('Please Select Date!');
         }
     }
 </script>

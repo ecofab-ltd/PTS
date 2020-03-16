@@ -60,7 +60,7 @@
     $eff = ($produce_minute/$work_minute) * 100;
     $line_efficiency = sprintf('%0.2f', $eff);
 
-    $this->method_call->updateTodayEfficiency($line_id, $line_efficiency, $segment_id, $produce_minute, $work_minute, $hour);
+//    $this->method_call->updateTodayEfficiency($line_id, $line_efficiency, $segment_id, $produce_minute, $work_minute, $hour);
 
     echo $line_efficiency;
     ?>

@@ -115,21 +115,18 @@
             foreach ($hour_ranges as $h){
                 $line_pre_info = $this->method_call->getLinePerformanceSummary($v['id'], $previous_date, $h['start_time'], $h['end_time']);
 
-
-
                 foreach ($line_pre_info as $lpi){
                     $line_output += $lpi['qty'];
                 }
 
-
             }
-            $line_target = $line_pre_info[0]['target'];
-            $work_hour_1 = ($line_pre_info[0]['work_hour_1'] != '' ? $line_pre_info[0]['work_hour_1'] : 0);
-            $work_hour_2 = ($line_pre_info[0]['work_hour_2'] != '' ? $line_pre_info[0]['work_hour_2'] : 0);
-            $work_hour_3 = ($line_pre_info[0]['work_hour_3'] != '' ? $line_pre_info[0]['work_hour_3'] : 0);
-            $work_hour_4 = ($line_pre_info[0]['work_hour_4'] != '' ? $line_pre_info[0]['work_hour_4'] : 0);
-            $sum_of_work_hour=$work_hour_1+$work_hour_2+$work_hour_3+$work_hour_4;
 
+            $line_target = $line_pre_info[0]['target'];
+            $work_hour_1 = ($line_pre_info[0]['work_hour_1'] > 0 ? $line_pre_info[0]['work_hour_1'] : 0);
+            $work_hour_2 = ($line_pre_info[0]['work_hour_2'] > 0 ? $line_pre_info[0]['work_hour_2'] : 0);
+            $work_hour_3 = ($line_pre_info[0]['work_hour_3'] > 0 ? $line_pre_info[0]['work_hour_3'] : 0);
+            $work_hour_4 = ($line_pre_info[0]['work_hour_4'] > 0 ? $line_pre_info[0]['work_hour_4'] : 0);
+            $sum_of_work_hour=$work_hour_1+$work_hour_2+$work_hour_3+$work_hour_4;
 
             $line_remarks = $line_pre_info[0]['remarks'];
             $line_efficiency = $line_pre_info[0]['efficiency'];
