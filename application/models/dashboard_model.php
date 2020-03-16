@@ -2785,7 +2785,7 @@ class Dashboard_model extends CI_Model {
                 LEFT JOIN
                 (SELECT so_no, po_no, purchase_order, item, quality, color, COUNT(id) as line_output_qty 
                  FROM `vt_few_days_po_pcs` 
-                WHERE DATE_FORMAT(end_line_qc_date_time, '%Y-%m-%d')='$date' 
+                WHERE DATE_FORMAT(end_line_qc_date_time, '%Y-%m-%d')='$date'
                 AND access_points=4 AND access_points_status=4
                 
                 GROUP BY so_no, po_no, purchase_order, item, quality, color) as t2

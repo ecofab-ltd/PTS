@@ -2986,7 +2986,7 @@ class Access_model extends CI_Model {
                 FROM (
                   SELECT
                     line_id,                     
-                    CASE WHEN mid_line_qc_date_time !='0000-00-00 00:00:00' THEN mid_line_qc_date_time END mid_line_qc_date_time
+                    CASE WHEN access_points >= 3 AND access_points_status IN (1, 4) THEN mid_line_qc_date_time END mid_line_qc_date_time
                    
                   FROM vt_few_days_po_pcs 
                     $where
@@ -4387,9 +4387,10 @@ class Access_model extends CI_Model {
         return $query;
     }
 
-    public function sendToLineForAlter($care_label_no, $floor_id, $date_time){
+    public function sendToLineForAlter($care_label_no, $floor_id, $status, $date_time){
         $sql = "UPDATE tb_care_labels 
-                SET finishing_qc_status=2, finishing_qc_date_time='$date_time', finishing_floor_id='$floor_id', packing_status=0
+                SET finishing_qc_status=$status, finishing_qc_date_time='$date_time', 
+                finishing_floor_id='$floor_id', packing_status=0
                 WHERE pc_tracking_no='$care_label_no'";
 
         $query = $this->db->query($sql);
@@ -5646,7 +5647,7 @@ class Access_model extends CI_Model {
     public function updateLineFinishingAlter($carelabel_tracking_no, $date_time)
     {
         $sql = "Update `vt_running_po_pcs` 
-                SET finishing_qc_status = 1, 
+                SET finishing_qc_status = 3, 
                 finishing_qc_date_time='$date_time'
                 WHERE pc_tracking_no='$carelabel_tracking_no'";
 

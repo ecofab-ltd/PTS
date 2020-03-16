@@ -70,13 +70,19 @@
         </div><!--/col-md-12-->
         <div class="row">
             <div class="col-md-2">
-                <input type="text" class="form-control" name="carelabel_tracking_no" autofocus autocomplete="off" required id="carelabel_tracking_no" onkeyup="finishingAlterSave()" />
+                <input type="text" class="form-control" name="carelabel_tracking_no" autofocus autocomplete="off" required id="carelabel_tracking_no" />
+            </div>
+            <div class="col-md-1">
+                <span class="btn btn-success" onclick="finishingAlterPassSave();">PASS</span>
+            </div>
+            <div class="col-md-1">
+                <span class="btn btn-danger" onclick="finishingAlterFailSave();">FAIL</span>
             </div>
             <div class="col-md-1">
                 <div class="col-md-1" id="loader" style="display: none;"><div class="loader"></div></div>
             </div>
             <div class="col-md-1">
-                <span class="btn btn-success" onclick="getFinishingAlterReport();">Report</span>
+                <span class="btn btn-primary" onclick="getFinishingAlterReport();">Report</span>
             </div>
         </div>
 
@@ -129,7 +135,7 @@
         $("#carelabel_tracking_no").focus();
     });
 
-    function finishingAlterSave(){
+    function finishingAlterPassSave(){
         $("#message").empty();
         $("#exception").empty();
 
@@ -147,16 +153,26 @@
             $.ajax({
                 url: "<?php echo base_url();?>access/finishingAlterSave/",
                 type: "POST",
-                data: {care_label_no: care_label_no},
+                data: {care_label_no: care_label_no, status: 1},
                 dataType: "html",
                 success: function (data) {
 
                     $("#loader").css('display', 'none');
                     $("#carelabel_tracking_no").attr('readonly', false);
 
-                    if(data != ''){
+                    if(data != '' && data != 'pass pending' && data != 'line pending'){
                         $("#exception").empty();
                         $("#message").text(care_label_no+" Sent to "+data);
+                    }
+
+                    if(data == 'line pending'){
+                        $("#message").empty();
+                        $("#exception").text("Line Process not Complete!");
+                    }
+
+                    if(data == 'pass pending'){
+                        $("#message").empty();
+                        $("#exception").text("Alter not Confirmed!");
                     }
 
                     if(data == ''){
@@ -173,7 +189,62 @@
         }
 
     }
-    
+
+    function finishingAlterFailSave(){
+        $("#message").empty();
+        $("#exception").empty();
+
+        $("#loader").css('display', 'block');
+
+        var cl_no = $("#carelabel_tracking_no").val();
+        var care_label_no = cl_no.trim();
+
+        var last_variable = care_label_no.slice(-1);
+
+        if(care_label_no != '' && last_variable == '.'){
+
+            $("#carelabel_tracking_no").attr('readonly', true);
+
+            $.ajax({
+                url: "<?php echo base_url();?>access/finishingAlterSave/",
+                type: "POST",
+                data: {care_label_no: care_label_no, status: 2},
+                dataType: "html",
+                success: function (data) {
+
+                    $("#loader").css('display', 'none');
+                    $("#carelabel_tracking_no").attr('readonly', false);
+
+                    if(data != '' && data != 'pass pending' && data != 'line pending'){
+                        $("#exception").empty();
+                        $("#message").text(care_label_no+" Sent to "+data);
+                    }
+
+                    if(data == 'line pending'){
+                        $("#message").empty();
+                        $("#exception").text("Line Process not Complete!");
+                    }
+
+                    if(data == 'pass pending'){
+                        $("#message").empty();
+                        $("#exception").text("Alter not Confirmed!");
+                    }
+
+                    if(data == ''){
+                        $("#message").empty();
+                        $("#exception").text("Failed!");
+                    }
+
+                    $("#carelabel_tracking_no").val('');
+                    $("#carelabel_tracking_no").focus();
+
+                }
+            });
+
+        }
+
+    }
+
     function getFinishingAlterReport() {
         $("#loader").css('display', 'block');
 

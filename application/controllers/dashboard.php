@@ -5134,7 +5134,7 @@ class Dashboard extends CI_Controller {
         $where = '';
 
         if($floor_id != '' && $floor_id != 0){
-            $where .= " AND finishing_qc_status=2 AND finishing_floor_id=$floor_id";
+            $where .= " AND finishing_qc_status in (2, 3) AND finishing_floor_id=$floor_id";
 
             $finishing_report = $this->access_model->getFinishingQcSummaryReload($where);
             $finishing_alter_qty = ($finishing_report[0]['finishing_alter_qty'] != '' ? $finishing_report[0]['finishing_alter_qty'] : 0);
