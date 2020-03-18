@@ -931,7 +931,7 @@ class Dashboard extends CI_Controller {
             $this->email->set_newline("\r\n");
 //            $this->email->from('pts@interfabshirt.com'); // change it to yours
             $this->email->from('ecofab.pts@gmail.com'); // change it to yours
-            $this->email->to('shehab.ahameed@interfabshirt.com, monirul.islam@interfabshirt.com, ecofab.ie@interfabshirt.com, mehedi.hassan@interfabshirt.com, hasnain.mehedi@interfabshirt.com'); // change it to yours
+            $this->email->to('shehab.ahameed@interfabshirt.com, monirul.islam@interfabshirt.com, shafayet.chowdhury@interfabshirt.com, ecofab.ie@interfabshirt.com, mehedi.hassan@interfabshirt.com, hasnain.mehedi@interfabshirt.com'); // change it to yours
             $this->email->cc('nipun.sarker@interfabshirt.com, hasib.hossain@interfabshirt.com, sahil.islam@interfabshirt.com, fahim.ashab@interfabshirt.com');// change it to yours
 //            $this->email->to('nipun.sarker@interfabshirt.com'); // change it to yours
             $this->email->subject("Production: $previous_date (Auto-Mail)");

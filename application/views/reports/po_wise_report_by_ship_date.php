@@ -16,8 +16,8 @@
         <th class="hidden-phone center">Order</th>
         <th class="hidden-phone center">Cut</th>
         <th class="hidden-phone center">Cut Pass</th>
+        <th class="hidden-phone center">Line Input</th>
         <th class="hidden-phone center">Sew</th>
-
         <th class="hidden-phone center" title="Sew Balance">Sew BLNC</th>
         <th class="hidden-phone center" title="Wash Return">Washed</th>
         <th class="hidden-phone center">Packed</th>
@@ -41,6 +41,7 @@
     $total_order_qty = 0;
     $total_cut_qty = 0;
     $total_cut_pass_qty = 0;
+    $total_line_input_qty = 0;
     $total_line_output_qty = 0;
     $total_line_output_balance_qty = 0;
     $total_washed_qty = 0;
@@ -59,8 +60,9 @@
         $total_order_qty += $v['total_order_qty'];
         $total_cut_qty += $v['total_cut_qty'];
         $total_cut_pass_qty += $v['total_cut_input_qty'];
+        $total_line_input_qty += $v['count_input_qty_line'];
         $total_line_output_qty += $v['count_end_line_qc_pass'];
-        $total_line_output_balance_qty += ($v['total_cut_input_qty'] - $v['count_end_line_qc_pass']);
+        $total_line_output_balance_qty += ($v['count_input_qty_line'] - $v['count_end_line_qc_pass']);
         $total_washed_qty += $v['count_washing_pass'];
         $total_packing_qty += $v['count_packing_pass'];
         $total_packing_balance_qty += $packing_balance_qty;
@@ -81,6 +83,7 @@
             <td class="center"><?php echo $v['total_order_qty'];?></td>
             <td class="center"><?php echo $v['total_cut_qty'];?></td>
             <td class="center"><?php echo $v['total_cut_input_qty'];?></td>
+            <td class="center"><?php echo $v['count_input_qty_line'];?></td>
             <td class="center">
                 <a href="<?php echo base_url();?>dashboard/getDailyLineOutputReport/<?php echo $v['so_no'];?>" target="_blank">
                     <?php echo $v['count_end_line_qc_pass'];?>
@@ -123,6 +126,7 @@
         <td class="center"><h4><b><?php echo $total_order_qty;?></b></h4></td>
         <td class="center"><h4><b><?php echo $total_cut_qty;?></b></h4></td>
         <td class="center"><h4><b><?php echo $total_cut_pass_qty;?></b></h4></td>
+        <td class="center"><h4><b><?php echo $total_line_input_qty;?></b></h4></td>
         <td class="center"><h4><b><?php echo $total_line_output_qty;?></b></h4></td>
         <td class="center"><h4><b><?php echo $total_line_output_balance_qty;?></b></h4></td>
         <td class="center"><h4><b><?php echo $total_washed_qty;?></b></h4></td>

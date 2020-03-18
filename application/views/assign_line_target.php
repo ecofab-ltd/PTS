@@ -96,7 +96,7 @@
             </div>
             <div class="col-md-2">
                 <div class="form-group">
-                    <input type="text" class="form-control form-control-inline input-medium default-date-picker" id="target_date" name="target_date" required />
+                    <input type="text" class="form-control form-control-inline input-medium default-date-picker" id="target_date" name="target_date" required="required" autocomplete="off" />
                 </div>
             </div>
 
@@ -228,13 +228,13 @@
                                     var mp = data[0].man_power_1;
                                 }
                                 if(segment == 2){
-                                    var mp = (data[0].man_power_2 == 0 ? data[0].man_power_1 : data[0].man_power_2);
+                                    var mp = data[0].man_power_2;
                                 }
                                 if(segment == 3){
-                                    var mp = (data[0].man_power_3 == 0 ? data[0].man_power_2 : data[0].man_power_3);
+                                    var mp = data[0].man_power_3;
                                 }
                                 if(segment == 4){
-                                    var mp = (data[0].man_power_4 == 0 ? data[0].man_power_3 : data[0].man_power_4);
+                                    var mp = data[0].man_power_4;
                                 }
 
                                 var remarks = data[0].remarks;

@@ -213,8 +213,6 @@
         var brands = $("#brands").val();
         var po_type = $("#po_type").val();
 
-        console.log(po_type);
-
         var brands_string = brands.toString();
 
         var ship_date = $("#ship_date").val();

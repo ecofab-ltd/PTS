@@ -2,6 +2,7 @@
 $total_month_order_qty = 0;
 $total_month_cut_qty = 0;
 $total_month_cut_pass_qty = 0;
+$total_month_line_input_qty = 0;
 $total_month_line_output_qty = 0;
 $total_month_line_output_balance_qty = 0;
 $total_month_wash_send_qty = 0;
@@ -20,6 +21,7 @@ $week_date = array();
 $week_total_order_qty = array();
 $week_total_cut_qty = array();
 $week_total_cut_pass_qty = array();
+$week_total_line_input_qty = array();
 $week_total_line_output_qty = array();
 $week_total_line_output_balance_qty = array();
 $week_total_wash_send_qty = array();
@@ -55,8 +57,8 @@ foreach ($dates as $dt){
         <th class="hidden-phone center">Order</th>
         <th class="hidden-phone center">Cut</th>
         <th class="hidden-phone center">Cut Pass</th>
+        <th class="hidden-phone center">Line Input</th>
         <th class="hidden-phone center">Sew</th>
-
         <th class="hidden-phone center" title="Sew Balance">Sew BLNC</th>
         <th class="hidden-phone center" title="Wash Send">Wash Send</th>
         <th class="hidden-phone center" title="Wash Received">Wash Rcv</th>
@@ -88,6 +90,7 @@ foreach ($dates as $dt){
     $total_order_qty = 0;
     $total_cut_qty = 0;
     $total_cut_pass_qty = 0;
+    $total_line_input_qty = 0;
     $total_line_output_qty = 0;
     $total_line_output_balance_qty = 0;
     $total_wash_send_qty = 0;
@@ -102,7 +105,7 @@ foreach ($dates as $dt){
     $total_balance_qty = 0;
 
     foreach ($po_close_report as $v){
-        $sew_balance_qty = $v['count_end_line_qc_pass'] - $v['total_order_qty'];
+        $sew_balance_qty = $v['count_end_line_qc_pass'] - $v['count_input_qty_line'];
         $balance_qty = ($v['count_carton_pass'] + $v['total_wh_qa']) - $v['total_cut_qty'];
         $washing_balance_qty = $v['count_washing_pass'] - $v['count_washing_qty'];
         $packing_balance_qty = $v['count_packing_pass'] - $v['total_order_qty'];
@@ -111,8 +114,9 @@ foreach ($dates as $dt){
         $total_order_qty += $v['total_order_qty'];
         $total_cut_qty += $v['total_cut_qty'];
         $total_cut_pass_qty += $v['total_cut_input_qty'];
+        $total_line_input_qty += $v['count_input_qty_line'];
         $total_line_output_qty += $v['count_end_line_qc_pass'];
-        $total_line_output_balance_qty += ($v['count_end_line_qc_pass'] - $v['total_order_qty']);
+        $total_line_output_balance_qty += ($v['count_end_line_qc_pass'] - $v['count_input_qty_line']);
         $total_wash_send_qty += $v['count_washing_qty'];
         $total_washed_qty += $v['count_washing_pass'];
         $total_wash_balance_qty += $washing_balance_qty;
@@ -138,6 +142,7 @@ foreach ($dates as $dt){
             <td class="center"><?php echo $v['total_order_qty'];?></td>
             <td class="center"><?php echo $v['total_cut_qty'];?></td>
             <td class="center"><?php echo $v['total_cut_input_qty'];?></td>
+            <td class="center"><?php echo $v['count_input_qty_line'];?></td>
             <td class="center">
                 <a href="<?php echo base_url();?>dashboard/getDailyLineOutputReport/<?php echo $v['so_no'];?>" target="_blank">
                     <?php echo $v['count_end_line_qc_pass'];?>
@@ -217,6 +222,7 @@ foreach ($dates as $dt){
         <td class="center"><h4><b><?php echo $total_order_qty;?></b></h4></td>
         <td class="center"><h4><b><?php echo $total_cut_qty;?></b></h4></td>
         <td class="center"><h4><b><?php echo $total_cut_pass_qty;?></b></h4></td>
+        <td class="center"><h4><b><?php echo $total_line_input_qty;?></b></h4></td>
         <td class="center"><h4><b><?php echo $total_line_output_qty;?></b></h4></td>
         <td class="center"><h4><b><?php echo $total_line_output_balance_qty;?></b></h4></td>
         <td class="center"><h4><b><?php echo $total_wash_send_qty;?></b></h4></td>
@@ -242,6 +248,7 @@ foreach ($dates as $dt){
     array_push($week_total_order_qty, $total_order_qty);
     array_push($week_total_cut_qty, $total_cut_qty);
     array_push($week_total_cut_pass_qty, $total_cut_pass_qty);
+    array_push($week_total_line_input_qty, $total_line_input_qty);
     array_push($week_total_line_output_qty, $total_line_output_qty);
     array_push($week_total_line_output_balance_qty, $total_line_output_balance_qty);
     array_push($week_total_wash_send_qty, $total_wash_send_qty);
@@ -257,6 +264,7 @@ foreach ($dates as $dt){
     $total_month_order_qty += $total_order_qty;
     $total_month_cut_qty += $total_cut_qty;
     $total_month_cut_pass_qty += $total_cut_pass_qty;
+    $total_month_line_input_qty += $total_line_input_qty;
     $total_month_line_output_qty += $total_line_output_qty;
     $total_month_line_output_balance_qty += $total_line_output_balance_qty;
     $total_month_wash_send_qty += $total_wash_send_qty;
@@ -274,13 +282,14 @@ foreach ($dates as $dt){
 <table class="display table table-bordered table-striped" id="" border="1">
     <thead>
     <tr>
-        <th class="hidden-phone center" colspan="28"><h1><b>Month Summary</b></h1></th>
+        <th class="hidden-phone center" colspan="29"><h1><b>Month Summary</b></h1></th>
     </tr>
     <tr>
         <th class="hidden-phone center">Dates</th>
         <th class="hidden-phone center">Order</th>
         <th class="hidden-phone center">Cut</th>
         <th class="hidden-phone center">Cut Pass</th>
+        <th class="hidden-phone center">Line Input</th>
         <th class="hidden-phone center">Sew</th>
         <th class="hidden-phone center" title="Sew Balance">Sew BLNC</th>
         <th class="hidden-phone center" title="Wash Send">Wash Send</th>
@@ -306,6 +315,7 @@ foreach ($dates as $dt){
         <td class="hidden-phone center"><?php echo $week_total_order_qty[$k];?></td>
         <td class="hidden-phone center"><?php echo $week_total_cut_qty[$k];?></td>
         <td class="hidden-phone center"><?php echo $week_total_cut_pass_qty[$k];?></td>
+        <td class="hidden-phone center"><?php echo $week_total_line_input_qty[$k];?></td>
         <td class="hidden-phone center"><?php echo $week_total_line_output_qty[$k];?></td>
         <td class="hidden-phone center"><?php echo $week_total_line_output_balance_qty[$k];?></td>
         <td class="hidden-phone center"><?php echo $week_total_wash_send_qty[$k];?></td>
@@ -327,6 +337,7 @@ foreach ($dates as $dt){
         <td class="center"><h4><b><?php echo $total_month_order_qty;?></b></h4></td>
         <td class="center"><h4><b><?php echo $total_month_cut_qty;?></b></h4></td>
         <td class="center"><h4><b><?php echo $total_month_cut_pass_qty;?></b></h4></td>
+        <td class="center"><h4><b><?php echo $total_month_line_input_qty;?></b></h4></td>
         <td class="center"><h4><b><?php echo $total_month_line_output_qty;?></b></h4></td>
         <td class="center"><h4><b><?php echo $total_month_line_output_balance_qty;?></b></h4></td>
         <td class="center"><h4><b><?php echo $total_month_wash_send_qty;?></b></h4></td>

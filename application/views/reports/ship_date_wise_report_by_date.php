@@ -76,14 +76,14 @@
 
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-inline input-medium default-date-picker" id="from_date" name="from_date" required />
+                                    <input type="text" class="form-control form-control-inline input-medium default-date-picker" id="from_date" name="from_date" required="required" autocomplete="off" />
                                 </div>
                                 <span><b>* Select From Date </b></span>
                             </div>
 
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-inline input-medium default-date-picker" id="to_date" name="to_date" required />
+                                    <input type="text" class="form-control form-control-inline input-medium default-date-picker" id="to_date" name="to_date" required="required" autocomplete="off" />
                                 </div>
                                 <span><b>* Select To Date </b></span>
                             </div>
