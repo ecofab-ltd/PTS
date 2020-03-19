@@ -6,6 +6,8 @@
     <meta http-equiv="refresh" content="300">
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/images/favicon.ico" type="image/x-icon" />
 
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
     <style>
         table, td, th {
             border: 1px solid #ddd;
@@ -19,6 +21,70 @@
         th, td {
             padding: 2px;
         }
+
+
+         body {font-family: Arial, Helvetica, sans-serif;}
+
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        /* The Close Button */
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /*Loader Start*/
+         .loader {
+             border: 20px solid #f3f3f3;
+             border-radius: 50%;
+             border-top: 20px solid #3498db;
+             width: 35px;
+             height: 35px;
+             -webkit-animation: spin 2s linear infinite;
+             animation: spin 2s linear infinite;
+         }
+
+        @-webkit-keyframes spin {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /*Loader End*/
     </style>
 </head>
 <body>
@@ -109,7 +175,9 @@
                 ?>
             </td>
             <td align="center"><?php echo $line_rep[0]['efficiency'];?></td>
-            <td align="center"><?php echo $average_dhu;?></td>
+            <td align="center" id="myBtn" onclick="getDhuReport(<?php echo $line_id;?>);" style="cursor: pointer;">
+                <?php echo $average_dhu;?>
+            </td>
             <?php
             $total_output = 0;
             $total_output_balance = 0;
@@ -268,5 +336,78 @@
             <?php } ?>
             </tfoot>
 </table>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="loader" class="loader" style="display: block;"></div>
+        <div id="quality"></div>
+    </div>
+
+</div>
+
+<script>
+//    Modal Start
+
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal
+//    btn.onclick = function() {
+//        modal.style.display = "block";
+//    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+//    Modal End
+
+    function getDhuReport(line_id) {
+        $("#quality").empty();
+
+        if(line_id != ''){
+
+            $("#quality").load('<?php echo base_url();?>dashboard/getQualityDefectsReload/'+line_id);
+
+            setInterval(function(){
+
+                var isEmptyQuality = $("#quality").html() === "";
+
+                if(isEmptyQuality == false){
+                    $("#loader").css("display", "none");
+                }
+                if(isEmptyQuality == true){
+                    $("#loader").css("display", "block");
+                }
+
+            }, 500);
+
+            modal.style.display = "block";
+
+
+        }
+
+    }
+
+</script>
+
 </body>
 </html>

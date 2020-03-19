@@ -5221,11 +5221,11 @@ class Dashboard extends CI_Controller {
         $where = '';
 
         if($date != '' && $line_id != ''){
-            $where .= "WHERE DATE_FORMAT(mid_line_qc_date_time, '%Y-%m-%d')='$date'";
+            $where .= " AND DATE_FORMAT(mid_line_qc_date_time, '%Y-%m-%d')='$date' AND line_id=$line_id";
         }
 
 //        $data['line_status'] = $this->dashboard_model->getLineStatusByLineViewTable($line_id, $date);
-        $data['line_status'] = $this->access_model->getMidPassReportFilterViewTable($line_id, $where);
+        $data['line_status'] = $this->access_model->getMidPassReportFilterViewTable($where);
 
         echo $data['maincontent'] = $this->load->view('line_mid_qc_pass_reload', $data, true);
     }

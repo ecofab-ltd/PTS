@@ -2971,27 +2971,11 @@ class Access_model extends CI_Model {
     }
 
 
-    public function getMidPassReportFilterViewTable($line_id, $where){
+    public function getMidPassReportFilterViewTable($where){
 
-        $sql = "SELECT B.*
-                
-                FROM 
-                (SELECT t1.*
-                FROM (SELECT
-                
-                  COUNT(mid_line_qc_date_time) as count_mid_pass_qty
-                  
-                  
-                 
-                FROM (
-                  SELECT
-                    line_id,                     
-                    CASE WHEN access_points >= 3 AND access_points_status IN (1, 4) THEN mid_line_qc_date_time END mid_line_qc_date_time
-                   
-                  FROM vt_few_days_po_pcs 
-                    $where
-                ) vt_few_days_po_pcs WHERE line_id=$line_id ) as t1
-                ) as B";
+        $sql = "SELECT line_id, COUNT(id) AS count_mid_pass_qty  
+                FROM `tb_care_labels` 
+                WHERE 1 $where";
 
         $query = $this->db->query($sql)->result_array();
         return $query;

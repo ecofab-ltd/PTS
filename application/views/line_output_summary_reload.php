@@ -10,6 +10,8 @@ if($line_info[0]['line_name'] != ''){
 $line_target = (($line_target != '' && $line_target != 0) ? $line_target : 0);
 $line_output = (($line_output != '' && $line_output != 0) ? $line_output : 0);
 
+$achievement_rate = round(($line_output / $line_target) * 100, 2);
+
 $balance = $line_target-$line_output;
 
 $balance = (($balance != '' && $balance != 0) ? $balance : 0);
@@ -39,7 +41,7 @@ $(document).ready(function(){
             animationEnabled: true,
             title: {
 //                text: "Target: <?php //echo ($line_target != '' ? $line_target : 0);?>// | Output: <?php //echo ($line_output != '' ? $line_output : 0);?>// | Balance: <?php //echo ($balance != '' && $balance > 0 ? $balance : 0);?>//"
-                text: "Target:<?php echo ($line_target != '' ? $line_target : 0);?> | Balance:<?php echo ($balance != '' && $balance > 0 ? $balance : 0);?>",
+                text: "Target:<?php echo ($line_target != '' ? $line_target : 0);?> | BLNC:<?php echo ($balance != '' && $balance > 0 ? $balance : 0);?> | Rate:<?php echo ($achievement_rate != '' && $achievement_rate > 0 ? $achievement_rate : 0).'%';?>",
                 fontSize: 28
             },
             data: [{
