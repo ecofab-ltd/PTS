@@ -404,7 +404,7 @@ if(isset($line_target)){
             $("#chartContainer").load('<?php echo base_url();?>dashboard/getLineOutputSummaryReload/<?php echo $line_id;?>');
             $("#wip").load('<?php echo base_url();?>dashboard/getWipReload/<?php echo $line_id;?>');
             $("#mid_qc_pass").load('<?php echo base_url();?>dashboard/getMidQcPassReload/<?php echo $line_id;?>');
-            $("#efficiency").load('<?php echo base_url();?>dashboard/getEfficiencyReload/<?php echo $line_id;?>');
+            $("#efficiency").load('<?php echo base_url();?>dashboard/getEfficiencyReload_1/<?php echo $line_id;?>');
             $("#man_power").load('<?php echo base_url();?>dashboard/getManPowerReload/<?php echo $line_id;?>');
             $("#running_pos").load('<?php echo base_url();?>dashboard/getRunningPoQtyReload/<?php echo $line_id;?>');
             $("#upcoming_pos").load('<?php echo base_url();?>dashboard/getUpcomingPosReload/<?php echo $line_id;?>');

@@ -29,13 +29,17 @@
 
 
 //                                        echo '<pre>';
+//                                        print_r($work_time);
+//                                        echo '</pre>';
+//
+//                                        echo '<pre>';
 //                                        print_r($sec_to_minutes);
 //                                        echo '</pre>';
-
+//
 //                                        echo '<pre>';
 //                                        print_r('Minutes: '.$minutes.' MP: '.$man_power);
 //                                        echo '</pre>';
-
+//
 //                                        echo '<pre>';
 //                                        print_r('Work Min: '.$work_minute);
 //                                        echo '</pre>';

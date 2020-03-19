@@ -102,6 +102,8 @@
         $total_line_output=0;
         $grand_total_output_lines=0;
         $total_sum_efficiency=0;
+        $total_wh=0;
+        $total_avg_wh=0;
         $count_lines=0;
         $over_time_qty = 0;
 
@@ -133,6 +135,8 @@
             $over_time_qty = $v['eot_output'];
             $dhu = $v['dhu'];
             $work_hour = $v['work_hour'];
+
+            $total_wh += $work_hour;
 
 //            echo '<pre>';
 //            print_r($extra_line_qty);
@@ -198,7 +202,10 @@
 //                $this->method_call->insertTblData('tb_daily_line_summary', $data_l);
             }
 
-        } ?>
+        }
+
+        $total_avg_wh = round(($total_wh / $count_lines), 2);
+        ?>
         </tbody>
         <tfoot>
         <tr>
@@ -207,17 +214,9 @@
             <td align="center"><h3><b><?php echo $total_line_normal_output;?></b></h3></td>
             <td align="center"><h3><b><?php echo $total_over_time_qty;?></b></h3></td>
             <td align="center"><h3><b><?php echo $grand_total_output_lines;?></b></h3></td>
-            <td align="center">
-                <h3><b>
-                        <?php
-//                        $total_eff = $total_sum_efficiency / $count_lines;
-//                        echo $total_line_efficiency = sprintf('%0.2f', $total_eff);
-                        echo $total_line_efficiency;
-                        ?>
-                    </b></h3>
-            </td>
+            <td align="center"><h3><b><?php echo $total_line_efficiency;?></b></h3></td>
             <td align="center"></td>
-            <td align="center"></td>
+            <td align="center"><h3><b><?php echo $total_avg_wh;?></b></h3></td>
             <td align="center"></td>
         </tr>
         </tfoot>

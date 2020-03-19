@@ -27,28 +27,28 @@
     <br />
     <table width="100%">
         <thead>
-        <tr style="background-color: #615000; color: #FFFFFF;">
-            <th colspan="4" class="center"><h2>Cutting Ready Package</h2></th>
-        </tr>
-        <tr style="background-color: #f7ffb0;">
-            <th>TARGET</th>
-            <th>10Hr OUTPUT</th>
-            <th>Extra OT QTY</th>
-            <th>TOTAL</th>
-        </tr>
+            <tr style="background-color: #615000; color: #FFFFFF;">
+                <th colspan="4" class="center"><h2>Cutting Ready Package</h2></th>
+            </tr>
+            <tr style="background-color: #f7ffb0;">
+                <th>TARGET</th>
+                <th>10Hr OUTPUT</th>
+                <th>Extra OT QTY</th>
+                <th>TOTAL</th>
+            </tr>
         </thead>
         <tbody>
-        <tr>
-            <th><?php echo $cutting_target[0]['target'];?></th>
-            <th><?php echo $cutting_prod[0]['normal_hour_cutting_output'];?></th>
-            <th>
-                <?php
-                $eot_cut_pass = ($cutting_prod[0]['total_cutting_output'] - $cutting_prod[0]['normal_hour_cutting_output']);
-                echo $eot_cut_pass;
-                ?>
-            </th>
-            <th><?php echo $cutting_prod[0]['total_cutting_output'];?></th>
-        </tr>
+            <tr>
+                <th><?php echo $cutting_target[0]['target'];?></th>
+                <th><?php echo $cutting_prod[0]['normal_hour_cutting_output'];?></th>
+                <th>
+                    <?php
+                    $eot_cut_pass = ($cutting_prod[0]['total_cutting_output'] - $cutting_prod[0]['normal_hour_cutting_output']);
+                    echo $eot_cut_pass;
+                    ?>
+                </th>
+                <th><?php echo $cutting_prod[0]['total_cutting_output'];?></th>
+            </tr>
         </tbody>
     </table>
 

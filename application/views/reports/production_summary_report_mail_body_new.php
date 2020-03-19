@@ -112,6 +112,13 @@
             $line_output = 0;
             $line_dhu = 0;
 
+            $line_target_info = $this->method_call->getLineTargetInfos($v['id'], $previous_date);
+
+            $man_power_1 = ($line_target_info[0]['man_power_1'] > 0 ? $line_target_info[0]['man_power_1'] : 0);
+            $man_power_2 = ($line_target_info[0]['man_power_2'] > 0 ? $line_target_info[0]['man_power_2'] : 0);
+            $man_power_3 = ($line_target_info[0]['man_power_3'] > 0 ? $line_target_info[0]['man_power_3'] : 0);
+            $man_power_4 = ($line_target_info[0]['man_power_4'] > 0 ? $line_target_info[0]['man_power_4'] : 0);
+
             foreach ($hour_ranges as $h){
                 $line_pre_info = $this->method_call->getLinePerformanceSummary($v['id'], $previous_date, $h['start_time'], $h['end_time']);
 
@@ -126,7 +133,7 @@
             $work_hour_2 = ($line_pre_info[0]['work_hour_2'] > 0 ? $line_pre_info[0]['work_hour_2'] : 0);
             $work_hour_3 = ($line_pre_info[0]['work_hour_3'] > 0 ? $line_pre_info[0]['work_hour_3'] : 0);
             $work_hour_4 = ($line_pre_info[0]['work_hour_4'] > 0 ? $line_pre_info[0]['work_hour_4'] : 0);
-            $sum_of_work_hour=$work_hour_1+$work_hour_2+$work_hour_3+$work_hour_4;
+            $avg_of_work_hour=round((($work_hour_1+$work_hour_2+$work_hour_3+$work_hour_4) / $man_power_1), 2);
 
             $line_remarks = $line_pre_info[0]['remarks'];
             $line_efficiency = $line_pre_info[0]['efficiency'];
@@ -137,7 +144,7 @@
             $line_dhu = $this->method_call->getLineDhuSumReport($v['id'], $previous_date);
             $line_sum_dhu = $line_dhu[0]['sum_dhu'];
 
-            $average_dhu = round(($line_sum_dhu/$sum_of_work_hour), 2);
+            $average_dhu = round(($line_sum_dhu/$avg_of_work_hour), 2);
 
 //            $over_time_qty = $v['total_line_output'] - $v['line_normal_hours_output'];
 
@@ -175,7 +182,7 @@
 
                     ?>
                 </td>
-                <td class="center"><?php echo $sum_of_work_hour;?></td>
+                <td class="center"><?php echo $avg_of_work_hour;?></td>
                 <td class="center"><?php echo $average_dhu;?></td>
                 <td class="center"><?php echo $remarks;?></td>
             </tr>
@@ -187,7 +194,7 @@
                 'normal_output' => ($line_output != 0 ? $line_output : 0),
                 'eot_output' => ($over_time_qty != '' ? $over_time_qty : 0),
                 'output' => ($total_line_output != '' ? $total_line_output : 0),
-                'work_hour' => ($sum_of_work_hour != '' ? $sum_of_work_hour : 0),
+                'work_hour' => ($avg_of_work_hour != '' ? $avg_of_work_hour : 0),
                 'efficiency' => ($line_efficiency != '' ? $line_efficiency : 0),
                 'dhu' => ($average_dhu != '' ? $average_dhu : 0),
                 'date' => $previous_date,

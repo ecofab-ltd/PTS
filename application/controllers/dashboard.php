@@ -5230,6 +5230,129 @@ class Dashboard extends CI_Controller {
         echo $data['maincontent'] = $this->load->view('line_mid_qc_pass_reload', $data, true);
     }
 
+    public function getEfficiencyReload_1($line_id){
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+//        $date='2019-07-04';
+
+
+        $time=$datex->format('H:i:s');
+//        $time="19:00:00";
+        $data['time'] = $time;
+
+
+        $min_max_hours = $this->access_model->getSegments($time);
+//        $min_max_hours = $this->access_model->getTime();
+        $segment_id = $min_max_hours[0]['id'];
+        $min_start_time = $min_max_hours[0]['start_time'];
+        $max_end_time = $min_max_hours[0]['end_time'];
+
+        $data['get_smv_list'] = $this->access_model->getSegmentWiseSMVs($line_id, $date, $min_start_time, $max_end_time);
+
+
+//        $line_trgt = $this->access_model->getLineTargetViewTable($line_id,$date);
+
+//        echo '<pre>';
+//        print_r( $data['work_time']);
+//        print_r( $data['get_smv_list']);
+//        print_r( $line_trgt);
+//        echo '</pre>';
+
+
+
+//        $segment_id=4;
+
+
+
+        $select_fields = '';
+
+        $data['segment_id'] = $segment_id;
+
+        if($segment_id == 1)
+        {
+            $minhours = $this->access_model->getMinMaxHours();
+            $min_time_to_sec = $minhours[0]['min_time_to_sec'];
+
+//            $data['work_time'] = $this->access_model->getSegments($time);
+            $maxhours = $this->access_model->getHoursByTimeRange($time);
+            $max_time_to_sec = $maxhours[0]['max_time_to_sec'];
+
+            $data['work_time'] = ($max_time_to_sec - $min_time_to_sec);
+
+            $select_fields .= "  id, line_id, target, man_power_1, date, remarks ";
+
+            $line_trgt = $this->access_model->getLineTargetinfo($date, $line_id, $select_fields);
+
+            $line_target = $line_trgt[0]['target'];
+            $man_power = $line_trgt[0]['man_power_1'];
+//            $man_power =60;
+            $data['man_power'] = $man_power;
+            $data['line_id'] = $line_id;
+
+
+            echo $data['maincontent'] = $this->load->view('line_efficiency_reload_1', $data, true);
+        }
+
+        if($segment_id == 2)
+        {
+            $work_time = $this->access_model->getSegments($time);
+            $data['work_time'] = $work_time[0]['working_time_diff_to_sec'];
+
+            $select_fields .= "  id, line_id, target, man_power_2, date, remarks ";
+
+            $line_trgt = $this->access_model->getLineTargetinfo($date, $line_id, $select_fields);
+
+            $line_target = $line_trgt[0]['target'];
+
+            $man_power = $line_trgt[0]['man_power_2'];
+            $data['man_power'] = $man_power;
+            $data['line_id'] = $line_id;
+
+
+            echo $data['maincontent'] = $this->load->view('line_efficiency_reload_1', $data, true);
+        }
+
+        if($segment_id == 3)
+        {
+            $work_time = $this->access_model->getSegments($time);
+            $data['work_time'] = $work_time[0]['working_time_diff_to_sec'];
+
+            $select_fields .= "  id, line_id, target, man_power_3, date, remarks ";
+
+            $line_trgt = $this->access_model->getLineTargetinfo($date, $line_id, $select_fields);
+
+            $line_target = $line_trgt[0]['target'];
+
+            $man_power = $line_trgt[0]['man_power_3'];
+            $data['man_power'] = $man_power;
+            $data['line_id'] = $line_id;
+
+
+            echo $data['maincontent'] = $this->load->view('line_efficiency_reload_1', $data, true);
+        }
+
+        if($segment_id == 4)
+        {
+            $work_time = $this->access_model->getWorkingHoursViewTable($line_id, $date, $min_start_time, $max_end_time);
+            $data['work_time'] = $work_time[0]['working_time_diff_to_sec'];
+
+            $select_fields .= "  id, line_id, target, man_power_4, date, remarks ";
+
+            $line_trgt = $this->access_model->getLineTargetinfo($date, $line_id, $select_fields);
+
+            $line_target = $line_trgt[0]['target'];
+
+            $man_power = $line_trgt[0]['man_power_4'];
+            $data['man_power'] = $man_power;
+            $data['line_id'] = $line_id;
+
+            echo $data['maincontent'] = $this->load->view('line_efficiency_reload_1', $data, true);
+        }
+
+    }
+
     public function getEfficiencyReload($line_id){
         $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
         
@@ -5239,7 +5362,7 @@ class Dashboard extends CI_Controller {
 
 
         $time=$datex->format('H:i:s');
-//        $time="19:00:00";
+//        $time="19:01:00";
         $data['time'] = $time;
 
 
@@ -5335,20 +5458,31 @@ class Dashboard extends CI_Controller {
 
         if($segment_id == 4)
         {
-            $work_time = $this->access_model->getWorkingHoursViewTable($line_id, $date, $min_start_time, $max_end_time);
-            $data['work_time'] = $work_time[0]['working_time_diff_to_sec'];
+//            $work_time = $this->access_model->getWorkingHoursViewTable($line_id, $date, $min_start_time, $max_end_time);
+//            $data['work_time'] = $work_time[0]['working_time_diff_to_sec'];
+
+            $work_time = $this->access_model->getSegments($time);
+            $segment_start_time = $work_time[0]['start_time'];
+            $parsed1 = date_parse($segment_start_time);
+            $segment_start_time_seconds = $parsed1['hour'] * 3600 + $parsed1['minute'] * 60 + $parsed1['second'];
 
             $select_fields .= "  id, line_id, target, man_power_4, date, remarks ";
 
             $line_trgt = $this->access_model->getLineTargetinfo($date, $line_id, $select_fields);
 
             $line_target = $line_trgt[0]['target'];
+            $last_segment_time = $line_trgt[0]['last_segment_time'];
+
+            $parsed2 = date_parse($last_segment_time);
+            $last_segment_time_seconds = $parsed2['hour'] * 3600 + $parsed2['minute'] * 60 + $parsed2['second'];
+
+            $data['work_time'] = $last_segment_time_seconds - $segment_start_time_seconds;
 
             $man_power = $line_trgt[0]['man_power_4'];
             $data['man_power'] = $man_power;
             $data['line_id'] = $line_id;
 
-            echo $data['maincontent'] = $this->load->view('line_efficiency_reload_1', $data, true);
+            echo $data['maincontent'] = $this->load->view('line_efficiency_reload', $data, true);
         }
 
     }
@@ -5405,6 +5539,21 @@ class Dashboard extends CI_Controller {
     public function getLineTargetInfo($line_id){
 
         return $this->access_model->getLineTargetViewTable($line_id);
+
+    }
+
+    public function getLineTargetInfos($line_id, $date){
+
+        $where = '';
+        if($line_id != ''){
+            $where .= " AND line_id=$line_id'";
+        }
+
+        if($date != ''){
+            $where .= " AND date='$date'";
+        }
+
+        return $this->access_model->getLineTarget($where);
 
     }
 

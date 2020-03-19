@@ -66,12 +66,6 @@
 <!---->
 <!--                </div>-->
 <!--            </div>-->
-            <div class="col-md-2">
-                <div class="form-group">
-                    <h3>Segment*</h3>
-                </div>
-            </div>
-
 
             <div class="col-md-2">
                 <div class="form-group">
@@ -91,12 +85,7 @@
 
             <div class="col-md-2">
                 <div class="form-group">
-                    <h3>Select Date*</h3>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <input type="text" class="form-control form-control-inline input-medium default-date-picker" id="target_date" name="target_date" required="required" autocomplete="off" />
+                    <input type="text" class="form-control form-control-inline input-medium default-date-picker" id="target_date" name="target_date" placeholder="Select Date" required="required" autocomplete="off" />
                 </div>
             </div>
 
@@ -133,6 +122,7 @@
                                                 <th class="center">Target</th>
                                                 <th class="center">Man-Power</th>
                                                 <th class="center">Remarks</th>
+                                                <th class="center">Last Hour</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -149,10 +139,13 @@
                                                     <input type="text" placeholder="Target" id="target<?php echo $k_1;?>" name="target[]">
                                                 </td>
                                                 <td class="center">
-                                                    <input type="text" placeholder="Man-Power" id="mp<?php echo $k_1;?>" name="mp[]">
+                                                    <input type="text" placeholder="Man-Power" id="mp<?php echo $k_1;?>" name="mp[]" onblur="lastSegmentTimeCheck(<?php echo $k_1;?>);">
                                                 </td>
                                                 <td class="center">
                                                     <input type="text" placeholder="Remarks" id="remarks<?php echo $k_1;?>" name="remarks[]">
+                                                </td>
+                                                <td class="center">
+                                                    <input type="time" placeholder="Last Segment Time" id="last_segment_time<?php echo $k_1;?>" name="last_segment_time[]" required="required" <?php if($v_segments['id'] != 4){ ?> readonly="readonly" disabled="disabled" <?php } ?>>
                                                 </td>
                                             </tr>
                                         <?php } ?>
@@ -182,6 +175,18 @@
 
 <script type="text/javascript">
     $('select').select2();
+
+    function lastSegmentTimeCheck(row) {
+        var mp = $("#mp"+row).val();
+        mp = (mp != '' ? mp : 0);
+
+        if(mp > 0){
+            $("#last_segment_time"+row).attr('required', true);
+        }else{
+            $("#last_segment_time"+row).attr('required', false);
+        }
+
+    }
 
     function getLineTarget() {
         var segment = $("#segments").val();
@@ -235,6 +240,13 @@
                                 }
                                 if(segment == 4){
                                     var mp = data[0].man_power_4;
+                                    mp = (mp != '' ? mp : 0);
+
+                                    if(mp > 0){
+                                        $("#last_segment_time"+i).attr('required', true);
+                                    }else{
+                                        $("#last_segment_time"+i).attr('required', false);
+                                    }
                                 }
 
                                 var remarks = data[0].remarks;

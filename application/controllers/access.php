@@ -6187,7 +6187,7 @@ class Access extends CI_Controller {
         $time=$datex->format('H:i:s');
         $date=$datex->format('Y-m-d');
 
-//        $time="17:30:00";
+//        $time="19:30:00";
 
         $data['title'] = 'Line Target Assign';
 
@@ -6239,6 +6239,7 @@ class Access extends CI_Controller {
         $mpr = $this->input->post('mp');
         $trgt_date = $this->input->post('target_date');
         $rmrks = $this->input->post('remarks');
+        $last_segment_times = $this->input->post('last_segment_time');
 
         $date=explode("-", $trgt_date);
 
@@ -6254,6 +6255,7 @@ class Access extends CI_Controller {
             $target = $targets[$k];
             $mp = $mpr[$k];
             $remarks = $rmrks[$k];
+            $last_segment_time = $last_segment_times[$k];
 
 
             $is_inputed = $this->access_model->isLineTargetInputed($ln, $target_date);
@@ -6266,28 +6268,28 @@ class Access extends CI_Controller {
 
                 if($segment_id == 1){
 
-                    $set_fields .= " Set target_hour='$target_hour', target='$target', man_power_1='$mp', remarks='$remarks' ";
+                    $set_fields .= " Set target_hour='$target_hour', target='$target', man_power_1='$mp', man_power_2='$mp', man_power_3='$mp', man_power_4='$mp', remarks='$remarks' ";
 
                     $this->access_model->updateLineTarget($line_id, $target_date, $set_fields);
                 }
 
                 if($segment_id == 2){
 
-                    $set_fields .= " Set target_hour='$target_hour', target='$target', man_power_2='$mp', remarks='$remarks' ";
+                    $set_fields .= " Set target_hour='$target_hour', target='$target', man_power_2='$mp', man_power_3='$mp', man_power_4='$mp', remarks='$remarks' ";
 
                     $this->access_model->updateLineTarget($line_id, $target_date, $set_fields);
                 }
 
                 if($segment_id == 3){
 
-                    $set_fields .= " Set target_hour='$target_hour', target='$target', man_power_3='$mp', remarks='$remarks' ";
+                    $set_fields .= " Set target_hour='$target_hour', target='$target', man_power_3='$mp', man_power_4='$mp', remarks='$remarks' ";
 
                     $this->access_model->updateLineTarget($line_id, $target_date, $set_fields);
                 }
 
                 if($segment_id == 4){
 
-                    $set_fields .= " Set target_hour='$target_hour', target='$target', man_power_4='$mp', remarks='$remarks' ";
+                    $set_fields .= " Set target_hour='$target_hour', last_segment_time='$last_segment_time', target='$target', man_power_4='$mp', remarks='$remarks' ";
 
                     $this->access_model->updateLineTarget($line_id, $target_date, $set_fields);
                 }
@@ -6300,6 +6302,9 @@ class Access extends CI_Controller {
                         'target' => $target,
                         'date' => $target_date,
                         'man_power_1' => $mp,
+                        'man_power_2' => $mp,
+                        'man_power_3' => $mp,
+                        'man_power_4' => $mp,
                         'remarks' => $remarks
                     );
 
@@ -6313,6 +6318,8 @@ class Access extends CI_Controller {
                         'target' => $target,
                         'date' => $target_date,
                         'man_power_2' => $mp,
+                        'man_power_3' => $mp,
+                        'man_power_4' => $mp,
                         'remarks' => $remarks
                     );
 
@@ -6326,6 +6333,7 @@ class Access extends CI_Controller {
                         'target' => $target,
                         'date' => $target_date,
                         'man_power_3' => $mp,
+                        'man_power_4' => $mp,
                         'remarks' => $remarks
                     );
 
@@ -6337,10 +6345,12 @@ class Access extends CI_Controller {
                     $data4=array(
                         'line_id' => $line_id,
                         'target_hour' => $target_hour,
+                        'last_segment_time' => "$last_segment_time",
                         'target' => $target,
                         'date' => $target_date,
                         'man_power_4' => $mp,
                         'remarks' => $remarks
+
                     );
 
                     $this->access_model->insertingData('line_daily_target', $data4);
