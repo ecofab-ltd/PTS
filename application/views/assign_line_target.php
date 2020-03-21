@@ -156,7 +156,7 @@
                                                     <input type="text" placeholder="Remarks" id="remarks<?php echo $k_1;?>" name="remarks[]">
                                                 </td>
                                                 <td class="center">
-                                                    <input type="time" class="last_segment_time" placeholder="Last Segment Time" id="last_segment_time<?php echo $k_1;?>" name="last_segment_time[]" required="required" <?php if($cur_segment != 4){ ?> readonly="readonly" disabled="disabled" <?php } ?>>
+                                                    <input type="time" class="last_segment_time" placeholder="Last Segment Time" id="last_segment_time<?php echo $k_1;?>" name="last_segment_time[]" min="<?php echo $segments[3]['start_time'];?>" max="<?php echo $segments[3]['end_time'];?>" required="required" <?php if($cur_segment != 4){ ?> readonly="readonly" disabled="disabled" <?php } ?>>
                                                 </td>
                                             </tr>
                                         <?php } ?>
@@ -284,10 +284,12 @@
                                 }
 
                                 var remarks = data[0].remarks;
+                                var last_segment_time = (data[0].last_segment_time != '00:00:00' ? data[0].last_segment_time : '');
 
                                 $("#target_hr"+i).val(target_hour);
                                 $("#target"+i).val(target);
                                 $("#mp"+i).val(mp);
+                                $("#last_segment_time"+i).val(last_segment_time);
                                 $("#remarks"+i).val(remarks);
 
                                 $("#mp"+i).blur();
