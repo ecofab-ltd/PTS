@@ -6302,7 +6302,7 @@ class Access extends CI_Controller {
                     $parsed2 = date_parse($last_segment_start_time);
                     $last_segment_start_time_seconds = $parsed2['hour'] * 3600 + $parsed2['minute'] * 60 + $parsed2['second'];
 
-                    $last_segment_time_diff_sec = $last_segment_time_seconds - $last_segment_start_time_seconds;
+                    $last_segment_time_diff_sec = ($last_segment_time_seconds > 0 ? $last_segment_time_seconds : 0) - ($last_segment_start_time_seconds > 0 ? $last_segment_start_time_seconds : 0);
 
                     $last_segment_time_diff_hour = round(($last_segment_time_diff_sec / 3600), 2);
 
@@ -6312,7 +6312,7 @@ class Access extends CI_Controller {
 
 
                     $data5 = array(
-                        'work_minute_4' => $last_segment_time_diff_sec,
+                        'work_minute_4' => $last_segment_time_diff_sec * $mp,
                         'work_hour_4' => $last_segment_time_diff_hour
                     );
 
@@ -6382,7 +6382,7 @@ class Access extends CI_Controller {
                     $parsed2 = date_parse($last_segment_start_time);
                     $last_segment_start_time_seconds = $parsed2['hour'] * 3600 + $parsed2['minute'] * 60 + $parsed2['second'];
 
-                    $last_segment_time_diff_sec = $last_segment_time_seconds - $last_segment_start_time_seconds;
+                    $last_segment_time_diff_sec = ($last_segment_time_seconds > 0 ? $last_segment_time_seconds : 0) - ($last_segment_start_time_seconds > 0 ? $last_segment_start_time_seconds : 0);
 
                     $last_segment_time_diff_hour = round(($last_segment_time_diff_sec / 3600), 2);
 
@@ -6391,7 +6391,7 @@ class Access extends CI_Controller {
 //                    echo '</pre>';
 
                     $data6 = array(
-                        'work_minute_4' => $last_segment_time_diff_sec,
+                        'work_minute_4' => $last_segment_time_diff_sec * $mp,
                         'work_hour_4' => $last_segment_time_diff_hour
                     );
 
