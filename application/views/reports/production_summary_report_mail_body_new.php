@@ -16,12 +16,12 @@
 <div style="align-content: center;">
     <table width="100%">
         <thead>
-            <tr style="background-color: #2fcd25; color: #FFFFFF;">
-                <th colspan="5"><h1>PTS Summary Report</h1></th>
-            </tr>
-            <tr style="background-color: #f7ffb0">
-                <th colspan="5">10 hours Report: <?php echo $previous_date;?></th>
-            </tr>
+        <tr style="background-color: #2fcd25; color: #FFFFFF;">
+            <th colspan="5"><h1>PTS Summary Report</h1></th>
+        </tr>
+        <tr style="background-color: #f7ffb0">
+            <th colspan="5">10 hours Report: <?php echo $previous_date;?></th>
+        </tr>
         </thead>
     </table>
     <br />
@@ -33,21 +33,21 @@
         <tr style="background-color: #f7ffb0;">
             <th>TARGET</th>
             <th>10Hr OUTPUT</th>
-<!--            <th>Extra OT QTY</th>-->
-<!--            <th>TOTAL</th>-->
+            <!--            <th>Extra OT QTY</th>-->
+            <!--            <th>TOTAL</th>-->
         </tr>
         </thead>
         <tbody>
         <tr>
             <th><?php echo $cutting_target[0]['target'];?></th>
             <th><?php echo $cutting_prod[0]['package_ready_qty'];?></th>
-<!--            <th>-->
-<!--                --><?php
-//                $eot_cut_pass = ($cutting_prod[0]['total_cutting_output'] - $cutting_prod[0]['normal_hour_cutting_output']);
-//                echo $eot_cut_pass;
-//                ?>
-<!--            </th>-->
-<!--            <th>--><?php //echo $cutting_prod[0]['total_cutting_output'];?><!--</th>-->
+            <!--            <th>-->
+            <!--                --><?php
+            //                $eot_cut_pass = ($cutting_prod[0]['total_cutting_output'] - $cutting_prod[0]['normal_hour_cutting_output']);
+            //                echo $eot_cut_pass;
+            //                ?>
+            <!--            </th>-->
+            <!--            <th>--><?php //echo $cutting_prod[0]['total_cutting_output'];?><!--</th>-->
         </tr>
         </tbody>
     </table>
@@ -75,20 +75,20 @@
     <br />
     <table width="100%">
         <thead>
-            <tr style="background-color: #0A6EA0; color: #FFFFFF;">
-                <th colspan="9"><h2>Line Report</h2></th>
-            </tr>
-            <tr style="background-color: #f7ffb0;">
-                <th>LINE</th>
-                <th>TARGET</th>
-                <th>10Hr OUTPUT</th>
-                <th>Extra OT QTY</th>
-                <th>TOTAL</th>
-                <th>EFFICIENCY</th>
-                <th>WH</th>
-                <th>DHU</th>
-                <th>Remarks</th>
-            </tr>
+        <tr style="background-color: #0A6EA0; color: #FFFFFF;">
+            <th colspan="9"><h2>Line Report</h2></th>
+        </tr>
+        <tr style="background-color: #f7ffb0;">
+            <th>LINE</th>
+            <th>TARGET</th>
+            <th>10Hr OUTPUT</th>
+            <th>Extra OT QTY</th>
+            <th>TOTAL</th>
+            <th>EFFICIENCY</th>
+            <th>WH</th>
+            <th>DHU</th>
+            <th>Remarks</th>
+        </tr>
         </thead>
         <tbody>
         <?php
@@ -129,11 +129,22 @@
             }
 
             $line_target = $line_pre_info[0]['target'];
+
+            $produce_minute_1 = ($line_pre_info[0]['produce_minute_1'] > 0 ? $line_pre_info[0]['produce_minute_1'] : 0);
+            $produce_minute_2 = ($line_pre_info[0]['produce_minute_2'] > 0 ? $line_pre_info[0]['produce_minute_2'] : 0);
+            $produce_minute_3 = ($line_pre_info[0]['produce_minute_3'] > 0 ? $line_pre_info[0]['produce_minute_3'] : 0);
+            $produce_minute_4 = ($line_pre_info[0]['produce_minute_4'] > 0 ? $line_pre_info[0]['produce_minute_4'] : 0);
+
             $work_hour_1 = ($line_pre_info[0]['work_hour_1'] > 0 ? $line_pre_info[0]['work_hour_1'] : 0);
             $work_hour_2 = ($line_pre_info[0]['work_hour_2'] > 0 ? $line_pre_info[0]['work_hour_2'] : 0);
             $work_hour_3 = ($line_pre_info[0]['work_hour_3'] > 0 ? $line_pre_info[0]['work_hour_3'] : 0);
             $work_hour_4 = ($line_pre_info[0]['work_hour_4'] > 0 ? $line_pre_info[0]['work_hour_4'] : 0);
-            $avg_of_work_hour=round((($work_hour_1+$work_hour_2+$work_hour_3+$work_hour_4) / $man_power_1), 2);
+
+            $work_minute_1 = ($line_pre_info[0]['work_minute_1'] > 0 ? $line_pre_info[0]['work_minute_1'] : 0);
+            $work_minute_2 = ($line_pre_info[0]['work_minute_2'] > 0 ? $line_pre_info[0]['work_minute_2'] : 0);
+            $work_minute_3 = ($line_pre_info[0]['work_minute_3'] > 0 ? $line_pre_info[0]['work_minute_3'] : 0);
+            $work_minute_4 = ($line_pre_info[0]['work_minute_4'] > 0 ? $line_pre_info[0]['work_minute_4'] : 0);
+            $avg_of_work_hour=round(((($work_minute_1+$work_minute_2+$work_minute_3+$work_minute_4) / 60) / $man_power_1), 2);
 
             $line_remarks = $line_pre_info[0]['remarks'];
             $line_efficiency = $line_pre_info[0]['efficiency'];
@@ -186,7 +197,7 @@
                 <td class="center"><?php echo $average_dhu;?></td>
                 <td class="center"><?php echo $remarks;?></td>
             </tr>
-        <?php
+            <?php
             $data_l = array(
 
                 'line_id' => ($v['id'] != '' ? $v['id'] : 0),
@@ -198,6 +209,18 @@
                 'efficiency' => ($line_efficiency != '' ? $line_efficiency : 0),
                 'dhu' => ($average_dhu != '' ? $average_dhu : 0),
                 'date' => $previous_date,
+                'produce_minute_1' => $produce_minute_1,
+                'work_minute_1' => $work_minute_1,
+                'work_hour_1' => $work_hour_1,
+                'produce_minute_2' => $produce_minute_2,
+                'work_minute_2' => $work_minute_2,
+                'work_hour_2' => $work_hour_2,
+                'produce_minute_3' => $produce_minute_3,
+                'work_minute_3' => $work_minute_3,
+                'work_hour_3' => $work_hour_3,
+                'produce_minute_4' => $produce_minute_4,
+                'work_minute_4' => $work_minute_4,
+                'work_hour_4' => $work_hour_4,
                 'remarks' => $remarks
 
             );
@@ -209,39 +232,39 @@
         } ?>
         </tbody>
         <tfoot>
-            <tr>
-                <td align="center"><h3><b>Total</b></h3></td>
-                <td align="center"><h3><b><?php echo $total_line_target;?></b></h3></td>
-                <td align="center"><h3><b><?php echo $total_line_normal_output;?></b></h3></td>
-                <td align="center"><h3><b><?php echo $total_over_time_qty;?></b></h3></td>
-                <td align="center"><h3><b><?php echo $grand_total_output_lines;?></b></h3></td>
-                <td align="center">
-                    <h3><b>
-                            <?php
-                            $total_eff = $total_sum_efficiency / $count_lines;
-                            echo $total_line_efficiency = sprintf('%0.2f', $total_eff);
-                            ?>
+        <tr>
+            <td align="center"><h3><b>Total</b></h3></td>
+            <td align="center"><h3><b><?php echo $total_line_target;?></b></h3></td>
+            <td align="center"><h3><b><?php echo $total_line_normal_output;?></b></h3></td>
+            <td align="center"><h3><b><?php echo $total_over_time_qty;?></b></h3></td>
+            <td align="center"><h3><b><?php echo $grand_total_output_lines;?></b></h3></td>
+            <td align="center">
+                <h3><b>
+                        <?php
+                        $total_eff = $total_sum_efficiency / $count_lines;
+                        echo $total_line_efficiency = sprintf('%0.2f', $total_eff);
+                        ?>
                     </b></h3>
-                </td>
-                <td align="center"></td>
-                <td align="center"></td>
-                <td align="center"></td>
-            </tr>
+            </td>
+            <td align="center"></td>
+            <td align="center"></td>
+            <td align="center"></td>
+        </tr>
         </tfoot>
     </table>
     <br />
     <table width="100%">
         <thead>
-            <tr style="background-color: #5d6155; color: #FFFFFF;">
-                <th colspan="5" class="center"><h2>Finishing Report</h2></th>
-            </tr>
-            <tr style="background-color: #f7ffb0;">
-                <th align="center">FLOOR</th>
-                <th align="center">TARGET</th>
-                <th align="center">10Hr OUTPUT</th>
-                <th align="center">Second Shift</th>
-                <th align="center">TOTAL</th>
-            </tr>
+        <tr style="background-color: #5d6155; color: #FFFFFF;">
+            <th colspan="5" class="center"><h2>Finishing Report</h2></th>
+        </tr>
+        <tr style="background-color: #f7ffb0;">
+            <th align="center">FLOOR</th>
+            <th align="center">TARGET</th>
+            <th align="center">10Hr OUTPUT</th>
+            <th align="center">Second Shift</th>
+            <th align="center">TOTAL</th>
+        </tr>
         </thead>
         <tbody>
         <?php
@@ -259,7 +282,7 @@
                 <td align="center"><?php echo $over_time_finish_qty;?></td>
                 <td align="center"><?php echo $f['total_finishing_output'];?></td>
             </tr>
-        <?php
+            <?php
             $data_f = array(
 
                 'floor_id' => ($f['finishing_floor_id'] != '' ? $f['finishing_floor_id'] : 0),

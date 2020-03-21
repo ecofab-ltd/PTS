@@ -21,6 +21,16 @@ class Access_model extends CI_Model {
         return $query;
     }
 
+    public function getSegmentList($where)
+    {
+        $sql = "SELECT *
+                FROM `tb_segment` 
+                WHERE 1 $where";
+
+        $query = $this->db->query($sql)->result_array();
+        return $query;
+    }
+
     public function isDefectAvailable($carelabel_tracking_no, $line, $access_points, $defect_code, $date_time)
     {
         $sql = "SELECT * FROM `tb_defects_tracking`

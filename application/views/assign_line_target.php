@@ -67,17 +67,28 @@
 <!--                </div>-->
 <!--            </div>-->
 
+            <?php
+
+            $cur_segment = $segment[0]['id'];
+
+            ?>
+
             <div class="col-md-2">
                 <div class="form-group">
-                    <select name="segments" id="segments">
+                    <select name="segments" id="segments" required="required" onchange="lastSegmentLastHourFieldOpenClose()">
 
-<!--                                                <option value="4">4nd segment</option>';-->
-<!--                                                <input type="hidden" name="segment_id" value="--><?php //echo 4; ?><!--">-->
+                        <option value="">Select Segment</option>
 
-                        <?php foreach($segments as $v_segments){ ?>
-                            <option value="<?php echo $v_segments['id']; ?>"><?php echo $v_segments['name']; ?></option>';
-                            <input type="hidden" name="segment_id" value="<?php echo $v_segments['id']; ?>">
-                        <?php } ?>
+                        <?php foreach($segments as $v_segments){
+
+                            if($v_segments['id'] >= $cur_segment){
+                            ?>
+                            <option value="<?php echo $v_segments['id']; ?>" <?php if($cur_segment == $v_segments['id']){ ?> selected="selected" <?php } ?>><?php echo $v_segments['name']; ?></option>
+<!--                            <input type="hidden" name="segment_id" value="--><?php //echo $v_segments['id']; ?><!--">-->
+                        <?php
+                            }
+                        }
+                        ?>
 
                     </select>
                 </div>
@@ -145,7 +156,7 @@
                                                     <input type="text" placeholder="Remarks" id="remarks<?php echo $k_1;?>" name="remarks[]">
                                                 </td>
                                                 <td class="center">
-                                                    <input type="time" placeholder="Last Segment Time" id="last_segment_time<?php echo $k_1;?>" name="last_segment_time[]" required="required" <?php if($v_segments['id'] != 4){ ?> readonly="readonly" disabled="disabled" <?php } ?>>
+                                                    <input type="time" class="last_segment_time" placeholder="Last Segment Time" id="last_segment_time<?php echo $k_1;?>" name="last_segment_time[]" required="required" <?php if($cur_segment != 4){ ?> readonly="readonly" disabled="disabled" <?php } ?>>
                                                 </td>
                                             </tr>
                                         <?php } ?>
@@ -176,15 +187,38 @@
 <script type="text/javascript">
     $('select').select2();
 
+    function lastSegmentLastHourFieldOpenClose() {
+        var segments = $("#segments").val();
+
+        if(segments == 4){
+            $(".last_segment_time").attr('required', true);
+            $(".last_segment_time").attr('disabled', false);
+            $(".last_segment_time").attr('readonly', false);
+        }else{
+            $(".last_segment_time").attr('required', false);
+            $(".last_segment_time").attr('disabled', true);
+            $(".last_segment_time").attr('readonly', true);
+        }
+    }
+
     function lastSegmentTimeCheck(row) {
+        var segments = $("#segments").val();
+
         var mp = $("#mp"+row).val();
         mp = (mp != '' ? mp : 0);
 
-        if(mp > 0){
-            $("#last_segment_time"+row).attr('required', true);
-        }else{
-            $("#last_segment_time"+row).attr('required', false);
+        if(segments == 4){
+            if(mp > 0){
+                $("#last_segment_time"+row).attr('required', true);
+                $("#last_segment_time"+row).attr('disabled', false);
+                $("#last_segment_time"+row).attr('readonly', false);
+            }else{
+                $("#last_segment_time"+row).attr('required', false);
+                $("#last_segment_time"+row).attr('disabled', true);
+                $("#last_segment_time"+row).attr('readonly', true);
+            }
         }
+
 
     }
 
@@ -255,6 +289,8 @@
                                 $("#target"+i).val(target);
                                 $("#mp"+i).val(mp);
                                 $("#remarks"+i).val(remarks);
+
+                                $("#mp"+i).blur();
 
                                 $("#loader").css("display", "none");
                             }

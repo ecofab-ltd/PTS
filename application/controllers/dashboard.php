@@ -2772,6 +2772,7 @@ class Dashboard extends CI_Controller {
     }
 
     public function lineWiseWipDetailReport($line_name, $line_id, $search_date){
+        $data['line_id'] = $line_id;
         $data['line_name'] = $line_name;
         $data['search_date'] = $search_date;
 
@@ -5546,7 +5547,7 @@ class Dashboard extends CI_Controller {
 
         $where = '';
         if($line_id != ''){
-            $where .= " AND line_id=$line_id'";
+            $where .= " AND line_id=$line_id";
         }
 
         if($date != ''){

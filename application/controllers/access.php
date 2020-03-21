@@ -6208,7 +6208,11 @@ class Access extends CI_Controller {
 
         $data['time']=$datex;
         $data['lines'] = $this->access_model->getLines($where);
-        $data['segments'] = $this->access_model->getSegments($time);
+
+        $where_1 = '';
+
+        $data['segment'] = $this->access_model->getSegments($time);
+        $data['segments'] = $this->access_model->getSegmentList();
 
 //        echo '<pre>';
 //        print_r($data['segments']);
@@ -6232,7 +6236,7 @@ class Access extends CI_Controller {
     }
 
     public function assignLineTarget(){
-        $segment_id = $this->input->post('segment_id');
+        $segment_id = $this->input->post('segments');
         $lines = $this->input->post('line_id');
         $targets = $this->input->post('target');
         $target_hr = $this->input->post('target_hr');
