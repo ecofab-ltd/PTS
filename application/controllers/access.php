@@ -6245,12 +6245,12 @@ class Access extends CI_Controller {
         $rmrks = $this->input->post('remarks');
         $last_segment_times = $this->input->post('last_segment_time');
 
+
         $date=explode("-", $trgt_date);
 
         $target_date = $date[2].'-'.$date[0].'-'.$date[1];
 
         $target=0;
-
 
 
         foreach ($lines as $k => $ln){
@@ -6263,7 +6263,6 @@ class Access extends CI_Controller {
 
 
             $is_inputed = $this->access_model->isLineTargetInputed($ln, $target_date);
-
 
 
             if(sizeof($is_inputed) > 0){
@@ -6292,6 +6291,33 @@ class Access extends CI_Controller {
                 }
 
                 if($segment_id == 4){
+
+                    $res = $this->access_model->getSegmentList(' AND id=4');
+                    $last_segment_start_time = $res[0]['start_time'];
+
+
+                    $parsed1 = date_parse($last_segment_time);
+                    $last_segment_time_seconds = $parsed1['hour'] * 3600 + $parsed1['minute'] * 60 + $parsed1['second'];
+
+                    $parsed2 = date_parse($last_segment_start_time);
+                    $last_segment_start_time_seconds = $parsed2['hour'] * 3600 + $parsed2['minute'] * 60 + $parsed2['second'];
+
+                    $last_segment_time_diff_sec = $last_segment_time_seconds - $last_segment_start_time_seconds;
+
+                    $last_segment_time_diff_hour = round(($last_segment_time_diff_sec / 3600), 2);
+
+//                    echo '<pre>';
+//                    print_r($last_segment_time_diff_hour.'  '.$last_segment_time_diff_sec);
+//                    echo '</pre>';
+
+
+                    $data5 = array(
+                        'work_minute_4' => $last_segment_time_diff_sec,
+                        'work_hour_4' => $last_segment_time_diff_hour
+                    );
+
+                    $this->access_model->updateTblNew('tb_today_line_output_qty', 'line_id', $line_id, $data5);
+
 
                     $set_fields .= " Set target_hour='$target_hour', last_segment_time='$last_segment_time', target='$target', man_power_4='$mp', remarks='$remarks' ";
 
@@ -6345,6 +6371,31 @@ class Access extends CI_Controller {
                 }
 
                 if($segment_id == 4){
+
+                    $res = $this->access_model->getSegmentList(' AND id=4');
+                    $last_segment_start_time = $res[0]['start_time'];
+
+
+                    $parsed1 = date_parse($last_segment_time);
+                    $last_segment_time_seconds = $parsed1['hour'] * 3600 + $parsed1['minute'] * 60 + $parsed1['second'];
+
+                    $parsed2 = date_parse($last_segment_start_time);
+                    $last_segment_start_time_seconds = $parsed2['hour'] * 3600 + $parsed2['minute'] * 60 + $parsed2['second'];
+
+                    $last_segment_time_diff_sec = $last_segment_time_seconds - $last_segment_start_time_seconds;
+
+                    $last_segment_time_diff_hour = round(($last_segment_time_diff_sec / 3600), 2);
+
+//                    echo '<pre>';
+//                    print_r($last_segment_time_diff_hour.'  '.$last_segment_time_diff_sec);
+//                    echo '</pre>';
+
+                    $data6 = array(
+                        'work_minute_4' => $last_segment_time_diff_sec,
+                        'work_hour_4' => $last_segment_time_diff_hour
+                    );
+
+                    $this->access_model->updateTblNew('tb_today_line_output_qty', 'line_id', $line_id, $data6);
 
                     $data4=array(
                         'line_id' => $line_id,
