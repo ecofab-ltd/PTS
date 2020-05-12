@@ -1,7 +1,7 @@
 <table class="display table table-bordered table-striped" id="">
     <thead>
     <tr style="background-color: #0A6EA0; color: #FFFFFF;">
-        <th colspan="9" class="center"><h2>Line Report</h2></th>
+        <th colspan="10" class="center"><h2>Line Report</h2></th>
     </tr>
     <tr style="background-color: #f7ffb0;">
         <th class="center">LINE</th>
@@ -9,9 +9,10 @@
         <th class="center">OUTPUT</th>
         <th class="center">EXTRA QTY</th>
         <th class="center">TOTAL</th>
-        <th class="center">EFFICIENCY</th>
+        <th class="center">EFFI.</th>
         <th class="center">DHU</th>
         <th class="center">WH</th>
+        <th class="center">MP</th>
         <th class="center">REMARKS</th>
     </tr>
     </thead>
@@ -44,6 +45,7 @@
             <td class="center"><?php echo $v['efficiency']; ?></td>
             <td class="center"><?php echo $v['dhu']; ?></td>
             <td class="center"><?php echo $v['work_hour']; ?></td>
+            <td class="center"><?php echo $v['man_power_1']; ?></td>
             <td class="center"><?php echo $v['remarks']; ?></td>
         </tr>
         <?php
@@ -72,6 +74,7 @@
         </td>
         <td align="center"></td>
         <td align="center"><h5><b><?php echo $avg_work_hour;?></b></h5></td>
+        <td align="center"></td>
         <td align="center"></td>
     </tr>
     </tfoot>

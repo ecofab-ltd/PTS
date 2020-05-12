@@ -104,6 +104,7 @@
         $total_sum_efficiency=0;
         $total_wh=0;
         $total_avg_wh=0;
+        $total_base_mp=0;
         $count_lines=0;
         $over_time_qty = 0;
 
@@ -135,8 +136,10 @@
             $over_time_qty = $v['eot_output'];
             $dhu = $v['dhu'];
             $work_hour = $v['work_hour'];
+            $base_mp = $v['man_power_1'];
 
-            $total_wh += $work_hour;
+            $total_base_mp += $base_mp;
+            $total_wh += ($work_hour * $base_mp);
 
 //            echo '<pre>';
 //            print_r($extra_line_qty);
@@ -204,7 +207,7 @@
 
         }
 
-        $total_avg_wh = round(($total_wh / $count_lines), 2);
+        $total_avg_wh = round(($total_wh / $total_base_mp), 2);
         ?>
         </tbody>
         <tfoot>

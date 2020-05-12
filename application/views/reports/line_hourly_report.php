@@ -220,8 +220,9 @@
         </tr>
 
         <?php
-            $count_line++;
-
+            if($line_rep[0]['efficiency'] > 0){
+                $count_line++;
+            }
             $grand_total_target += $line_info[0]['target'];
             $grand_total_output += $total_output;
             $grand_total_line_target_per_hour += $line_target_per_hour;
@@ -274,13 +275,15 @@
                 $count_lines = 0;
 
                 foreach ($floor_eff as $fe){
-                    $floor_total_efficiency += $fe['efficiency'];
+                    if($fe['efficiency'] > 0){
+                        $floor_total_efficiency += $fe['efficiency'];
 
-//                            echo '<pre>';
-//                            print_r($floor_total_efficiency);
-//                            echo '</pre>';
+    //                            echo '<pre>';
+    //                            print_r($floor_total_efficiency);
+    //                            echo '</pre>';
 
-                    $count_lines++;
+                        $count_lines++;
+                    }
                 }
 
                 foreach ($floor_lines_target as $fl){

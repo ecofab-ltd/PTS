@@ -6304,6 +6304,7 @@ class Access extends CI_Controller {
 
                     $last_segment_time_diff_sec = ($last_segment_time_seconds > 0 ? $last_segment_time_seconds : 0) - ($last_segment_start_time_seconds > 0 ? $last_segment_start_time_seconds : 0);
 
+                    $last_segment_time_diff_min = round(($last_segment_time_diff_sec / 60), 2);
                     $last_segment_time_diff_hour = round(($last_segment_time_diff_sec / 3600), 2);
 
 //                    echo '<pre>';
@@ -6312,7 +6313,7 @@ class Access extends CI_Controller {
 
 
                     $data5 = array(
-                        'work_minute_4' => $last_segment_time_diff_sec * $mp,
+                        'work_minute_4' => $last_segment_time_diff_min * $mp,
                         'work_hour_4' => $last_segment_time_diff_hour
                     );
 
@@ -6384,6 +6385,7 @@ class Access extends CI_Controller {
 
                     $last_segment_time_diff_sec = ($last_segment_time_seconds > 0 ? $last_segment_time_seconds : 0) - ($last_segment_start_time_seconds > 0 ? $last_segment_start_time_seconds : 0);
 
+                    $last_segment_time_diff_min = round(($last_segment_time_diff_sec / 60), 2);
                     $last_segment_time_diff_hour = round(($last_segment_time_diff_sec / 3600), 2);
 
 //                    echo '<pre>';
@@ -6391,7 +6393,7 @@ class Access extends CI_Controller {
 //                    echo '</pre>';
 
                     $data6 = array(
-                        'work_minute_4' => $last_segment_time_diff_sec * $mp,
+                        'work_minute_4' => $last_segment_time_diff_min * $mp,
                         'work_hour_4' => $last_segment_time_diff_hour
                     );
 

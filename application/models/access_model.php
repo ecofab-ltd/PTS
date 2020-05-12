@@ -146,7 +146,7 @@ class Access_model extends CI_Model {
         $sql = "SELECT t1.*, t2.*
                 FROM (SELECT * FROM `tb_line` WHERE floor=$floor_id) AS t1
                 LEFT JOIN
-                (SELECT line_id, efficiency 
+                (SELECT line_id, efficiency
                  FROM `tb_today_line_output_qty`
                  GROUP BY line_id) AS t2
                 ON t1.id=t2.line_id";

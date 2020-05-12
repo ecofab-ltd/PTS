@@ -89,7 +89,7 @@ foreach ($floors as $v_f){
     <tr style="background-color: #f7ffb0;">
         <th class="center">LINE</th>
         <th class="center">TARGET</th>
-        <th class="center">TOTAL</th>
+        <th class="center">OUTPUT</th>
         <th class="center">EFFICIENCY</th>
         <th class="center">WIP</th>
         <th class="center">DHU</th>

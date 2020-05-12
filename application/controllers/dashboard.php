@@ -2157,24 +2157,27 @@ class Dashboard extends CI_Controller {
 
         /* Total Efficiency Calculation Start */
         $floor_eff_sum=0;
+        $floor_count=0;
+
         $floor_efficiency_array = array();
 
         $floors = $this->access_model->getFloors();
 
-        $floor_count = sizeof($floors);
+//        $floor_count = sizeof($floors);
 
         foreach ($floors as $vf){
             $floor_id = $vf['id'];
 
             $floor_sum_efficiency = 0;
             $floor_efficiency = 0;
+            $line_count = 0;
 
             $where = '';
             $where .= " AND floor=$floor_id";
-
+//
             $lines = $this->dashboard_model->getAllLinesByCondition($where);
-
-            $line_count = sizeof($lines);
+//
+//            $line_count = sizeof($lines);
 
             foreach ($lines as $vl){
 
@@ -2184,7 +2187,12 @@ class Dashboard extends CI_Controller {
                 $where_1 .= " AND line_id=$line_id";
 
                 $line_output_report = $this->dashboard_model->getLineReport($previous_date, $where_1);
-                $floor_sum_efficiency += $line_output_report[0]['efficiency'];
+
+                if($line_output_report[0]['efficiency'] > 0){
+                    $floor_sum_efficiency += $line_output_report[0]['efficiency'];
+
+                    $line_count++;
+                }
 
                 $floor_efficiency = round($floor_sum_efficiency/$line_count, 2);
             }
@@ -2193,7 +2201,11 @@ class Dashboard extends CI_Controller {
         }
 
         foreach ($floor_efficiency_array as $ve){
-            $floor_eff_sum += $ve;
+            if($ve > 0){
+                $floor_eff_sum += $ve;
+
+                $floor_count++;
+            }
         }
 
         $floor_line_efficiency = round($floor_eff_sum/$floor_count, 2);
@@ -5363,7 +5375,7 @@ class Dashboard extends CI_Controller {
 
 
         $time=$datex->format('H:i:s');
-//        $time="19:01:00";
+//        $time="19:05:00";
         $data['time'] = $time;
 
 
