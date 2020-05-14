@@ -2176,7 +2176,7 @@ class Dashboard extends CI_Controller {
             $where .= " AND floor=$floor_id";
 //
             $lines = $this->dashboard_model->getAllLinesByCondition($where);
-//
+
 //            $line_count = sizeof($lines);
 
             foreach ($lines as $vl){
@@ -3504,10 +3504,7 @@ class Dashboard extends CI_Controller {
             $where .= " AND color = '$color'";
         }
 
-
-
         $get_data['order_info'] = $this->dashboard_model->getPoOrderPackingInfobyPo($where);
-
 
 
         $maincontent = $this->load->view('po_wise_size_cutting_report', $get_data, true);

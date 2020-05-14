@@ -62,7 +62,7 @@
                                 }
 //                          ?>
                         </select>
-                        <span style="font-size: 11px;">* Select SO_PO_Item_Quality_Color</span>
+                        <span style="font-size: 11px;">* SO_PO_Item_Quality_Color_ExFacDate_Type</span>
                     </div>
                 </div>
                 <div class="col-md-1" id="loader" style="display: none;"><div class="loader"></div></div>

@@ -277,7 +277,13 @@
                   <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>dashboard/cutPackageReportChart"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b> Package Ready Chart </b> </a> </li>
               </ul>
             </li>
-            <li> <a href="<?php echo base_url();?>access/poInfoReport"><i class="fa fa-circle"></i> PO Info </a></li>
+            <li> <a href="javascript:void(0);"> <i class="fa fa-bar-chart-o"></i> PO Info <span class="plus"><i class="fa fa-plus"></i></span></a>
+                <ul>
+                    <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>access/poInfoReport"><i class="fa fa-circle"></i> Date Wise PO </a> </li>
+                    <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>access/poSearchReport"><i class="fa fa-circle"></i> PO Search </a> </li>
+                </ul>
+            </li>
+            <li> </li>
 
             <?php
                 }

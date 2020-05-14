@@ -85,7 +85,7 @@ $sl++;
             echo $code;
             ?>
         </div><br />
-        <?php if($brand != "OLYMP" && $brand != "TIMBERLAND" && $brand != "M&S T11" && $brand != "M&S T25" && $brand != "M&ST11" && $brand != "M&ST25" && $brand != "M&S"){ ?>
+        <?php if($brand != "OLYMP" && $brand != "WOOLWORTH" && $brand != "TIMBERLAND" && $brand != "M&S T11" && $brand != "M&S T25" && $brand != "M&ST11" && $brand != "M&ST25" && $brand != "M&S"){ ?>
             <span style="float: left;">--|-----------------|--</span>
             <br />
             <span style="margin-left: 45px !important; font-size: 55px !important;"><b>+</b></span>
