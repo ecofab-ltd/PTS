@@ -188,7 +188,9 @@ foreach ($floors as $v_f){
 </table>
 
 <?php
-    $count_floor++;
+    if($total_line_efficiency > 0){
+        $count_floor++;
+    }
 
     $grand_total_target +=  $total_line_target;
     $grand_total_output +=  $total_line_output;
