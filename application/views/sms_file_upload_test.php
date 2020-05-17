@@ -58,9 +58,9 @@
                             <select required type="text" class="form-control" id="po_type" name="po_type">
                                 <option value="">Select PO Type...</option>
 
-                                <option value="0">BULK</option>
+                                <option value="0">Bulk</option>
                                 <option value="1">Size Set</option>
-                                <option value="2">sample</option>
+                                <option value="2">Sample</option>
 
 
                             </select>
