@@ -478,7 +478,7 @@ class Dashboard extends CI_Controller {
 //        $this->output->clear_all_cache();
 
         $where = '';
-        $where .= " AND brand in ('BBD', 'BMB', 'BBS', 'BGM', 'BMA', 'BMC', 'BMS', 'BOM', 'HUGO', 'HUM', 'M&S T11', 'M&ST11', 'M&S', 'TIMBERLAND', 'CONBIPEL', 'MOSS')";
+        $where .= " AND brand in ('BBD', 'BMB', 'BBS', 'BGM', 'BMA', 'BMC', 'BMS', 'BOM', 'HUGO', 'HUM', 'M&S T11', 'M&ST11', 'M&S', 'TIMBERLAND', 'CONBIPEL', 'MOSS', 'WOOLWORTH')";
 
 //        $data['prod_summary'] = $this->dashboard_model->getProductionSummaryReport($where);
         $data['prod_summary'] = $this->dashboard_model->getProductionReport($where);
