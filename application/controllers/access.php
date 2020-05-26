@@ -1219,7 +1219,7 @@ class Access extends CI_Controller {
             $h_data = array(
                 'id' => 11,
                 'hour' => 11,
-                'start_time' => "19:00:00",
+                'start_time' => "18:00:00",
                 'end_time' => "23:59:59",
                 'u_id' => 0
             );
