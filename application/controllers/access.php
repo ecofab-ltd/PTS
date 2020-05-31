@@ -2062,7 +2062,13 @@ class Access extends CI_Controller {
             if($finishing_qc_status != 2){
                 $this->access_model->sendToLineForAlter($pc_no, $floor_id, $status, $date_time);
 
-                echo "$line";
+                if($status == 1){
+                    echo "Pass From $line";
+                }
+                if($status == 2){
+                    echo "Sent to $line";
+                }
+
             }elseif ($finishing_qc_status == 2){
                 echo "line pending";
             }

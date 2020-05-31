@@ -2291,12 +2291,18 @@ class Dashboard extends CI_Controller {
 
 
         $count_finishing_output=0;
+        $count_line_output=0;
+
+        foreach ($data['line_prod'] as $v_1){
+            $count_line_output += $v_1['output'];
+        }
 
         foreach ($data['finishing_prod'] as $v_2){
             $count_finishing_output += $v_2['output'];
         }
 
-        if( $count_finishing_output !=0){
+
+        if( $count_line_output != 0){
             $new_row_tbl = '';
             $new_row_tbl .= "$mail_content";
 

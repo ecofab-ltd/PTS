@@ -162,7 +162,7 @@
 
                     if(data != '' && data != 'pass pending' && data != 'line pending'){
                         $("#exception").empty();
-                        $("#message").text(care_label_no+" Sent to "+data);
+                        $("#message").text(care_label_no+" "+data);
                     }
 
                     if(data == 'line pending'){
@@ -217,7 +217,7 @@
 
                     if(data != '' && data != 'pass pending' && data != 'line pending'){
                         $("#exception").empty();
-                        $("#message").text(care_label_no+" Sent to "+data);
+                        $("#message").text(care_label_no+" "+data);
                     }
 
                     if(data == 'line pending'){
