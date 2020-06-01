@@ -79,9 +79,9 @@
 
 
                                             <tr>
-                                                <td class="center">Cut No *</td>
+                                                <td class="center">Cut No </td>
                                                 <td class="center">
-                                                    <select id="cut_no" name="cut_no" required onchange="cutNoSelectionCheck();">
+                                                    <select id="cut_no" name="cut_no" onchange="cutNoSelectionCheck();">
                                                         <option value="">Select Cut No</option>
                                                     </select>
                                                 </td>
@@ -90,7 +90,7 @@
 
 
                                             <tr>
-                                                <td class="center">Size *</td>
+                                                <td class="center">Size </td>
                                                 <td class="center">
                                                     <select id="size" name="size"  onchange="lineSelectionCheck();">
                                                         <option value="">Select Size</option>
@@ -218,7 +218,7 @@
         var line_no_from = $("#line_no_from").val();
 
 
-        if(so_no != '' && cut_no != '' && line_no_from != ''){
+        if(so_no != '' && line_no_from != ''){
 
             $.ajax({
                 url: "<?php echo base_url();?>access/getTotalScannedQty/",

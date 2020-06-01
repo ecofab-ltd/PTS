@@ -2577,7 +2577,7 @@ class Access extends CI_Controller {
             $where .= " AND size = '$size'";
         }
         if($line_no_from != ''){
-            $where .= " AND line_id = '$line_no_from'";
+            $where .= " AND line_id = '$line_no_from' AND access_points != 4 AND access_points_status != 4";
         }
 
         $res = $this->access_model->getTotalScannedQty($where);
@@ -2605,7 +2605,7 @@ class Access extends CI_Controller {
             $where .= " AND size = '$size'";
         }
         if($line_no_from != ''){
-            $where .= " AND line_id = '$line_no_from'";
+            $where .= " AND line_id = '$line_no_from' AND access_points != 4 AND access_points_status != 4";
         }
 
         $this->access_model->changingLinePlan( $line_no_to, $where);
