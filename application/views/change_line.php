@@ -173,9 +173,6 @@
             });
         }
 
-
-
-
     }
 
     function lineSelectionCheck() {
@@ -204,6 +201,8 @@
                     $("#size").append(data);
                 }
             });
+        }else{
+            location.reload();
         }
     }
 

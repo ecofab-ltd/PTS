@@ -171,6 +171,7 @@ $dataPoints = array(
 
                     </div>
                 </section>
+
             </div>
             <div class="col-md-2">
                 <div class="information red_info">

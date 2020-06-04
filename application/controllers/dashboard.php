@@ -4962,6 +4962,10 @@ class Dashboard extends CI_Controller {
         $this->load->view('master_line', $data);
     }
 
+    public function updatePerHourTarget($line_id, $start_time, $end_time, $per_hour_actual_target){
+        $this->dashboard_model->updatePerHourTarget($line_id, $start_time, $end_time, $per_hour_actual_target);
+    }
+
     public function allLinePerformanceDashboard(){
         $data['title'] = 'EcoFab Line Performance';
 
@@ -5060,7 +5064,7 @@ class Dashboard extends CI_Controller {
         $data['line_target'] = $floor_target;
         $data['line_target_hour'] = $floor_target_hour;
 
-        echo $data['maincontent'] = $this->load->view('line_hourly_output_reload', $data, true);
+        echo $data['maincontent'] = $this->load->view('finishing_hourly_output_reload', $data, true);
     }
 
     public function getLineHourlyReport($line_id, $start_time, $end_time){

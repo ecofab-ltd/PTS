@@ -413,6 +413,7 @@
                 ?>
                 <!--            <li> <a href="--><?php //echo base_url();?><!--access/care_label_end_line"><i class="fa fa-circle"></i> End-Line QC</a></li>-->
                 <li> <a href="<?php echo base_url();?>access/smv_form"><i class="fa fa-circle"></i> Set SMV </a></li>
+                <li> <a href="<?php echo base_url();?>access/change_line"><i class="fa fa-exchange"></i> Change Line </a></li>
 <!--                <li> <a href="--><?php //echo base_url();?><!--access/manage_bundle_line"><i class="fa fa-circle"></i> Bundle-Line </a></li>-->
 <!--                <li> <a href="--><?php //echo base_url();?><!--access/washReport"><i class="fa fa-circle"></i> Wash Report </a></li>-->
                 <li> <a href="<?php echo base_url();?>access/aqlPlan"><i class="fa fa-circle"></i> AQL Plan </a></li>

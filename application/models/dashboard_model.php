@@ -3768,6 +3768,16 @@ class Dashboard_model extends CI_Model {
         return $query;
     }
 
+    public function updatePerHourTarget($line_id, $start_time, $end_time, $per_hour_actual_target){
+        $sql="UPDATE `tb_today_line_output_qty`
+              SET target_hr='$per_hour_actual_target'
+              WHERE start_time='$start_time' AND end_time='$end_time'
+              AND `line_id`=$line_id";
+
+        $query = $this->db->query($sql);
+        return $query;
+    }
+
     public function updateTbl($tbl, $id, $data)
     {
         $this->db->where('id', $id);

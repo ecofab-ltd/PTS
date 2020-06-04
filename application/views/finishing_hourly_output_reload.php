@@ -19,17 +19,17 @@ $dataPoints = array(
     array("label"=>"Output", "y"=>$line_output)
 );
 
-foreach ($line_report as $k_3 => $v_3){
-    $per_hour_target = round(($line_target != '' ? $line_target : 0)/$line_target_hour);
-
-    $time_diff = number_format((strtotime($v_3['end_time']) - strtotime($v_3['start_time'])) / 3600, 2);
-
-    $extra_time = $time_diff - floor($time_diff);
-
-    $per_hour_actual_target = round($per_hour_target + ($per_hour_target * $extra_time));
-
-    $this->method_call->updatePerHourTarget($line_id, $v_3['start_time'], $v_3['end_time'], $per_hour_actual_target);
-}
+//foreach ($line_report as $k_3 => $v_3){
+//    $per_hour_target = round(($line_target != '' ? $line_target : 0)/$line_target_hour);
+//
+//    $time_diff = number_format((strtotime($v_3['end_time']) - strtotime($v_3['start_time'])) / 3600, 2);
+//
+//    $extra_time = $time_diff - floor($time_diff);
+//
+//    $per_hour_actual_target = round($per_hour_target + ($per_hour_target * $extra_time));
+//
+//    $this->method_call->updatePerHourTarget($line_id, $v_3['start_time'], $v_3['end_time'], $per_hour_actual_target);
+//}
 
 ?>
 
@@ -68,7 +68,7 @@ foreach ($line_report as $k_3 => $v_3){
                             color: "#f9ae00",
                             dataPoints: [
                                 <?php foreach ($line_report as $k_1 => $v_1){ ?>
-                                { label: "<?php echo date('H:i', strtotime($v_1['start_time'])).'-'.date('H:i', strtotime($v_1['end_time']));?>", y: <?php echo $v_1['target_hr'];?> },
+                                { label: "<?php echo date('H:i', strtotime($v_1['start_time'])).'-'.date('H:i', strtotime($v_1['end_time']));?>", y: <?php echo round(($line_target != '' ? $line_target : 0)/$line_target_hour);?> },
                                 <?php } ?>
                             ]
                         }

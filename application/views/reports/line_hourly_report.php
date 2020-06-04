@@ -192,7 +192,7 @@
                     <?php
                     if($lr['qty'] > 0){
 
-                    if($line_target_per_hour > $lr['qty']){?>
+                    if($lr['target_hr'] > $lr['qty']){?>
                     style="background-color: rgba(255,117,111,0.8);"
                     <?php }else{ ?>
                     style="background-color: rgba(164,255,130,0.8);"
@@ -204,7 +204,7 @@
                     <?php
                     $total_output += $lr['qty'];
 
-                    $blnc = ($line_target_per_hour - $lr['qty']);
+                    $blnc = ($lr['target_hr'] - $lr['qty']);
                     $balance = round($blnc * (-1), 2);
                     echo $lr['qty'].' ( '.$balance.' ) ';
                     ?>
