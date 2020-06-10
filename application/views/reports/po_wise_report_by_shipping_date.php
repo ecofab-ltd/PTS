@@ -42,7 +42,7 @@ foreach ($dates as $dt){
 <table class="display table table-bordered table-striped" id="" border="1">
     <thead>
     <tr>
-        <th class="hidden-phone center" colspan="28"><h3>Ship Date: <?php echo $dt['ex_factory_date'];?></h3></th>
+        <th class="hidden-phone center" colspan="29"><h3>Ship Date: <?php echo $dt['ex_factory_date'];?></h3></th>
     </tr>
     <tr>
         <th class="hidden-phone center">SO</th>
