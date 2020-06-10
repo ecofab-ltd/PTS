@@ -89,7 +89,7 @@ foreach ($line_report as $k_3 => $v_3){
 
                                 $line_hour_target = (round(($line_target != '' ? $line_target : 0)/$line_target_hour));
 
-                                $color_code = (($line_hour_target <= $hourly_qty) ? "#28a832" : "#ad1d0a");
+                                $color_code = (($v_2['target_hr'] <= $hourly_qty) ? "#28a832" : "#ad1d0a");
                                 ?>
 
                                 { label: "<?php echo date('H:i', strtotime($v_2['start_time'])).'-'.date('H:i', strtotime($v_2['end_time']));?>", y: <?php echo $hourly_qty;?>, color: '<?php echo $color_code;?>' },
