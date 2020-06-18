@@ -219,6 +219,7 @@
                 <li> <a href="<?php echo base_url();?>access/delete_cutting"><i class="fa fa-trash-o"></i> Delete Cutting </a></li>
                 <li> <a href="<?php echo base_url();?>access/sms_file_upload_test"><i class="fa fa-cloud-upload"></i> Manual File Upload </a></li>
                 <li> <a href="<?php echo base_url();?>access/backup_db"><i class="fa fa-archive"></i> Backup DB </a></li>
+                <li> <a href="<?php echo base_url();?>access/autoDbBackup"><i class="fa fa-archive"></i> Prod. Summary Backup </a></li>
             <?php
             }
 

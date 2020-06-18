@@ -1109,23 +1109,25 @@ class Access extends CI_Controller {
         $where = '';
 
         foreach ($sales_orders as $k_1 => $v_1){
-            $po = $v_1;
+            $so = $v_1;
             $purchase_order = $purchase_orders[$k_1];
             $item = $items[$k_1];
 
-            if($po != ''){
-                $where .= " AND po_no like '%$po%'";
+            if($so != ''){
+                $where .= " AND so_no = '$so'";
             }
 
             if($purchase_order != ''){
-                $where .= " AND purchase_order like '%$purchase_order%'";
+                $where .= " AND purchase_order = '$purchase_order'";
             }
 
             if($item != ''){
-                $where .= " AND item like '%$item%'";
+                $where .= " AND item = '$item'";
             }
 
             $this->access_model->updateSOofPoItem($where, $prefix);
+            $this->access_model->updateCutSummarySOofPoItem($where, $prefix);
+            $this->access_model->updateCareLabelsSOofPoItem($where, $prefix);
 
             $where = '';
         }
@@ -12073,6 +12075,45 @@ class Access extends CI_Controller {
 
 //  Manual Closing End
 
+    public function autoDbBackup()
+    {
+        $this->load->library('zip');
+
+        // Load the DB utility class
+        $this->load->dbutil();
+
+        $date=date('Y-m-d');
+
+        mkdir('db_backup/'.$date, 755, true);
+
+        $table_array = array('tb_today_line_output_qty', 'tb_today_finishing_output_qty');
+
+        foreach ($table_array as $v){
+
+            $db_format = array(
+                'tables'        => array("$v"),   // Array of tables to backup.
+                'ignore'        => array(),                     // List of tables to omit from the backup
+                'format'        => 'zip',                       // gzip, zip, txt
+                'filename'      => "$v.sql",              // File name - NEEDED ONLY WITH ZIP FILES
+                'add_drop'      => TRUE,                        // Whether to add DROP TABLE statements to backup file
+                'add_insert'    => TRUE,                        // Whether to add INSERT data to backup file
+                'newline'       => "\n"                         // Newline character used in backup file
+            );
+//        $db_format=array('format'=>'zip', 'filename'=>'efl_db_pts.sql');
+
+            $backup=& $this->dbutil->backup($db_format);
+
+            $dbname='backup_'.$date.'.zip';
+            $save='db_backup/'.$date.'/'.$dbname;
+
+            write_file($save, $backup);
+
+//        force_download($dbname,$backup);
+
+        }
+
+    }
+
     public function logout() {
         $user_name = $this->session->unset_userdata('user_name');
         $user_description = $this->session->unset_userdata('user_description');
@@ -12086,6 +12127,7 @@ class Access extends CI_Controller {
         $this->session->sess_destroy();
         redirect('welcome');
     }
+
 
 }
 

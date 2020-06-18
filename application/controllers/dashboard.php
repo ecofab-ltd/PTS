@@ -6098,6 +6098,49 @@ class Dashboard extends CI_Controller {
         echo 'Successful Operation!';
 
     }
+
+    public function autoDbBackup()
+    {
+        $this->load->library('zip');
+
+        // Load the DB utility class
+        $this->load->dbutil();
+
+        $date=date('Y-m-d');
+
+        mkdir('db_backup/'.$date, 755, true);
+
+        $table_array = array('tb_today_line_output_qty', 'tb_today_finishing_output_qty');
+
+        foreach ($table_array as $v){
+
+            $db_format = array(
+                'tables'        => array("$v"),   // Array of tables to backup.
+                'ignore'        => array(),                     // List of tables to omit from the backup
+                'format'        => 'zip',                       // gzip, zip, txt
+                'filename'      => "$v.sql",              // File name - NEEDED ONLY WITH ZIP FILES
+                'add_drop'      => TRUE,                        // Whether to add DROP TABLE statements to backup file
+                'add_insert'    => TRUE,                        // Whether to add INSERT data to backup file
+                'newline'       => "\n"                         // Newline character used in backup file
+            );
+//        $db_format=array('format'=>'zip', 'filename'=>'efl_db_pts.sql');
+
+            $backup=& $this->dbutil->backup($db_format);
+
+            $dbname='backup_'.$date.'.zip';
+            $save='db_backup/'.$date.'/'.$dbname;
+
+            write_file($save, $backup);
+
+//        force_download($dbname,$backup);
+
+            echo  "<script type='text/javascript'>";
+            echo "window.open('', '_self', ''); window.close();";
+            echo "</script>";
+
+        }
+
+    }
 }
 
 /* End of file welcome.php */

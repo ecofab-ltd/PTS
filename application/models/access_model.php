@@ -5688,7 +5688,27 @@ class Access_model extends CI_Model {
 
     public function updateSOofPoItem($where, $po_no)
     {
-        $sql = "Update `tb_po_detail` 
+        $sql = "Update `tb_po_detail`
+                SET po_no = '$po_no'
+                where 1 $where";
+
+        $query = $this->db->query($sql);
+        return $query;
+    }
+
+    public function updateCutSummarySOofPoItem($where, $po_no)
+    {
+        $sql = "Update `tb_cut_summary`
+                SET po_no = '$po_no'
+                where 1 $where";
+
+        $query = $this->db->query($sql);
+        return $query;
+    }
+
+    public function updateCareLabelsSOofPoItem($where, $po_no)
+    {
+        $sql = "Update `tb_care_labels`
                 SET po_no = '$po_no'
                 where 1 $where";
 

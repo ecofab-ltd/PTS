@@ -52,7 +52,7 @@
                                             <option value="<?php echo $v['po_no'];?>"><?php echo $v['po_no'];?></option>
                                         <?php } ?>
                                     </select>
-                                    <span style="font-size: 11px;">* SAP No.</span>
+                                    <span style="font-size: 11px;">* SO / GROUP SO No.</span>
                                 </div>
                             </div>
 
