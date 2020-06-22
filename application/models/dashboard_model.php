@@ -2786,7 +2786,7 @@ class Dashboard_model extends CI_Model {
                 
                 LEFT JOIN
                 (SELECT so_no, po_no, purchase_order, item, quality, color, COUNT(id) as line_output_qty 
-                 FROM `vt_few_days_po_pcs` 
+                 FROM `tb_care_labels` 
                 WHERE DATE_FORMAT(end_line_qc_date_time, '%Y-%m-%d')='$date'
                 AND access_points=4 AND access_points_status=4
                 
@@ -2796,7 +2796,7 @@ class Dashboard_model extends CI_Model {
                 
                 LEFT JOIN
                 (SELECT so_no, po_no, purchase_order, item, quality, color, COUNT(id) as packing_qty 
-                 FROM `vt_few_days_po_pcs` 
+                 FROM `tb_care_labels` 
                 WHERE DATE_FORMAT(packing_date_time, '%Y-%m-%d')='$date' AND packing_status=1
                 
                 GROUP BY so_no, po_no, purchase_order, item, quality, color) as t3
@@ -2805,7 +2805,7 @@ class Dashboard_model extends CI_Model {
                 
                 LEFT JOIN
                 (SELECT so_no, po_no, purchase_order, item, quality, color, COUNT(id) as carton_qty 
-                 FROM `vt_few_days_po_pcs` 
+                 FROM `tb_care_labels` 
                 WHERE DATE_FORMAT(carton_date_time, '%Y-%m-%d')='$date' AND carton_status=1                
                 GROUP BY so_no, po_no, purchase_order, item, quality, color) as t4
                 ON t1.so_no=t4.so_no AND t1.purchase_order=t4.purchase_order
@@ -2813,7 +2813,7 @@ class Dashboard_model extends CI_Model {
                 
                  LEFT JOIN
                 (SELECT so_no, po_no, purchase_order, item, quality, color, COUNT(id) as cut_pass_qty 
-                 FROM `vt_few_days_po_pcs` 
+                 FROM `tb_care_labels` 
                 WHERE DATE_FORMAT(sent_to_production_date_time, '%Y-%m-%d')='$date' AND sent_to_production=1
                 
                 GROUP BY so_no, po_no, purchase_order, item, quality, color) as t5
@@ -2822,7 +2822,7 @@ class Dashboard_model extends CI_Model {
                 
                 LEFT JOIN
                 (SELECT so_no, po_no, purchase_order, item, quality, color, COUNT(id) as line_mid_pass_qty 
-                 FROM `vt_few_days_po_pcs` 
+                 FROM `tb_care_labels` 
                 WHERE DATE_FORMAT(mid_line_qc_date_time, '%Y-%m-%d')='$date' 
                 AND access_points >= 3 AND access_points_status IN (1, 4)
                 

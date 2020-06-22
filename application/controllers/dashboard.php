@@ -841,7 +841,7 @@ class Dashboard extends CI_Controller {
 
         foreach ($prod_summary as $k => $v){
 
-            if($v["line_output_qty"] != '' || $v["cut_pass_qty"] != '' || $v["packing_qty"] != '' || $v["carton_qty"] != ''){
+            if($v["line_output_qty"] != '' || $v["cut_pass_qty"] != '' || $v["packing_qty"] != '' || $v["carton_qty"] != '' || $v["line_mid_pass_qty"] != ''){
 
                 $po_type='';
 
