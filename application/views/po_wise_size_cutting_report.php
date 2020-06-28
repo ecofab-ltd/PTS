@@ -4,6 +4,7 @@ $total_cut_qty = 0;
 $total_sew_size_qty = 0;
 $total_pack_size_qty = 0;
 $total_carton_size_qty = 0;
+$total_manually_closed_qty = 0;
 $total_wh_size_qty = 0;
 
 //foreach ($order_info as $v){
@@ -122,6 +123,7 @@ $count_unscanned_pc = $cut_qty - ($count_total_carton_qty + $total_wh_qty);
                         <th class="center">Sew Qty</th>
                         <th class="center">Packed Qty</th>
                         <th class="center">Carton Qty</th>
+                        <th class="center">Manual Close</th>
 <!--                        <th class="center">Warehouse Qty</th>-->
                     </tr>
                     </thead>
@@ -158,8 +160,10 @@ $count_unscanned_pc = $cut_qty - ($count_total_carton_qty + $total_wh_qty);
                                 <?php echo $v_1['total_carton_qty']; ?>
                             </td>
 
-
-
+                            <td class="center" <?php if($v_1['order_qty'] > $v_1['total_carton_qty'])
+                            { ?> style="background-color: yellow;" <?php } ?>>
+                                <?php echo $v_1['total_manually_closed_qty']; ?>
+                            </td>
 
                         </tr>
                         <?php
@@ -169,6 +173,7 @@ $count_unscanned_pc = $cut_qty - ($count_total_carton_qty + $total_wh_qty);
                         $total_sew_size_qty += $v_1['sew_qty'];
                         $total_pack_size_qty += $v_1['total_packing_qty'];
                         $total_carton_size_qty += $v_1['total_carton_qty'];
+                        $total_manually_closed_qty += $v_1['total_manually_closed_qty'];
                         $total_wh_size_qty += $v_1['total_wh_qty'];
                     } ?>
                     </tbody>
@@ -181,6 +186,7 @@ $count_unscanned_pc = $cut_qty - ($count_total_carton_qty + $total_wh_qty);
                         <td class="center"><?php echo $total_sew_size_qty;?></td>
                         <td class="center"><?php echo $total_pack_size_qty;?></td>
                         <td class="center"><?php echo $total_carton_size_qty;?></td>
+                        <td class="center"><?php echo $total_manually_closed_qty;?></td>
 <!--                        <td class="center">--><?php //echo $total_wh_size_qty;?><!--</td>-->
                     </tr>
                     </tfoot>

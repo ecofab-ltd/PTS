@@ -1702,7 +1702,7 @@ class Dashboard_model extends CI_Model {
     }
 
     public function getPoOrderPackingInfobyPo($where){
-        $sql="SELECT t1.*,t2.cut_qty, t3.cut_pass_qty,t4.sew_qty,t5.total_packing_qty,t6.total_carton_qty
+        $sql="SELECT t1.*,t2.cut_qty, t3.cut_pass_qty,t4.sew_qty,t5.total_packing_qty,t6.total_carton_qty, t8.total_manually_closed_qty
                 FROM
                 (SELECT po_no,so_no,item,quality,color,purchase_order,style_no,style_name, ex_factory_date, status, 
                 `size`,SUM(quantity) AS order_qty from tb_po_detail
@@ -1744,6 +1744,11 @@ class Dashboard_model extends CI_Model {
                 `tb_size_serial` as t7
                 ON t1.size=t7.size
                 
+                 LEFT JOIN
+                (SELECT po_no,so_no,item,quality,color,purchase_order,size,COUNT(id) as total_manually_closed_qty FROM `tb_care_labels` 
+                WHERE 1 $where and manually_closed=1 GROUP BY po_no,so_no,item,quality,color,purchase_order,size) as t8
+                
+                ON t1.so_no=t8.so_no AND t1.size=t8.size
                 
                 ORDER BY t7.serial ASC";
 
