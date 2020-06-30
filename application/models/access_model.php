@@ -2527,7 +2527,7 @@ class Access_model extends CI_Model {
 //
 //                ORDER BY t4.max_bundle_collar_cuff_scanned_line_date_time DESC";
 
-        $sql = "SELECT t1.*, t2.total_order_qty,t3.bundle_start,
+        $sql = "Select A.* FROM (SELECT t1.*, t2.total_order_qty,t3.bundle_start,
                 t3.bundle_end,t3.cutting_collar_bundle_ready_date_time
                 FROM (
                 SELECT po_no,so_no,item,quality,color,purchase_order,ex_factory_date,brand,style_no,style_name,
@@ -2552,7 +2552,11 @@ class Access_model extends CI_Model {
                 LEFT JOIN
                 vt_cut as t3
                 ON t1.so_no=t3.so_no AND t1.po_no=t3.po_no AND t1.purchase_order=t3.purchase_order AND t1.item=t3.item AND t1.quality=t3.quality AND t1.color=t3.color
-                ORDER  BY cutting_collar_bundle_ready_date_time";
+                ORDER  BY cutting_collar_bundle_ready_date_time) AS A
+                
+                INNER JOIN 
+                (SELECT so_no FROM tb_production_summary WHERE balance > 0) AS B
+                ON A.so_no=B.so_no";
 
         $query = $this->db->query($sql)->result_array();
         return $query;
