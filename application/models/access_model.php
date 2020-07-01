@@ -2555,7 +2555,8 @@ class Access_model extends CI_Model {
                 ORDER  BY cutting_collar_bundle_ready_date_time) AS A
                 
                 INNER JOIN 
-                (SELECT so_no FROM tb_production_summary WHERE balance > 0) AS B
+                (SELECT so_no FROM tb_production_summary 
+                WHERE balance > 0 AND (count_input_qty_line - count_end_line_qc_pass) > 0) AS B
                 ON A.so_no=B.so_no";
 
         $query = $this->db->query($sql)->result_array();
