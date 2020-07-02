@@ -2998,7 +2998,7 @@ class Dashboard_model extends CI_Model {
                 
                 FROM 
                 (SELECT so_no, po_no, brand, purchase_order, item, quality, color, style_no, style_name, 
-                ex_factory_date, SUM(quantity) AS total_order_qty, wash_gmt, po_type, status
+                ex_factory_date, crd_date, SUM(quantity) AS total_order_qty, wash_gmt, po_type, status
                 FROM tb_po_detail 
                 WHERE 1 $where
                 GROUP BY so_no) AS t1

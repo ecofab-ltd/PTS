@@ -526,6 +526,7 @@ class Dashboard extends CI_Controller {
                 $idata['style_name'] = ($v['style_name'] != NULL ? $v['style_name'] : '');
                 $idata['brand'] = ($v['brand'] != NULL ? $v['brand'] : '');
                 $idata['ex_factory_date'] = ($v['ex_factory_date'] != NULL ? $v['ex_factory_date'] : '0000-00-00');
+                $idata['crd_date'] = ($v['crd_date'] != NULL ? $v['crd_date'] : '0000-00-00');
                 $idata['status'] = ($v['status'] != NULL ? $v['status'] : '');
                 $idata['planned_lines'] = ($v['planned_lines'] != NULL ? $v['planned_lines'] : '');
                 $idata['responsible_line'] = ($v['responsible_line'] != NULL ? $v['responsible_line'] : '');

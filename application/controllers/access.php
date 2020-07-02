@@ -4432,6 +4432,12 @@ class Access extends CI_Controller {
 //                    echo '</pre>';
 //                    die();
 
+                    $exploded_crd_date = explode(".", $v[10]);
+                    $exploded_crd_month=$exploded_crd_date[1];
+                    $exploded_crd_day=$exploded_crd_date[2];
+                    $exploded_crd_year=$exploded_crd_date[0];
+                    $crd_date = $exploded_crd_year."-" .$exploded_crd_month. "-" .$exploded_crd_day;
+
 
                     $purchase_order = (str_replace(" ", "", $purch_order));
                     $item = (str_replace(" ", "", $itm));
@@ -4508,6 +4514,7 @@ class Access extends CI_Controller {
                                 'quantity' => "$quantity",
                                 'size' => "$size",
                                 'ex_factory_date' => "$ex_factory_date",
+                                'crd_date' => "$crd_date",
                                 'is_manual_upload' =>1,
                                 'upload_date' =>"$date",
                                 'po_type' =>"$po_type"
@@ -4550,6 +4557,7 @@ class Access extends CI_Controller {
                             'quantity' => "$quantity",
                             'size' => "$size",
                             'ex_factory_date' => "$ex_factory_date",
+                            'crd_date' => "$crd_date",
                             'is_manual_upload' => 1,
                             'upload_date' =>"$date",
                             'po_type' =>"$po_type"
