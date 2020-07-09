@@ -1565,7 +1565,9 @@ class Access_model extends CI_Model {
             CASE WHEN warehouse_sizeset_date_time != '0000-00-00 00:00:00' THEN warehouse_sizeset_date_time END warehouse_sizeset_date_time,
             CASE WHEN carton_status = 1 THEN carton_status END carton_status 
           FROM tb_care_labels    
-        ) tb_care_labels WHERE 1 $condition_1 GROUP BY so_no,po_no,item,quality,color,purchase_order) as t1";
+        ) tb_care_labels WHERE 1 $condition_1 
+        GROUP BY so_no,po_no,item,quality,color,purchase_order 
+        ORDER BY ex_factory_date DESC) as t1";
 
         $query = $this->db->query($sql1)->result_array();
         return $query;

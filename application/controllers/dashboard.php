@@ -81,7 +81,7 @@ class Dashboard extends CI_Controller {
 
         $object->setActiveSheetIndex(0);
 
-        $table_columns = array("PO", "Plan Line", "Lines", "Brand", "ORDER", "ExFac", "CUT", "CUT PASS", "CUT BLNC", "INPUT", "COLLAR", "COLLAR BLNC", "CUFF", "CUFF BLNC", "MID", "MID BLNC", "END", "END BLNC", "PACK", "PACK BLNC", "CARTON", "BALANCE", "REMARKS");
+        $table_columns = array("PO", "Plan Line", "Lines", "Brand", "ORDER", "ExFac", "CUT", "CUT PASS", "CUT BLNC", "INPUT", "COLLAR", "COLLAR BLNC", "CUFF", "CUFF BLNC", "MID", "MID BLNC", "END", "END BLNC", "PACK", "PACK BLNC", "CARTON", "OTHERS", "BALANCE", "REMARKS");
 
         $column = 0;
 
@@ -99,6 +99,7 @@ class Dashboard extends CI_Controller {
         foreach ($prod_summary as $k => $v){
 
             $total_finishing_wh_qa = $v['count_carton_pass'] + $v['total_wh_qa'] + $v['count_manual_close_qty'];
+            $total_others = $v['total_wh_qa'] + $v['count_manual_close_qty'];
 
 //            $total_finishing_wh_qa = $v['count_carton_pass'] + $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'] + $v['total_manual_close_qty'];
 //            $total_wh_qa = $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_lost'];
@@ -162,8 +163,9 @@ class Dashboard extends CI_Controller {
                 $object->getActiveSheet()->setCellValueByColumnAndRow(18, $excel_row, $v["count_packing_pass"]);
                 $object->getActiveSheet()->setCellValueByColumnAndRow(19, $excel_row, $pack_balance_qty);
                 $object->getActiveSheet()->setCellValueByColumnAndRow(20, $excel_row, $v["count_carton_pass"]);
-                $object->getActiveSheet()->setCellValueByColumnAndRow(21, $excel_row, ($total_po_item_balance > 0 ? $total_po_item_balance : 0));
-                $object->getActiveSheet()->setCellValueByColumnAndRow(22, $excel_row, $v["status"]);
+                $object->getActiveSheet()->setCellValueByColumnAndRow(21, $excel_row, $total_others);
+                $object->getActiveSheet()->setCellValueByColumnAndRow(22, $excel_row, ($total_po_item_balance > 0 ? $total_po_item_balance : 0));
+                $object->getActiveSheet()->setCellValueByColumnAndRow(23, $excel_row, $v["status"]);
                 $excel_row++;
 
             }

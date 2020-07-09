@@ -36,7 +36,7 @@
 
                     $total_finishing_qa = $v['count_carton_pass'] + $v['count_wh_prod_sample'] + $v['count_wh_factory'] + $v['count_wh_buyer'] + $v['count_wh_trash'] + $v['count_wh_others'] + $v['count_wh_size_set'];
 
-                    if (($v['count_packing_pass'] - $total_finishing_qa) > 0) {
+                    if (($v['count_packing_pass'] - $total_finishing_qa) < 0) {
                         ?>
                         <tr>
                             <td class="hidden-phone center"><span
