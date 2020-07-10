@@ -1182,6 +1182,59 @@ class Access extends CI_Controller {
         redirect('access/changeExfactory');
     }
 
+    public function poSizeUpdate()
+    {
+        $data['title'] = 'PO Size Update';
+        $data['user_name'] = $this->session->userdata('user_name');
+        $data['user_description'] = $this->session->userdata('user_description');
+        $data['access_points'] = $this->session->userdata('access_points');
+
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
+            $data['so_nos'] = $this->access_model->getAllSOs();
+            $data['maincontent'] = $this->load->view('po_size_update', $data, true);
+            $this->load->view('master', $data);
+
+        }else{
+            echo $this->load->view('404');
+        }
+    }
+
+    public function getPoSizeQty(){
+        $so_no = $this->input->post('so_no');
+
+        $res = $this->access_model->selectTableData('id, size, quantity', 'tb_po_detail', 'so_no', $so_no);
+
+        $tr = '';
+
+        foreach ($res as $v){
+            $tr .= '<tr><td class="center">'.$v['size'].'<input type="hidden" value="'.$v['id'].'" name="id[]" /></td><td class="center"><input type="number" class="" value="'.$v['quantity'].'" name="qty[]" /></td></tr>';
+        }
+
+        echo $tr;
+    }
+
+    public function updatingPoSizeQty(){
+        $so_no = $this->input->post('so_no');
+        $ids = $this->input->post('id');
+        $qtys = $this->input->post('qty');
+
+        foreach ($ids as $k => $id){
+            $data = array(
+                'quantity' => $qtys[$k]
+            );
+
+            $this->access_model->updateTbl('tb_po_detail', $id, $data);
+        }
+
+        $data['message'] = "$so_no Successfully Updated!";
+        $this->session->set_userdata($data);
+        redirect('access/poSizeUpdate');
+    }
+
     public function care_label_end_line_new(){
         $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
         
@@ -4389,7 +4442,7 @@ class Access extends CI_Controller {
     public function smsFileUploadTest()
     {
         $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
-        
+
         $date_time = $datex->format('Y-m-d H:i:s');
         $date = $datex->format('Y-m-d');
 
@@ -4545,8 +4598,8 @@ class Access extends CI_Controller {
                         $extended_so_no_final = ($substring_so_no * 1) + 1;
 
                         $data_1 = array(
-                            'po_no' => "M$extended_so_no_final",
-                            'so_no' => "M$extended_so_no_final",
+                            'po_no' => "E$extended_so_no_final",
+                            'so_no' => "E$extended_so_no_final",
                             'purchase_order' => "$purchase_order",
                             'item' => "$item",
                             'style_no' => "$style_no",
@@ -4565,9 +4618,12 @@ class Access extends CI_Controller {
 
                         $insert_info_2 = $this->access_model->insertingData('tb_po_detail', $data_1);
 
-//                        echo '<pre>';
-//                        print_r($data_1);
-//                        echo '</pre>';
+                        $data_2 = array(
+                            'so_no' => "E$extended_so_no_final",
+                            'update_date_time' => "$date_time"
+                        );
+                        $this->access_model->updateTbl('tb_last_so', 1, $data_2);
+
                     }
 
                 }

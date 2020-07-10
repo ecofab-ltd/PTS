@@ -9,6 +9,17 @@ class Access_model extends CI_Model {
         //return $this->db->insert_id();
     }
 
+    public function selectTableData($fields, $tbl, $condition_column, $condition_value)
+    {
+        $this->db->select($fields);
+        $this->db->from($tbl);
+        $this->db->where($condition_column, $condition_value);
+        $query=  $this->db->get();
+        $result=$query->result_array();
+        return $result;
+
+    }
+
     public function getSegments($time)
     {
         $sql = "SELECT *,
@@ -1565,7 +1576,7 @@ class Access_model extends CI_Model {
             CASE WHEN warehouse_sizeset_date_time != '0000-00-00 00:00:00' THEN warehouse_sizeset_date_time END warehouse_sizeset_date_time,
             CASE WHEN carton_status = 1 THEN carton_status END carton_status 
           FROM tb_care_labels    
-        ) tb_care_labels WHERE 1 $condition_1 
+        ) tb_care_labels WHERE 1 $condition_1
         GROUP BY so_no,po_no,item,quality,color,purchase_order 
         ORDER BY ex_factory_date DESC) as t1";
 
@@ -3112,7 +3123,8 @@ class Access_model extends CI_Model {
 
     public function getManualUploadLastSoNo()
     {
-        $sql = "SELECT * FROM `tb_po_detail` WHERE is_manual_upload=1 ORDER BY ID DESC LIMIT 1";
+//        $sql = "SELECT * FROM `tb_po_detail` WHERE is_manual_upload=1 ORDER BY ID DESC LIMIT 1";
+        $sql = "SELECT * FROM `tb_last_so`";
 
         $query = $this->db->query($sql)->result_array();
         return $query;
