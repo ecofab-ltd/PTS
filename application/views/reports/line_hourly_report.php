@@ -98,6 +98,8 @@
             <th align="center" rowspan="2" style="font-size: 20px; font-weight: 900; width: 40px;">Effi.</th>
             <th align="center" rowspan="2" style="font-size: 20px; font-weight: 900; width: 40px;">DHU</th>
             <th align="center" colspan="10" style="font-size: 20px; font-weight: 900;">HOURS</th>
+<!--            <th align="center" rowspan="2" style="font-size: 20px; font-weight: 900; width: 40px;">AVG</th>-->
+            <th align="center" rowspan="2" style="font-size: 20px; font-weight: 900; width: 40px;">AVG</th>
             <th align="center" rowspan="2" style="font-size: 20px; font-weight: 900; width: 40px;">Total</th>
             <th align="center" rowspan="2" style="font-size: 20px; font-weight: 900; width: 40px;">BLNC</th>
         </tr>
@@ -145,6 +147,7 @@
             $work_hour_4 = ($dhu_summary[0]['work_hour_4'] != '' ? $dhu_summary[0]['work_hour_4'] : 0);
 
             $total_wh = $work_hour_1+$work_hour_2+$work_hour_3+$work_hour_4;
+
             $average_dhu = round($dhu_sum/$total_wh, 2);
 
             $line_target_hour = $line_info[0]['target_hour'];
@@ -188,7 +191,7 @@
                 foreach ($line_report AS $lr){
                 ?>
 
-                <td align="center"
+                <td align="center" title="<?php echo $h['start_time'].' - '.$h['end_time'];?>"
                     <?php
                     if($lr['qty'] > 0){
 
@@ -214,7 +217,11 @@
                 }
             }
             $total_output_balance = $total_output - $line_info[0]['target'];
+
+            $working_hour = ($total_wh-1)+$min_to_hour; // Getting Exact Current Production Hour-Minute
             ?>
+<!--            <td align="center">--><?php //echo round($total_output/$total_wm_to_wh, 2);?><!--</td>-->
+            <td align="center" title="<?php echo $working_hour;?>"><?php echo round($total_output/$working_hour, 2);?></td>
             <td align="center"><?php echo $total_output;?></td>
             <td align="center"><?php echo $total_output_balance;?></td>
         </tr>
@@ -253,6 +260,8 @@
 
                 }
                 ?>
+
+                <th align="center" style="font-size: 20px; font-weight: 900;"></th>
                 <th align="center" style="font-size: 20px; font-weight: 900;"><?php echo $grand_total_output?></th>
                 <th align="center" style="font-size: 20px; font-weight: 900;"><?php echo $grand_total_output - $grand_total_target;?></th>
             </tr>
@@ -333,6 +342,7 @@
 
                 }
                 ?>
+                <th align="center" style="font-size: 20px; font-weight: 900;"></th>
                 <th align="center" style="font-size: 20px; font-weight: 900;"><?php echo $floor_grand_total_output?></th>
                 <th align="center" style="font-size: 20px; font-weight: 900;"><?php echo $floor_grand_total_output - $floor_total_target;?></th>
             </tr>
