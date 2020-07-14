@@ -3358,6 +3358,24 @@ class Dashboard extends CI_Controller {
         $data['today_cut'] = $this->dashboard_model->getTodayCutQty($date);
         $data['lay_qty'] = $this->dashboard_model->getLayQty();
 
+//        SOLID STYLE CUTTING REPORT
+        $data['today_no_of_marker_solid'] = $this->dashboard_model->getTodayNumberOfMarkerByStyleType($date, 1);
+        $data['today_no_of_garments_solid'] = $this->dashboard_model->getTodayNumberOfGarmentByStyleType($date, 1);
+        $data['today_cut_solid'] = $this->dashboard_model->getTodayCutQtyByStyleType($date, 1);
+        $data['lay_qty_solid'] = $this->dashboard_model->getLayQtyByStyleType(1);
+
+//        CHECK STYLE CUTTING REPORT
+        $data['today_no_of_marker_check'] = $this->dashboard_model->getTodayNumberOfMarkerByStyleType($date, 2);
+        $data['today_no_of_garments_check'] = $this->dashboard_model->getTodayNumberOfGarmentByStyleType($date, 2);
+        $data['today_cut_check'] = $this->dashboard_model->getTodayCutQtyByStyleType($date, 2);
+        $data['lay_qty_check'] = $this->dashboard_model->getLayQtyByStyleType(2);
+
+//        PRINT STYLE CUTTING REPORT
+        $data['today_no_of_marker_print'] = $this->dashboard_model->getTodayNumberOfMarkerByStyleType($date, 3);
+        $data['today_no_of_garments_print'] = $this->dashboard_model->getTodayNumberOfGarmentByStyleType($date, 3);
+        $data['today_cut_print'] = $this->dashboard_model->getTodayCutQtyByStyleType($date, 3);
+        $data['lay_qty_print'] = $this->dashboard_model->getLayQtyByStyleType(3);
+
         $data['table_report'] = $this->dashboard_model->cuttingTableWiseDailyReport($date);
 
         $this->load->view('reports/line_wip_graph_report', $data);
@@ -4609,6 +4627,44 @@ class Dashboard extends CI_Controller {
         }
 
         $where .= " AND t1.carton_status=0 AND t1.warehouse_qa_type=0";
+
+        $get_data['remain_pcs'] = $this->dashboard_model->getRemainingCLBySize($where);
+
+        $maincontent = $this->load->view('po_item_wise_carton_remain_pcs', $get_data, true);
+
+        echo $maincontent;
+    }
+
+    public function getPoItemWiseFinishingRemainCL(){
+        $po_no = $this->input->post('po_no');
+        $so_no = $this->input->post('so_no');
+        $purchase_order = $this->input->post('purchase_order');
+        $item = $this->input->post('item');
+        $quality = $this->input->post('quality');
+        $color = $this->input->post('color');
+
+
+        $where = '';
+        if($po_no != ''){
+            $where .= " AND t1.po_no = '$po_no'";
+        }
+        if($so_no != ''){
+            $where .= " AND t1.so_no = '$so_no'";
+        }
+        if($purchase_order != ''){
+            $where .= " AND t1.purchase_order = '$purchase_order'";
+        }
+        if($item != ''){
+            $where .= " AND t1.item = '$item'";
+        }
+        if($quality != ''){
+            $where .= " AND t1.quality = '$quality'";
+        }
+        if($color != '') {
+            $where .= " AND t1.color = '$color'";
+        }
+
+        $where .= " AND t1.access_points=4 AND t1.access_points_status=4 AND t1.carton_status=0 AND t1.warehouse_qa_type=0";
 
         $get_data['remain_pcs'] = $this->dashboard_model->getRemainingCLBySize($where);
 
