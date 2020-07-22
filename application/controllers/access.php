@@ -1184,7 +1184,7 @@ class Access extends CI_Controller {
 
     public function poSizeUpdate()
     {
-        $data['title'] = 'PO Size Update';
+        $data['title'] = 'PO Update';
         $data['user_name'] = $this->session->userdata('user_name');
         $data['user_description'] = $this->session->userdata('user_description');
         $data['access_points'] = $this->session->userdata('access_points');
@@ -1230,9 +1230,70 @@ class Access extends CI_Controller {
             $this->access_model->updateTbl('tb_po_detail', $id, $data);
         }
 
+        $data_1['purchase_order'] = $this->input->post('purchase_order');
+        $data_1['item'] = $this->input->post('item');
+        $data_1['quality'] = $this->input->post('quality');
+        $data_1['color'] = $this->input->post('color');
+        $data_1['style_no'] = $this->input->post('style_no');
+        $data_1['style_name'] = $this->input->post('style_name');
+        $ex_factory_dt_1 = $this->input->post('ex_fac_date');
+        $ex_factory_date_1 = explode('-', $ex_factory_dt_1);
+        $ex_year_1=$ex_factory_date_1[2];
+        $ex_month_1=$ex_factory_date_1[0];
+        $ex_day_1=$ex_factory_date_1[1];
+        $data_1['ex_factory_date']=$ex_year_1.'-'.$ex_month_1.'-'.$ex_day_1;
+
+        $crd_dt = $this->input->post('crd_date');
+        $crd_date = explode('-', $crd_dt);
+        $year=$crd_date[2];
+        $month=$crd_date[0];
+        $day=$crd_date[1];
+        $data_1['crd_date']=$year.'-'.$month.'-'.$day;
+        $this->access_model->updateTblNew('tb_po_detail', 'so_no', $so_no, $data_1);
+
+
+        $data_2['purchase_order'] = $this->input->post('purchase_order');
+        $data_2['item'] = $this->input->post('item');
+        $data_2['quality'] = $this->input->post('quality');
+        $data_2['color'] = $this->input->post('color');
+        $data_2['style_no'] = $this->input->post('style_no');
+        $data_2['style_name'] = $this->input->post('style_name');
+        $ex_factory_dt_2 = $this->input->post('ex_fac_date');
+        $ex_factory_date_2 = explode('-', $ex_factory_dt_2);
+        $ex_year_2=$ex_factory_date_2[2];
+        $ex_month_2=$ex_factory_date_2[0];
+        $ex_day_2=$ex_factory_date_2[1];
+        $data_2['ex_factory_date']=$ex_year_2.'-'.$ex_month_2.'-'.$ex_day_2;
+        $this->access_model->updateTblNew('tb_cut_summary', 'so_no', $so_no, $data_2);
+
+
+        $data_3['purchase_order'] = $this->input->post('purchase_order');
+        $data_3['item'] = $this->input->post('item');
+        $data_3['quality'] = $this->input->post('quality');
+        $data_3['color'] = $this->input->post('color');
+        $data_3['style_no'] = $this->input->post('style_no');
+        $data_3['style_name'] = $this->input->post('style_name');
+        $ex_factory_dt_3 = $this->input->post('ex_fac_date');
+        $ex_factory_date_3 = explode('-', $ex_factory_dt_3);
+        $ex_year_3=$ex_factory_date_3[2];
+        $ex_month_3=$ex_factory_date_3[0];
+        $ex_day_3=$ex_factory_date_3[1];
+        $data_3['ex_factory_date']=$ex_year_3.'-'.$ex_month_3.'-'.$ex_day_3;
+        $this->access_model->updateTblNew('tb_care_labels', 'so_no', $so_no, $data_3);
+
         $data['message'] = "$so_no Successfully Updated!";
         $this->session->set_userdata($data);
         redirect('access/poSizeUpdate');
+    }
+
+    public function deletePO(){
+        $so_no = $this->input->post('so_no');
+
+        $this->access_model->deleteTableData('tb_po_detail', 'so_no', $so_no);
+        $this->access_model->deleteTableData('tb_cut_summary', 'so_no', $so_no);
+        $this->access_model->deleteTableData('tb_care_labels', 'so_no', $so_no);
+
+        echo 'done';
     }
 
     public function care_label_end_line_new(){
@@ -1241,11 +1302,14 @@ class Access extends CI_Controller {
         $date_time=$datex->format('Y-m-d H:i:s');
         $date=$datex->format('Y-m-d');
 
+        $previous_date = $datex->modify("-1 days")->format('Y-m-d');
+//        $previous_date = '2020-07-14';
+
         $s_data['session_last_action_date_time'] = $date_time;
         $this->session->set_userdata($s_data);
 
 //        echo '<pre>';
-//        print_r($date_time);
+//        print_r($previous_date);
 //        echo '</pre>';
 //        die();
 
@@ -1264,53 +1328,225 @@ class Access extends CI_Controller {
         $res = $this->checkAuthorization($data['access_points'], $cur_url);
 
         if(sizeof($res) > 0) {
-        $res = $this->access_model->isReadyTodayLineOutputTable($line_id, $date);
 
-        if(sizeof($res) == 0){
-            $this->access_model->deleteTodayLineOutputTable($line_id);
+            $where = '';
 
-            $hours = $this->access_model->getHours();
-
-            $h_data = array(
-                'id' => 11,
-                'hour' => 11,
-                'start_time' => "19:00:00",
-                'end_time' => "23:59:59",
-                'u_id' => 0
-            );
-
-            array_push($hours, $h_data);
-
-            foreach ($hours as $v_h){
-
-                $h_data = array(
-                    'line_id' => $line_id,
-                    'date' => $date,
-                    'start_time' => $v_h['start_time'],
-                    'end_time' => $v_h['end_time'],
-                    'qty' => 0
-                );
-
-
-                $this->access_model->insertingData('tb_today_line_output_qty', $h_data);
+            if($line_id != ''){
+                $where .= " AND line_id=$line_id";
             }
 
-        }
+            $last_day_summary_check = $this->dashboard_model->getLineReport($previous_date, $where);
 
-        $where = '';
-        if($line_id != 0 && $line_id != ''){
-            $where .= " AND t5.line_id=$line_id order by t3.max_end_line_qc_date_time DESC";
-        }
+//            echo '<pre>';
+//            print_r($last_day_summary_check);
+//            echo '</pre>';
+//            die();
 
-//        $data['prod_summary'] = $this->access_model->getProducitonSummaryReport();
-//        $data['prod_summary'] = $this->access_model->getProducitonSummaryReportFilter($where);
+            if(sizeof($last_day_summary_check) > 0){
 
-        $data['maincontent'] = $this->load->view('care_label_end_line_new', $data, true);
-        $this->load->view('master', $data);
+                $res = $this->access_model->isReadyTodayLineOutputTable($line_id, $date);
 
+                if(sizeof($res) == 0){
+                    $this->access_model->deleteTodayLineOutputTable($line_id);
+
+                    $hours = $this->access_model->getHours();
+
+                    $h_data = array(
+                        'id' => 11,
+                        'hour' => 11,
+                        'start_time' => "19:00:00",
+                        'end_time' => "23:59:59",
+                        'u_id' => 0
+                    );
+
+                    array_push($hours, $h_data);
+
+                    foreach ($hours as $v_h){
+
+                        $h_data = array(
+                            'line_id' => $line_id,
+                            'date' => $date,
+                            'start_time' => $v_h['start_time'],
+                            'end_time' => $v_h['end_time'],
+                            'qty' => 0
+                        );
+
+
+                        $this->access_model->insertingData('tb_today_line_output_qty', $h_data);
+                    }
+
+                }
+
+    //            $where = '';
+    //            if($line_id != 0 && $line_id != ''){
+    //                $where .= " AND t5.line_id=$line_id order by t3.max_end_line_qc_date_time DESC";
+    //            }
+
+    //          $data['prod_summary'] = $this->access_model->getProducitonSummaryReport();
+    //          $data['prod_summary'] = $this->access_model->getProducitonSummaryReportFilter($where);
+
+
+            }else{
+                $this->getBackupLineLastDayProduction($line_id, $previous_date);
+
+                $res = $this->access_model->isReadyTodayLineOutputTable($line_id, $date);
+
+                if(sizeof($res) == 0){
+                    $this->access_model->deleteTodayLineOutputTable($line_id);
+
+                    $hours = $this->access_model->getHours();
+
+                    $h_data = array(
+                        'id' => 11,
+                        'hour' => 11,
+                        'start_time' => "19:00:00",
+                        'end_time' => "23:59:59",
+                        'u_id' => 0
+                    );
+
+                    array_push($hours, $h_data);
+
+                    foreach ($hours as $v_h){
+
+                        $h_data = array(
+                            'line_id' => $line_id,
+                            'date' => $date,
+                            'start_time' => $v_h['start_time'],
+                            'end_time' => $v_h['end_time'],
+                            'qty' => 0
+                        );
+
+
+                        $this->access_model->insertingData('tb_today_line_output_qty', $h_data);
+                    }
+
+                }
+            }
+
+            $data['maincontent'] = $this->load->view('care_label_end_line_new', $data, true);
+            $this->load->view('master', $data);
         }else{
             echo $this->load->view('404');
         }
+    }
+
+    public function getBackupLineLastDayProduction($line_id, $previous_date){
+
+        $line_output = 0;
+        $total_line_output = 0;
+
+        $time_range = $this->dashboard_model->getWorkingTimeRange();
+
+        $starting_time = $time_range[0]['starting_time'];
+        $ending_time = $time_range[0]['ending_time'];
+
+        $where_seg = "";
+        if($starting_time != '' && $ending_time != ''){
+            $where_seg .= "  ORDER BY id DESC LIMIT 1";
+        }
+
+        $segments = $this->dashboard_model->getSegments($where_seg);
+        $start_time = $segments[0]['start_time'];
+        $end_time = $segments[0]['end_time'];
+
+
+        $where_t = '';
+        if($line_id != ''){
+            $where_t .= " AND line_id=$line_id";
+        }
+
+        if($previous_date != ''){
+            $where_t .= " AND date='$previous_date'";
+        }
+
+        $line_target_info = $this->access_model->getLineTarget($where_t);
+
+        $man_power_1 = ($line_target_info[0]['man_power_1'] > 0 ? $line_target_info[0]['man_power_1'] : 0);
+        $man_power_2 = ($line_target_info[0]['man_power_2'] > 0 ? $line_target_info[0]['man_power_2'] : 0);
+        $man_power_3 = ($line_target_info[0]['man_power_3'] > 0 ? $line_target_info[0]['man_power_3'] : 0);
+        $man_power_4 = ($line_target_info[0]['man_power_4'] > 0 ? $line_target_info[0]['man_power_4'] : 0);
+
+        $hour_ranges = $this->access_model->getHours();
+        foreach ($hour_ranges as $h){
+            $line_pre_info = $this->access_model->getLineOutputReport($line_id, $previous_date, $h['start_time'], $h['end_time']);
+
+            foreach ($line_pre_info as $lpi){
+                $line_output += $lpi['qty'];
+            }
+
+        }
+        $line_target = $line_pre_info[0]['target'];
+
+        $produce_minute_1 = ($line_pre_info[0]['produce_minute_1'] > 0 ? $line_pre_info[0]['produce_minute_1'] : 0);
+        $produce_minute_2 = ($line_pre_info[0]['produce_minute_2'] > 0 ? $line_pre_info[0]['produce_minute_2'] : 0);
+        $produce_minute_3 = ($line_pre_info[0]['produce_minute_3'] > 0 ? $line_pre_info[0]['produce_minute_3'] : 0);
+        $produce_minute_4 = ($line_pre_info[0]['produce_minute_4'] > 0 ? $line_pre_info[0]['produce_minute_4'] : 0);
+
+        $work_hour_1 = ($line_pre_info[0]['work_hour_1'] > 0 ? $line_pre_info[0]['work_hour_1'] : 0);
+        $work_hour_2 = ($line_pre_info[0]['work_hour_2'] > 0 ? $line_pre_info[0]['work_hour_2'] : 0);
+        $work_hour_3 = ($line_pre_info[0]['work_hour_3'] > 0 ? $line_pre_info[0]['work_hour_3'] : 0);
+        $work_hour_4 = ($line_pre_info[0]['work_hour_4'] > 0 ? $line_pre_info[0]['work_hour_4'] : 0);
+
+        $work_minute_1 = ($line_pre_info[0]['work_minute_1'] > 0 ? $line_pre_info[0]['work_minute_1'] : 0);
+        $work_minute_2 = ($line_pre_info[0]['work_minute_2'] > 0 ? $line_pre_info[0]['work_minute_2'] : 0);
+        $work_minute_3 = ($line_pre_info[0]['work_minute_3'] > 0 ? $line_pre_info[0]['work_minute_3'] : 0);
+        $work_minute_4 = ($line_pre_info[0]['work_minute_4'] > 0 ? $line_pre_info[0]['work_minute_4'] : 0);
+        $avg_of_work_hour=round(((($work_minute_1+$work_minute_2+$work_minute_3+$work_minute_4) / 60) / $man_power_1), 2);
+
+        $line_remarks = $line_pre_info[0]['remarks'];
+        $line_efficiency = $line_pre_info[0]['efficiency'];
+
+        $extra_line_qty = $this->access_model->getLineOutputReport($line_id, $previous_date, $start_time, $end_time);
+        $over_time_qty = $extra_line_qty[0]['qty'];
+
+
+        $line_dhu = $this->access_model->getLineDhuSumReport($line_id, $previous_date);
+        $line_sum_dhu = $line_dhu[0]['sum_dhu'];
+
+        $average_dhu = round(($line_sum_dhu/$avg_of_work_hour), 2);
+        if($line_remarks != ''){
+            $remarks = $line_remarks;
+        }else{
+            $remarks = '';
+        }
+
+        $total_line_output = ($line_output + $over_time_qty);
+
+        $data_l = array(
+
+            'line_id' => $line_id,
+            'target' => ($line_target != '' ? $line_target : 0),
+            'normal_output' => ($line_output != 0 ? $line_output : 0),
+            'eot_output' => ($over_time_qty != '' ? $over_time_qty : 0),
+            'output' => ($total_line_output != '' ? $total_line_output : 0),
+            'work_hour' => ($avg_of_work_hour != '' ? $avg_of_work_hour : 0),
+            'efficiency' => ($line_efficiency != '' ? $line_efficiency : 0),
+            'dhu' => ($average_dhu != '' ? $average_dhu : 0),
+            'date' => $previous_date,
+            'man_power_1' => $man_power_1,
+            'produce_minute_1' => $produce_minute_1,
+            'work_minute_1' => $work_minute_1,
+            'work_hour_1' => $work_hour_1,
+            'man_power_2' => $man_power_2,
+            'produce_minute_2' => $produce_minute_2,
+            'work_minute_2' => $work_minute_2,
+            'work_hour_2' => $work_hour_2,
+            'man_power_3' => $man_power_3,
+            'produce_minute_3' => $produce_minute_3,
+            'work_minute_3' => $work_minute_3,
+            'work_hour_3' => $work_hour_3,
+            'man_power_4' => $man_power_4,
+            'produce_minute_4' => $produce_minute_4,
+            'work_minute_4' => $work_minute_4,
+            'work_hour_4' => $work_hour_4,
+            'remarks' => $remarks
+
+        );
+
+        if($line_output != 0 && $line_output != ''){
+            $this->dashboard_model->insertTblData('tb_daily_line_summary', $data_l);
+        }
+
     }
 
     public function lineFinishingAlter(){
@@ -1898,9 +2134,11 @@ class Access extends CI_Controller {
             $where .= " AND color = '$color'";
         }
 
-        $data['po_detail'] = $this->access_model->getPoDetail($where);
+        $po_info = $this->access_model->getPoDetail($where);
 
-        $maincontent = $this->load->view('po_item_detail', $data);
+//        $maincontent = $this->load->view('po_item_detail', $data);
+
+        echo json_encode($po_info);
     }
 
     public function washGmtStatus($sap_no, $so_no, $purchase_order, $item, $quality, $color, $status){
