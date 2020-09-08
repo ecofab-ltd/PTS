@@ -1,5 +1,4 @@
 <?php
-
 $line_name = '';
 $line_id = $line_info[0]['id'];
 
@@ -70,7 +69,7 @@ $dataPoints = array(
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <section class="panel default" style="background-color: #ff0e16; color: #ffffff;">
+                            <section class="panel default" id="wip" style="background-color: #ff0e16; color: #ffffff;">
                                 <div class="row  center"><b><span style="font-size: 20px;">WIP</span></b></div>
                                 <div class="panel-body">
 
@@ -97,7 +96,7 @@ $dataPoints = array(
                         <!--                            </section>-->
                         <!--                        </div>-->
                         <div class="col-sm-6">
-                            <section class="panel default" style="background-color: #ffcb0c; color: #000000;">
+                            <section class="panel default" id="mid_qc_pass" style="background-color: #ffcb0c; color: #000000;">
                                 <div class="row center"><b><span style="font-size: 20px;">MID PASS</span></b></div>
                                 <div class="panel-body">
 
@@ -115,13 +114,13 @@ $dataPoints = array(
                     </div>
 
                     <div class="row">
-                        <section class="panel default">
-                            <div class="panel-body">
 
-                                <div class="center" style="<?php if($line_id == 7){ ?>height: 430px; <?php }else{ ?> height: 335px; <?php } ?> width: 100%; font-size: 50px;"><b>Quality</b></div>
-
+                            <div class="col-md-12">
+                                <section class="panel default" id="quality">
+                                    <div class="center" style="<?php if($line_id == 7){ ?>height: 430px; <?php }else{ ?> height: 335px; <?php } ?> width: 100%; font-size: 40px;"><b>Quality</b></div>
+                                </section>
                             </div>
-                        </section>
+
                     </div>
                 </div>
 
@@ -129,10 +128,10 @@ $dataPoints = array(
         </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="col-md-6">
+            <div class="col-md-4">
 
                 <section class="panel default">
-                    <div class="panel-body">
+                    <div class="panel-body" id="upcoming_pos">
 
                         <div class="left" style="width: 100%; font-size: 25px;"><b>Upcoming POs</b></div>
                         <br />
@@ -172,23 +171,37 @@ $dataPoints = array(
 
                     </div>
                 </section>
-            </div>
-            <div class="col-md-6">
 
-                <div class="col-md-6">
+            </div>
+            <div class="col-md-2">
+                <div class="information red_info">
+                    <div class="information_inner">
+                        <span style="font-size: 25px;">Finishing Alter</span>
+                        <h1 class="bolded" id="finishing_alter"><?php echo '';?></h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="information red_info">
+                    <div class="information_inner" id="running_pos">
+                        <span style="font-size: 25px;">RUNNING POs</span>
+                        <h1 class="bolded"><?php echo '';?></h1>
+                    </div>
+                </div>
+            </div>
+                <div class="col-md-2">
                     <div class="information green_info">
-                        <div class="information_inner">
-                            <div class="info green_symbols"><i class="fa fa-users icon"></i></div>
+                        <div class="information_inner" id="man_power">
                             <span style="font-size: 25px;">MAN POWER</span>
                             <h1 class="bolded"><?php echo $man_power;?></h1>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-2">
 
                         <div class="information red_info">
-                            <div class="information_inner">
-                                <div class="info red_symbols"><img width="85" height="85" src="<?php echo base_url();?>assets/images/efficiency_logo.png"></div>
+                            <div class="information_inner" id="efficiency">
+<!--                                <div class="info red_symbols"><img width="85" height="85" src="--><?php //echo base_url();?><!--assets/images/efficiency_logo.png"></div>-->
                                 <span style="font-size: 25px;">EFFICIENCY</span>
                                 <h1 class="bolded">
                                     <?php
@@ -230,7 +243,6 @@ $dataPoints = array(
 
                 </div>
 
-            </div>
         </div>
 
 
@@ -244,9 +256,31 @@ $dataPoints = array(
 //            $("#reload_div").load('<?php //echo base_url();?>//access/getProductionSummaryReportByUID');
 //        }, 10000);
 
+        $("#chartContainer_1").load('<?php echo base_url();?>dashboard/getLineHourlyOutputReload/<?php echo $line_id;?>');
+        $("#chartContainer").load('<?php echo base_url();?>dashboard/getLineOutputSummaryReload/<?php echo $line_id;?>');
+//        $("#wip").load('<?php //echo base_url();?>//dashboard/getWipReload/<?php //echo $line_id;?>//');
+//        $("#mid_qc_pass").load('<?php //echo base_url();?>//dashboard/getMidQcPassReload/<?php //echo $line_id;?>//');
+//        $("#efficiency").load('<?php //echo base_url();?>//dashboard/getEfficiencyReload/<?php //echo $line_id;?>//');
+        <!--$("#man_power").load('<?php echo base_url();?>dashboard/getManPowerReload/<?php echo $line_id;?>');-->
+        <!--$("#upcoming_pos").load('<?php echo base_url();?>dashboard/getUpcomingPosReload/<?php echo $line_id;?>');-->
+
         setInterval(function() {
-            window.location.reload();
-        }, 240000);
+//            window.location.reload();
+
+//            if($("#chartContainer_1").html() != ''){
+                $("#chartContainer_1").load('<?php echo base_url();?>dashboard/getLineHourlyOutputReload/<?php echo $line_id;?>');
+                $("#chartContainer").load('<?php echo base_url();?>dashboard/getLineOutputSummaryReload/<?php echo $line_id;?>');
+                $("#wip").load('<?php echo base_url();?>dashboard/getWipReload/<?php echo $line_id;?>');
+                $("#mid_qc_pass").load('<?php echo base_url();?>dashboard/getMidQcPassReload/<?php echo $line_id;?>');
+                $("#efficiency").load('<?php echo base_url();?>dashboard/getEfficiencyReload/<?php echo $line_id;?>');
+                $("#man_power").load('<?php echo base_url();?>dashboard/getManPowerReload/<?php echo $line_id;?>');
+                $("#running_pos").load('<?php echo base_url();?>dashboard/getRunningPoQtyReload/<?php echo $line_id;?>');
+                $("#upcoming_pos").load('<?php echo base_url();?>dashboard/getUpcomingPosReload/<?php echo $line_id;?>');
+                $("#quality").load('<?php echo base_url();?>dashboard/getQualityDefectsReload/<?php echo $line_id;?>');
+                $("#finishing_alter").load('<?php echo base_url();?>dashboard/getLineFinishingAlterReload/<?php echo $line_id;?>');
+//            }
+
+        }, 60000);
     });
 
     $(function(){
@@ -311,112 +345,69 @@ $dataPoints = array(
         <!--HOURLY CHART START-->
 
 
-        var chart_h = new CanvasJS.Chart("chartContainer_1",
-            {
-                title:{
-                    text: "Hourly",
-                    fontSize: 28
-                },
-
-                axisX:{
-                    labelFontSize: 18,
-                    labelFontWeight: "bold"
-                },
-
-                toolTip: {
-                    shared: true
-                },
-
-                data: [
-                    {
-                        type: "bar",
-                        legendText: "TARGET",
-                        showInLegend: true,
-                        name: "TARGET",
-                        indexLabel: "{y}",
-                        indexLabelFontSize: 18,
-                        color: "#f9ae00",
-                        dataPoints: [
-                            <?php foreach ($hours as $k_1 => $v_1){ ?>
-                                { label: "<?php echo date('H:i', strtotime($v_1['start_time'])).'-'.date('H:i', strtotime($v_1['end_time']));?>", y: <?php echo (round(($line_target != '' ? $line_target : 0)/10));?> },
-                            <?php } ?>
-                        ]
-                    }
-                    ,
-
-                    {
-                        type: "bar",
-                        legendText: "OUTPUT",
-                        showInLegend: true,
-                        name: "OUTPUT",
-                        indexLabel: "{y}",
-                        indexLabelFontSize: 18,
-                        dataPoints: [
-                            <?php foreach ($hours as $k_2 => $v_2){
-                            $output = $this->method_call->todayLineOutputHourly($line_id, $v_2['start_time'], $v_2['end_time']);
-
-                            $hourly_qty = ($output[0]['hourly_output'] != 0 ? $output[0]['hourly_output'] : 0);
-
-                            $line_hour_target = (round(($line_target != '' ? $line_target : 0)/10));
-
-                            $color_code = (($line_hour_target <= $hourly_qty) ? "#28a832" : "#ad1d0a");
-                                ?>
-
-                                { label: "<?php echo date('H:i', strtotime($v_2['start_time'])).'-'.date('H:i', strtotime($v_2['end_time']));?>", y: <?php echo $hourly_qty;?>, color: '<?php echo $color_code;?>' },
-                            <?php } ?>
-                        ]
-                    }
-
-                ]
-
-            });
-
-        chart_h.render();
+//        var chart_h = new CanvasJS.Chart("chartContainer_1",
+//            {
+//                title:{
+//                    text: "Hourly",
+//                    fontSize: 28
+//                },
+//
+//                axisX:{
+//                    labelFontSize: 18,
+//                    labelFontWeight: "bold"
+//                },
+//
+//                toolTip: {
+//                    shared: true
+//                },
+//
+//                data: [
+//                    {
+//                        type: "bar",
+//                        legendText: "TARGET",
+//                        showInLegend: true,
+//                        name: "TARGET",
+//                        indexLabel: "{y}",
+//                        indexLabelFontSize: 18,
+//                        color: "#f9ae00",
+//                        dataPoints: [
+//                            <?php //foreach ($hours as $k_1 => $v_1){ ?>
+//                                { label: "<?php //echo date('H:i', strtotime($v_1['start_time'])).'-'.date('H:i', strtotime($v_1['end_time']));?>//", y: <?php //echo (round(($line_target != '' ? $line_target : 0)/10));?>// },
+//                            <?php //} ?>
+//                        ]
+//                    }
+//                    ,
+//
+//                    {
+//                        type: "bar",
+//                        legendText: "OUTPUT",
+//                        showInLegend: true,
+//                        name: "OUTPUT",
+//                        indexLabel: "{y}",
+//                        indexLabelFontSize: 18,
+//                        dataPoints: [
+//                            <?php //foreach ($hours as $k_2 => $v_2){
+//                            $output = $this->method_call->todayLineOutputHourly($line_id, $v_2['start_time'], $v_2['end_time']);
+//
+//                            $hourly_qty = ($output[0]['hourly_output'] != 0 ? $output[0]['hourly_output'] : 0);
+//
+//                            $line_hour_target = (round(($line_target != '' ? $line_target : 0)/10));
+//
+//                            $color_code = (($line_hour_target <= $hourly_qty) ? "#28a832" : "#ad1d0a");
+//                                ?>
+//
+//                                { label: "<?php //echo date('H:i', strtotime($v_2['start_time'])).'-'.date('H:i', strtotime($v_2['end_time']));?>//", y: <?php //echo $hourly_qty;?>//, color: '<?php //echo $color_code;?>//' },
+//                            <?php //} ?>
+//                        ]
+//                    }
+//
+//                ]
+//
+//            });
+//
+//        chart_h.render();
 
 
     }
 
-//    window.onload = function () {
-//        CanvasJS.addColorSet("colorShades",
-//        [//colorSet Array
-//
-//            "#ad1d0a",
-//            "#3CB371"
-//        ]);
-//
-//        var chart = new CanvasJS.Chart("chartContainer", {
-//            animationEnabled: true,
-//            title:{
-//                text: "Target: <?php //echo ($line_target != '' ? $line_target : 0);?>// | Output: <?php //echo ($line_output != '' ? $line_output : 0);?>// | Balance: <?php //echo ($balance != '' && $balance > 0 ? $balance : 0);?>//"
-//            },
-//            toolTip: {
-//                shared: true
-//            },
-//            legend: {
-//                reversed: true,
-//                verticalAlign: "center",
-//                horizontalAlign: "right"
-//            },
-//            data: [{
-//                type: "stackedColumn100",
-//                name: "OUTPUT",
-//                color: "green",
-//                showInLegend: true,
-//                dataPoints: [
-//                    { label: "<?php //echo $line_name;?>//", y: <?php //echo $line_output;?>// }
-//                ]
-//            },
-//                {
-//                    type: "stackedColumn100",
-//                    name: "BALANCE",
-//                    color: "red",
-//                    showInLegend: true,
-//                    dataPoints: [
-//                        { label: "<?php //echo $line_name;?>//", y: <?php //echo $balance;?>// }
-//                    ]
-//                }]
-//        });
-//        chart.render();
-//
-//    }
 </script>
