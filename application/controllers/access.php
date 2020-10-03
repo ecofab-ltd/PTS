@@ -1719,6 +1719,72 @@ class Access extends CI_Controller {
         echo 'done';
     }
 
+    public function getMachineList(){
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+//        $s_data['session_last_action_date_time'] = $date_time;
+//        $this->session->set_userdata($s_data);
+
+        $data['title'] = 'Machine List';
+
+        $line_id = $this->session->userdata('line_id');
+        $data['user_name'] = $this->session->userdata('user_name');
+        $data['user_description'] = $this->session->userdata('user_description');
+        $data['access_points'] = $this->session->userdata('access_points');
+        $data['msg'] = '';
+        $data['session_out'] = $this->session_out;
+
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
+
+            $data['machine_nos'] = $this->access_model->selectTableDataRowQuery('machine_no', 'tb_machine_list', '');
+            $data['machine_models'] = $this->access_model->selectTableDataRowQuery('model_no', 'tb_machine_list', ' GROUP BY model_no');
+            $data['lines'] = $this->access_model->selectTableDataRowQuery('*', 'tb_line', ' ORDER BY (line_code * 1)');
+
+            $data['machine_list'] = $this->access_model->getMachineList();
+
+            $data['maincontent'] = $this->load->view('machine_list', $data, true);
+            $this->load->view('master', $data);
+        }else{
+            echo $this->load->view('404');
+        }
+    }
+
+    public function filterMachineList(){
+        $machine_no = $this->input->post('machine_no');
+        $model = $this->input->post('model');
+        $line_id = $this->input->post('line_id');
+        $other_location = $this->input->post('other_location');
+
+        $where = '';
+
+        if($machine_no != ''){
+            $where .= " AND t1.machine_no='$machine_no'";
+        }
+
+        if($model != ''){
+            $where .= " AND t1.model_no='$model'";
+        }
+
+        if($line_id != ''){
+            $where .= " AND t1.line_id='$line_id'";
+        }
+
+        if($other_location != ''){
+            $where .= " AND t1.other_location LIKE '%$other_location%'";
+        }
+
+        $data['machine_list'] = $this->access_model->getMachineList($where);
+
+        echo $maincontent = $this->load->view('reports/filter_machine_list', $data);
+    }
+
     public function care_label_end_line_new(){
         $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
         

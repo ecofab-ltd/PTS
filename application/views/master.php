@@ -461,9 +461,16 @@
                 <li> <a href="<?php echo base_url();?>access/packingList"><i class="fa fa-circle"></i> Packing List </a></li>
             <?php }
 
-            if($access_points == 500){
-                ?>
+            if($access_points == 500){ ?>
+
                 <li> <a href="<?php echo base_url();?>access/getReprintRequest"><i class="fa fa-circle"></i> Reprint Requests </a></li>
+
+            <?php }
+
+            if($access_points == 600){ ?>
+
+                <li><a href="<?php echo base_url();?>access/getMachineList"><i class="fa fa-circle"></i> Machine List </a></li>
+
             <?php } ?>
 
             <li> <a href="<?php echo base_url(); ?>access/logout"><i class="fa fa-power-off"></i> Logout</a> </li>
