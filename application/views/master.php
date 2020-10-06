@@ -469,7 +469,10 @@
 
             if($access_points == 600){ ?>
 
-                <li><a href="<?php echo base_url();?>access/getMachineList"><i class="fa fa-circle"></i> Machine List </a></li>
+                <li><a href="<?php echo base_url();?>access/getMachineList"><i class="fa fa-bars"></i> Machine List </a></li>
+                <li><a href="<?php echo base_url();?>access/getMachineNames"><i class="fa fa-th"></i> Machine Names </a></li>
+                <li><a href="<?php echo base_url();?>access/getMachineModels"><i class="fa fa-indent"></i> Machine Models </a></li>
+                <li><a href="<?php echo base_url();?>access/getMachineLocations"><i class="fa fa-map-marker"></i> Locations </a></li>
 
             <?php } ?>
 

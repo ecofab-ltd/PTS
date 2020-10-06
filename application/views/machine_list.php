@@ -37,7 +37,7 @@
                   <div class="row">
                       <div class="col-md-2">
                           <select required class="form-control" id="machine_no" name="machine_no">
-                              <option value="">Machine</option>
+                              <option value="">Machine No.</option>
 
                               <?php foreach ($machine_nos as $mno){ ?>
                                   <option value="<?php echo $mno['machine_no']?>"><?php echo $mno['machine_no'];?></option>
@@ -46,62 +46,101 @@
                           </select>
                       </div>
                       <div class="col-md-2">
-                          <select required class="form-control" id="model" name="model">
-                              <option value="">Model</option>
+                          <select required class="form-control" id="machine_name" name="machine_name">
+                              <option value="">Machine Name</option>
 
-                              <?php foreach ($machine_models as $m){ ?>
-                                  <option value="<?php echo $m['model_no']?>"><?php echo $m['model_no'];?></option>
+                              <?php foreach ($machine_names as $mname){ ?>
+                                  <option value="<?php echo $mname['id']?>"><?php echo $mname['machine_name'];?></option>
                               <?php } ?>
 
                           </select>
                       </div>
-                      <div class="col-md-1">
-                          <select required class="form-control" id="line_id" name="line_id">
-                              <option value="">Line</option>
+                      <div class="col-md-2">
+                          <select required class="form-control" id="model" name="model">
+                              <option value="">Machine Model</option>
 
+                              <?php foreach ($machine_models as $mmodel){ ?>
+                                  <option value="<?php echo $mmodel['id']?>"><?php echo $mmodel['machine_model'];?></option>
+                              <?php } ?>
+
+                          </select>
+                      </div>
+                      <div class="col-md-2">
+                          <select required class="form-control" id="line_id" name="line_id">
+                              <option value="">Select Line</option>
                               <?php foreach ($lines as $l){ ?>
                                   <option value="<?php echo $l['id']?>"><?php echo $l['line_code'];?></option>
                               <?php } ?>
-
                           </select>
                       </div>
-                      <div class="col-md-1">
-                          <input type="text" autocomplete="off" name="other_location" id="other_location" placeholder="Other Location">
+                      <div class="col-md-2">
+                          <select class="form-control" id="other_location" name="other_location">
+                              <option value="">Select Other Location</option>
+                              <?php foreach ($other_locations as $ol){ ?>
+                                  <option value="<?php echo $ol['id']?>"><?php echo $ol['location_name'];?></option>
+                              <?php } ?>
+                          </select>
                       </div>
                       <div class="col-md-1 text-right">
                           <span class="btn btn-primary" onclick="filterMachineList();">SEARCH</span>
                       </div>
                       <div class="col-md-1" id="loader" style="display: none;"><div class="loader"></div></div>
-                      <div class="col-md-3"></div>
-                      <div class="col-md-1">
-                          <div class="table-responsive">
-                              <table class="display" id="">
-                                  <thead>
-                                  <tr>
-                                      <!--                                <th class="hidden-phone center"><a target="_blank" href="--><?php //echo base_url();?><!--dashboard/poWiseCuttingReport" class="btn btn-danger">Cutting</a></th>-->
-                                      <th class="hidden-phone center">
-                                          <span class="btn btn-success"><i class="fa fa-plus"></i> Machine</span>
-                                      </th>
-                                      <th class="hidden-phone center">
-                                          <span class="btn btn-default" id="btnExport123" onclick="ExportToExcel('table_id')">
-                                                <i class="fa fa-arrow-down"></i> <b> EXCEL</b>
-                                          </span>
-                                      </th>
-                                  </tr>
-                                  </thead>
-                              </table>
-                          </div>
-                      </div>
+
                   </div>
               </div>
           </div>
-          <div class="block-web" style="overflow-x:auto;">
+          <br />
+          <div class="block-web">
+              <div class="row">
+                  <div class="col-md-10">
+                      <div style="padding-top:10px">
+                          <h6 style="color:red">
+                              <?php
+                              $exc = $this->session->userdata('exception');
+                              if (isset($exc)) {
+                                  echo $exc;
+                                  $this->session->unset_userdata('exception');
+                              }
+                              ?>
+                          </h6>
+
+                          <h6 style="color:green">
+                              <?php
+                              $msg = $this->session->userdata('message');
+                              if (isset($msg)) {
+                                  echo $msg;
+                                  $this->session->unset_userdata('message');
+                              }
+                              ?>
+                          </h6>
+                      </div>
+                  </div>
+                  <div class="col-md-2">
+                      <div class="table-responsive">
+                          <table class="" id="">
+                              <thead>
+                              <tr>
+                                  <!--                                <th class="hidden-phone center"><a target="_blank" href="--><?php //echo base_url();?><!--dashboard/poWiseCuttingReport" class="btn btn-danger">Cutting</a></th>-->
+                                  <th class="hidden-phone center">
+                                      <a href="<?php echo base_url();?>access/addMachineNo" class="btn btn-success"><i class="fa fa-plus"></i> Machine</a>
+                                  </th>
+                                  <th class="hidden-phone center">
+                                          <span class="btn btn-default" id="btnExport123" onclick="ExportToExcel('table_id')">
+                                                <i class="fa fa-arrow-down"></i> <b> EXCEL</b>
+                                          </span>
+                                  </th>
+                              </tr>
+                              </thead>
+                          </table>
+                      </div>
+                  </div>
+              </div>
               <table class="display table table-bordered table-striped" id="table_id" border="1">
                   <thead>
                       <tr style="font-size: 16px;">
                           <th class="hidden-phone center">SL.</th>
                           <th class="hidden-phone center">Machine No</th>
-                          <th class="hidden-phone center">Machine Description</th>
+                          <th class="hidden-phone center">Machine Name</th>
                           <th class="hidden-phone center">Model</th>
                           <th class="hidden-phone center">Line</th>
                           <th class="hidden-phone center">Other Location</th>
@@ -116,19 +155,37 @@
 
                   $sl=1;
 
-                  foreach ($machine_list as $v){ ?>
+                  foreach ($machine_list as $k => $v){ ?>
 
                       <tr>
-                          <td class="center"><?php echo $sl; $sl++;?></td>
-                          <td class="center"><?php echo $v['machine_no'];?></td>
-                          <td class="center"><?php echo $v['machine_description'];?></td>
-                          <td class="center"><?php echo $v['model_no'];?></td>
-                          <td class="center"><?php echo $v['line_code'];?></td>
-                          <td class="center"><?php echo $v['other_location'];?></td>
-                          <td class="center"><?php echo ($v['status'] == 1 ? 'ACTIVE' : ($v['status'] == 0 ? 'INACTIVE' : '') );?></td>
-                          <td class="center"><?php echo ($v['status'] == 1 ? 'RUNNING' : ($v['status'] == 2 ? 'UNDER MAINTENANCE' : '') );?></td>
                           <td class="center">
-                              <a class="btn btn-warning" href="" title="EDIT"><i class="fa fa-edit"></i></a>
+                              <?php echo $sl; $sl++;?>
+                              <input type="hidden" required="required" readonly="readonly" id="machine_id_<?php echo $k;?>" value="<?php echo $v['id'];?>">
+                          </td>
+                          <td class="center"><?php echo $v['machine_no'];?></td>
+                          <td class="center"><?php echo $v['machine_name'];?></td>
+                          <td class="center"><?php echo $v['machine_model'];?></td>
+                          <td class="center"><?php echo $v['line_code'];?></td>
+                          <td class="center"><?php echo $v['location_name'];?></td>
+                          <td class="center"><?php echo ($v['status'] == 1 ? 'ACTIVE' : ($v['status'] == 0 ? 'INACTIVE' : '') );?></td>
+                          <td class="center">
+                              <?php
+                              if($v['service_status'] == 0){
+                                 echo 'Out of Service';
+                              }
+                              if($v['service_status'] == 1){
+                                  echo 'Running';
+                              }
+                              if($v['service_status'] == 2){
+                                  echo 'Under Maintenance';
+                              }
+                              if($v['service_status'] == 3){
+                                  echo 'Idle';
+                              }
+                              ?>
+                          </td>
+                          <td class="center">
+                              <a href="<?php echo base_url();?>access/editMachineNo/<?php echo $v['id'];?>" class="btn btn-warning" title="EDIT" onclick="getSetDataToModal(<?php echo $k;?>);"><i class="fa fa-edit"></i></a>
                           </td>
                       </tr>
 
@@ -142,39 +199,13 @@
           </div>
       </div>
 
-<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel"></h4>
-            </div>
-
-            <div class="modal-body">
-                <div class="col-md-3 scroll4">
-                    <div class="porlets-content">
-                        <div class="table-responsive" id="remain_cl_list">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <!--                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                <!--                <button type="button" class="btn btn-primary">Save changes</button>-->
-            </div>
-
-        </div>
-    </div>
-</div>
 
 <script type="text/javascript">
     $('select').select2();
 
     function filterMachineList() {
         var machine_no = $("#machine_no").val();
+        var machine_name = $("#machine_name").val();
         var model = $("#model").val();
         var line_id = $("#line_id").val();
         var other_location = $("#other_location").val();
@@ -185,7 +216,7 @@
         $.ajax({
             url: "<?php echo base_url();?>access/filterMachineList/",
             type: "POST",
-            data: {machine_no: machine_no, model: model, line_id: line_id, other_location: other_location},
+            data: {machine_no: machine_no, machine_name: machine_name, model: model, line_id: line_id, other_location: other_location},
             dataType: "html",
             success: function (data) {
                 $("#table_body").append(data);
@@ -194,6 +225,29 @@
         });
     }
 
+    function checkMachineAvailability() {
+        var new_machine_no = $("#new_machine_no").val();
+
+        $.ajax({
+            url: "<?php echo base_url();?>access/checkMachineAvailability/",
+            type: "POST",
+            data: {new_machine_no: new_machine_no},
+            dataType: "json",
+            success: function (data) {
+
+                console.log(data.length);
+
+                if(data.length > 0){
+                   $("#modal_submit_btn").attr('disabled', true);
+               }else{
+                   $("#modal_submit_btn").attr('disabled', false);
+               }
+
+            }
+        });
+
+    }
+    
     function ExportToExcel(tableid) {
         var tab_text = "<table border='2px'><tr>";
         var textRange; var j = 0;
