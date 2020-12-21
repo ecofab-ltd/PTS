@@ -2445,6 +2445,167 @@ class Access extends CI_Controller {
         echo $maincontent = $this->load->view('filter_machine_list', $data);
     }
 
+    public function fabricAssignToCutting($fabric_id){
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $data['title'] = 'Fabric Assign to Cutting';
+        $data['user_name'] = $this->session->userdata('user_name');
+        $data['user_description'] = $this->session->userdata('user_description');
+        $data['access_points'] = $this->session->userdata('access_points');
+
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
+            $data['fabric_code'] = $this->access_model->selectTableDataRowQuery('*', 'tb_fabric_code', " AND id=$fabric_id");
+
+            $data['maincontent'] = $this->load->view('fabric_assign_to_cutting', $data, true);
+            $this->load->view('master', $data);
+        }else{
+            echo $this->load->view('404');
+        }
+    }
+
+    public function saveFabricAssignToCutting(){
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $fabric_code = $this->input->post('fabric_code');
+        $data['fabric_id'] = $this->input->post('fabric_id');
+        $data['cutting_assignment_length'] = $this->input->post('cutting_assignment_length');
+        $data['remarks'] = $this->input->post('remarks');
+        $data['assignment_date'] = $date;
+
+        $this->access_model->insertingData('tb_fabric_assignment_to_cutting', $data);
+
+        $data_s['message'] = $fabric_code.' - '.$data['cutting_assignment_length']."(m) is Assigned to Cutting!";
+        $this->session->set_userdata($data_s);
+        redirect('access/getFabricCodes');
+    }
+
+    public function checkStoreFabricLengthAvailability(){
+        $fabric_id = $this->input->post('fabric_id');
+
+        $res = $this->access_model->checkStoreFabricLengthAvailability(" AND t1.id=$fabric_id");
+
+        echo json_encode($res);
+    }
+
+    public function fabricInhouse($fabric_id){
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $data['title'] = 'Fabric Inhouse';
+        $data['user_name'] = $this->session->userdata('user_name');
+        $data['user_description'] = $this->session->userdata('user_description');
+        $data['access_points'] = $this->session->userdata('access_points');
+
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
+            $data['fabric_code'] = $this->access_model->selectTableDataRowQuery('*', 'tb_fabric_code', " AND id=$fabric_id");
+
+            $data['maincontent'] = $this->load->view('fabric_inhouse', $data, true);
+            $this->load->view('master', $data);
+        }else{
+            echo $this->load->view('404');
+        }
+    }
+
+    public function saveFabricInhouse(){
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $fabric_code = $this->input->post('fabric_code');
+        $data['fabric_id'] = $this->input->post('fabric_id');
+        $data['inhouse_length'] = $this->input->post('inhouse_length');
+        $data['remarks'] = $this->input->post('remarks');
+        $data['inhouse_date'] = $date;
+
+        $this->access_model->insertingData('tb_fabric_inhouse_log', $data);
+
+        $data_s['message'] = $fabric_code.' - '.$data['inhouse_length']."(m) Successfully Inhoused!";
+        $this->session->set_userdata($data_s);
+        redirect('access/getFabricCodes');
+    }
+
+    public function addNewFabricCode(){
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $data['title'] = 'New Fabric Code';
+        $data['user_name'] = $this->session->userdata('user_name');
+        $data['user_description'] = $this->session->userdata('user_description');
+        $data['access_points'] = $this->session->userdata('access_points');
+
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
+            $data['maincontent'] = $this->load->view('add_new_fabric_code', $data, true);
+            $this->load->view('master', $data);
+        }else{
+            echo $this->load->view('404');
+        }
+    }
+
+    public function checkFabricCodeAvailability(){
+        $fabric_code = $this->input->post('fabric_code');
+
+        $result = $this->access_model->selectTableDataRowQuery('*', 'tb_fabric_code', " AND fabric_code='$fabric_code'");
+
+        if(sizeof($result) > 0){
+            echo 'available';
+        }else{
+            echo 'unavailable ';
+        }
+    }
+
+    public function saveNewFabricCode(){
+        $data['fabric_code'] = $this->input->post('fabric_code');
+
+        $this->access_model->insertingData('tb_fabric_code', $data);
+
+        $data_s['message'] = $data['fabric_code']." is Successfully Created!";
+        $this->session->set_userdata($data_s);
+        redirect('access/getFabricCodes');
+    }
+
+    public function getFabricCodes(){
+        $data['title']='Fabric Codes';
+
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $data['user_name'] = $this->session->userdata('user_name');
+        $data['user_description'] = $this->session->userdata('user_description');
+        $data['access_points'] = $this->session->userdata('access_points');
+
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
+            $data['fabric_codes'] = $this->access_model->checkStoreFabricLengthAvailability();
+
+            $data['maincontent'] = $this->load->view('fabric_codes', $data, true);
+            $this->load->view('master', $data);
+        }else{
+            echo $this->load->view('404');
+        }
+    }
+
     public function getDefectCodes(){
         $data['title']='Defect Codes';
 
@@ -2646,6 +2807,11 @@ class Access extends CI_Controller {
         $res = $this->checkAuthorization($data['access_points'], $cur_url);
 
         if(sizeof($res) > 0) {
+            $data['floors'] = $this->access_model->getFloors();
+            $data['lines'] = $this->access_model->getLines();
+            $data['brands'] = $this->access_model->getAllBrands();
+            $data['finishing_floors'] = $this->access_model->selectTableDataRowQuery("*", "tb_floor", " AND is_finishing_floor=1");
+
             $data['maincontent'] = $this->load->view('add_new_user', $data, true);
             $this->load->view('master', $data);
         }else{
@@ -2746,6 +2912,7 @@ class Access extends CI_Controller {
             $data['floors'] = $this->access_model->getFloors();
             $data['lines'] = $this->access_model->getLines();
             $data['brands'] = $this->access_model->getAllBrands();
+            $data['finishing_floors'] = $this->access_model->selectTableDataRowQuery("*", "tb_floor", " AND is_finishing_floor=1");
             $data['user_info'] = $this->access_model->getUserList(" AND t1.id=$user_id");
 
             $data['maincontent'] = $this->load->view('edit_user_info', $data, true);
@@ -6266,7 +6433,7 @@ class Access extends CI_Controller {
             if ($manually_closed == 1){
                 echo 'closed';
             }else{
-                if(($id == 0) && ($sent_to_production == 1)){
+                if(($id == 0) && ($sent_to_production == 1) && ($package_sent_to_production == 1)){
                     $this->access_model->inputToLine($carelabel_tracking_no, $line_id, $finishing_floor_id, 2, 1, $date_time);
 
                     echo 'successfully inputed';
@@ -6289,6 +6456,9 @@ class Access extends CI_Controller {
                 if (($id != $line_id)){
                     if($sent_to_production == 0){
                         echo 'cutting process not finished';
+                    }
+                    if($package_sent_to_production == 0){
+                        echo 'input man scan incomplete';
                     }
                     if($id != 0){
                         $line_info = $this->access_model->getLineInfo($id);
@@ -7677,6 +7847,7 @@ class Access extends CI_Controller {
         $get_data['sap_no'] = $this->access_model->getSapPoNo();
         $get_data['tables'] = $this->access_model->getTables();
         $get_data['cut_no'] = $this->access_model->getCutNoList();
+        $get_data['fabric_codes'] = $this->access_model->selectTableDataRowQuery("*", "tb_fabric_code", "");
 
         $data['maincontent'] = $this->load->view('cutting', $get_data, true);
         $this->load->view('master', $data);
@@ -7740,6 +7911,8 @@ class Access extends CI_Controller {
         $po_type = $this->input->post('po_type');
         $style_type = $this->input->post('style_type');
         $per_bundle_qty = $this->input->post('per_bundle_qty');
+//        $fabric_id = $this->input->post('fabric_id');
+//        $fabric_length = $this->input->post('fabric_length');
 
         $size_field = "size";
         $qty_field = "qty";
@@ -7957,6 +8130,22 @@ class Access extends CI_Controller {
                         }
                     }
                 }
+
+//                Fabric Usage Summary Start
+
+//                $res_fabric_cut = $this->access_model->selectTableDataRowQuery("*", "tb_fabric_usage_detail", " AND group_so='$sap_no' AND cut_no='$cut_no'");
+//
+//                if(sizeof($res_fabric_cut) == 0){
+//                    $data_fabric['fabric_id'] = $fabric_id;
+//                    $data_fabric['group_so'] = $sap_no;
+//                    $data_fabric['cut_no'] = $cut_no;
+//                    $data_fabric['usage_length'] = $fabric_length;
+//                    $data_fabric['usage_date'] = $date;
+//
+//                    $this->access_model->insertingData('tb_fabric_usage_detail', $data_fabric);
+//                }
+
+//                Fabric Usage Summary End
 
                 echo $cut_tracking_no.'.';
 //            }
