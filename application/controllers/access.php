@@ -2120,6 +2120,7 @@ class Access extends CI_Controller {
     public function getEmployeeSkills(){
         $employee_code = $this->input->post('employee_code');
         $psl = $this->input->post('psl');
+        $update_date = $this->input->post('update_date');
 
         $where = '';
 
@@ -2129,6 +2130,10 @@ class Access extends CI_Controller {
 
         if($psl != ''){
             $where .= $this->db->where('tb_employee_skills.psl', $psl);
+        }
+
+        if($update_date != '' && $update_date != 'undefined--undefined'){
+            $where .= $this->db->where('tb_employee_skills.update_date <', $update_date);
         }
 
         $employee_skill_list = $this->access_model->getEmployeeSkills($where);
@@ -2158,6 +2163,7 @@ class Access extends CI_Controller {
             $newline .= '<td class="hidden-phone center">'.$v['category'].'</td>';
             $newline .= '<td class="hidden-phone center">'.$v['capacity'].'</td>';
             $newline .= '<td class="hidden-phone center">'.(round($v['capacity']/$v['standard_capacity'], 2) * 100).'</td>';
+            $newline .= '<td class="hidden-phone center">'.$v['update_date'].'</td>';
             $newline .= '<td class="hidden-phone center">
                             <table>
                                 <tr>
@@ -2203,6 +2209,10 @@ class Access extends CI_Controller {
     }
 
     public function updateEmployeeSkill(){
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
         $emp_skill_id = $this->input->post('emp_skill_id');
 
         $psl = $this->input->post('psl');
@@ -2215,6 +2225,7 @@ class Access extends CI_Controller {
             $data['psl'] = $psl;
             $data['is_mail_psl'] = $is_mail_psl;
             $data['capacity'] = $capacity;
+            $data['update_date'] = $date;
 
             $this->access_model->updateTblNew('tb_employee_skills', 'id', $emp_skill_id, $data);
 
@@ -2230,6 +2241,7 @@ class Access extends CI_Controller {
                 $data['psl'] = $psl;
                 $data['is_mail_psl'] = $is_mail_psl;
                 $data['capacity'] = $capacity;
+                $data['update_date'] = $date;
 
                 $this->access_model->updateTblNew('tb_employee_skills', 'id', $emp_skill_id, $data);
 
@@ -2453,6 +2465,206 @@ class Access extends CI_Controller {
         }
     }
 
+    public function styleWiseSMVs(){
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $data['title'] = 'Style Wise SMV';
+
+        $line_id = $this->session->userdata('line_id');
+        $data['user_name'] = $this->session->userdata('user_name');
+        $data['user_description'] = $this->session->userdata('user_description');
+        $data['access_points'] = $this->session->userdata('access_points');
+        $data['msg'] = '';
+        $data['session_out'] = $this->session_out;
+
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
+            $data['style_smv_list'] = $this->access_model->selectTableDataRowQuery('*', 'tb_style_smv', '');
+
+            $data['maincontent'] = $this->load->view('style_smv_list', $data, true);
+            $this->load->view('master', $data);
+        }else{
+            echo $this->load->view('404');
+        }
+    }
+
+    public function getStyleSmv(){
+        $style_id = $this->input->post('style');
+
+        $where = '';
+
+        if($style_id != ''){
+            $where .= " AND id='$style_id'";
+        }
+
+        $style_smv_list = $this->access_model->selectTableDataRowQuery('*', 'tb_style_smv', " $where");
+
+        $newline='';
+
+        $sl=1;
+
+        foreach ($style_smv_list as $st){
+
+            $newline .= '<tr>';
+            $newline .= '<td class="hidden-phone center">'.$sl.'</td>';
+            $newline .= '<td class="hidden-phone center">'.$st['style_no'].'</td>';
+            $newline .= '<td class="hidden-phone center">'.$st['style_name'].'</td>';
+            $newline .= '<td class="hidden-phone center">'.$st['brand'].'</td>';
+            $newline .= '<td class="hidden-phone center">'.$st['smv'].'</td>';
+            $newline .= '<td class="hidden-phone center">
+                            <table>
+                                <tr>    
+                                    <td><a href="'.base_url().'access/editStyleSmv/'.$st['id'].'" class="btn btn-warning"><i class="fa fa-pencil"></i></a></td>
+                                    <td><a href="'.base_url().'access/deleteStyleSmv/'.$st['id'].'" class="btn btn-danger" onclick="return confirm(\'Are you sure to delete?\')"><i class="fa fa-times"></i></a></td>
+                                </tr>
+                            </table>
+                        </td>';
+            $newline .= '</tr>';
+
+            $sl++;
+        }
+
+        echo $newline;
+    }
+
+    public function editStyleSmv($style_id){
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $data['title'] = 'Edit Style SMV';
+
+        $line_id = $this->session->userdata('line_id');
+        $data['user_name'] = $this->session->userdata('user_name');
+        $data['user_description'] = $this->session->userdata('user_description');
+        $data['access_points'] = $this->session->userdata('access_points');
+        $data['msg'] = '';
+        $data['session_out'] = $this->session_out;
+
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
+            $data['style_info'] = $this->access_model->selectTableDataRowQuery('*', 'tb_style_smv', " AND id=$style_id");
+
+            $data['maincontent'] = $this->load->view('edit_style_smv', $data, true);
+            $this->load->view('master', $data);
+        }else{
+            echo $this->load->view('404');
+        }
+    }
+
+    public function updateStyleWiseSmv(){
+        $style_id = $this->input->post('style_id');
+
+        $data['style_name'] = preg_replace('!\s+!', ' ', str_replace("'", "", trim($this->input->post('style_name'))));
+        $data['brand'] = preg_replace('!\s+!', ' ', str_replace("'", "", trim($this->input->post('brand'))));
+        $data['smv'] = preg_replace('!\s+!', ' ', str_replace("'", "", trim($this->input->post('smv'))));
+
+        $this->access_model->updateTblNew('tb_style_smv', 'id', $style_id, $data);
+
+        $data['message'] = 'Successfully Updated!';
+        $this->session->set_userdata($data);
+
+        $this->load->library('user_agent');
+        if ($this->agent->is_referral())
+        {
+            $previous_url = $this->agent->referrer();
+
+            redirect("$previous_url");
+        }
+    }
+
+    public function deleteStyleSmv($style_id){
+        $this->access_model->deleteTableData('tb_style_smv', 'id', $style_id);
+
+        $data['message'] = 'Successfully Deleted!';
+        $this->session->set_userdata($data);
+
+        return redirect('access/styleWiseSMVs');
+    }
+
+    public function uploadStyleSmv(){
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
+        $data['title'] = 'Upload Style SMV';
+
+        $line_id = $this->session->userdata('line_id');
+        $data['user_name'] = $this->session->userdata('user_name');
+        $data['user_description'] = $this->session->userdata('user_description');
+        $data['access_points'] = $this->session->userdata('access_points');
+        $data['msg'] = '';
+        $data['session_out'] = $this->session_out;
+
+        $cur_url = __METHOD__;
+
+        $res = $this->checkAuthorization($data['access_points'], $cur_url);
+
+        if(sizeof($res) > 0) {
+            $data['maincontent'] = $this->load->view('upload_style_smv', $data, true);
+            $this->load->view('master', $data);
+        }else{
+            echo $this->load->view('404');
+        }
+    }
+
+    public function uploadingStyleSmv(){
+        $filename = $_FILES["style_smv_file"]["tmp_name"];
+
+        if($_FILES["style_smv_file"]['name'] == 'style_smv.csv') {
+            if ($_FILES["style_smv_file"]["size"] > 0) {
+                $file = fopen($filename, "r");
+                fgetcsv($file);
+
+                while (!feof($file)) {
+                    $line_of_text[] = fgetcsv($file);
+                }
+                fclose($file);
+
+                foreach ($line_of_text as $k => $v) {
+
+                    if ($v[0] != '') {
+                        $style_no = preg_replace('!\s+!', ' ', str_replace("'", "", trim($v[0])));
+                        $style_name = preg_replace('!\s+!', ' ', str_replace("'", "", trim($v[1])));
+                        $brand = preg_replace('!\s+!', ' ', str_replace("'", "", trim($v[2])));
+                        $smv = $v[3];
+
+                        $res = $this->access_model->selectTableDataRowQuery('*', 'tb_style_smv', " AND style_no='$style_no'");
+
+                        if (sizeof($res) == 0) {
+
+                            $data = array(
+                                'brand' => $brand,
+                                'style_no' => $style_no,
+                                'style_name' => $style_name,
+                                'smv' => $smv,
+                            );
+
+                            $this->access_model->insertingData('tb_style_smv', $data);
+                        }
+
+                    }
+
+                }
+
+                return redirect('access/styleWiseSMVs');
+            }
+        }else{
+            $data['exception'] = 'Wrong file selected! Make Sure the File Name: style_smv.csv';
+            $this->session->set_userdata($data);
+
+            return redirect('access/uploadStyleSmv');
+        }
+    }
+
     public function operationList(){
         $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
         $date_time=$datex->format('Y-m-d H:i:s');
@@ -2591,7 +2803,7 @@ class Access extends CI_Controller {
     public function deleteOperation($operation_id){
         $this->access_model->deleteTableData('tb_operation_list', 'id', $operation_id);
 
-        $data['message'] = 'Successfully Updated!';
+        $data['message'] = 'Successfully Deleted!';
         $this->session->set_userdata($data);
 
         return redirect('access/operationList');
@@ -2624,6 +2836,10 @@ class Access extends CI_Controller {
     }
 
     public function uploadingEmployeeSkills(){
+        $datex = new DateTime('now', new DateTimeZone('Asia/Dhaka'));
+        $date_time=$datex->format('Y-m-d H:i:s');
+        $date=$datex->format('Y-m-d');
+
         $filename = $_FILES["employee_skills_file"]["tmp_name"];
 
         if($_FILES["employee_skills_file"]['name'] == 'employee_skills.csv') {
@@ -2656,6 +2872,7 @@ class Access extends CI_Controller {
                                     'employee_code' => $employee_code,
                                     'is_mail_psl' => $is_mail_psl,
                                     'capacity' => $capacity,
+                                    'update_date' => $date,
                                 );
 
                                 $this->access_model->insertingData('tb_employee_skills', $data);

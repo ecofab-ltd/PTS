@@ -501,6 +501,7 @@
                         <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>access/operationList"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Operation List</b> </a> </li>
                         <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>access/employeeList"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Employee List</b> </a> </li>
                         <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>access/employeeSkills"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Employee Skills</b> </a> </li>
+                        <li> <a style="margin-bottom: 1px;" href="<?php echo base_url();?>access/styleWiseSMVs"> <span>&nbsp;</span> <i class="fa fa-circle"></i> <b>Style SMV</b> </a> </li>
                     </ul>
                 </li>
                 <li> <a href="javascript:void(0);"> <i class="fa fa-plus"></i> Target Assign <span class="plus"><i class="fa fa-plus"></i></span></a>
