@@ -3,7 +3,7 @@
 <head>
     <title><?php echo $title;?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="refresh" content="30">
+    <meta http-equiv="refresh" content="60">
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/images/favicon.ico" type="image/x-icon" />
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -88,6 +88,9 @@
     </style>
 </head>
 <body>
+
+<?php $hour_count = sizeof($hours);?>
+
 <table id="" border="1" width="100%" style="border: 1px solid black;">
         <thead>
         <tr style="background-color: #f7ffb0;">
@@ -98,25 +101,16 @@
             <th align="center" rowspan="2" style="font-size: 20px; font-weight: 900; width: 40px;">Effi.</th>
             <th align="center" rowspan="2" style="font-size: 20px; font-weight: 900; width: 40px;">DHU</th>
             <th align="center" rowspan="2" style="font-size: 18px; font-weight: 900; width: 40px;">BRND</th>
-            <th align="center" colspan="10" style="font-size: 20px; font-weight: 900;">HOURS</th>
+            <th align="center" colspan="<?php echo $hour_count;?>" style="font-size: 20px; font-weight: 900;">HOURS</th>
 <!--            <th align="center" rowspan="2" style="font-size: 20px; font-weight: 900; width: 40px;">AVG</th>-->
             <th align="center" rowspan="2" style="font-size: 20px; font-weight: 900; width: 40px;">AVG</th>
             <th align="center" rowspan="2" style="font-size: 20px; font-weight: 900; width: 40px;">Total</th>
             <th align="center" rowspan="2" style="font-size: 20px; font-weight: 900; width: 40px;">BLNC</th>
         </tr>
         <tr style="background-color: #f7ffb0;">
-
-            <th align="center" style="font-size: 20px; font-weight: 900;">1</th>
-            <th align="center" style="font-size: 20px; font-weight: 900;">2</th>
-            <th align="center" style="font-size: 20px; font-weight: 900;">3</th>
-            <th align="center" style="font-size: 20px; font-weight: 900;">4</th>
-            <th align="center" style="font-size: 20px; font-weight: 900;">5</th>
-            <th align="center" style="font-size: 20px; font-weight: 900;">6</th>
-            <th align="center" style="font-size: 20px; font-weight: 900;">7</th>
-            <th align="center" style="font-size: 20px; font-weight: 900;">8</th>
-            <th align="center" style="font-size: 20px; font-weight: 900;">9</th>
-            <th align="center" style="font-size: 20px; font-weight: 900;">10</th>
-
+            <?php foreach ($hours as $h){ ?>
+                <th align="center" style="font-size: 20px; font-weight: 900;"><?php echo $h['hour']?></th>
+            <?php } ?>
         </tr>
         </thead>
         <tbody>
@@ -167,6 +161,8 @@
             <td align="center"><?php echo round($line_target_per_hour).' / '.$line_target_hour;?></td>
             <td align="center">
                 <?php
+                $segment_id = $this->method_call->getSegments($time, $line['floor']);
+
                 if($segment_id == 1){
                     $man_power = $line_info[0]['man_power_1'];
                     echo $man_power;
@@ -193,16 +189,18 @@
                 <?php echo $brand;?>
             </td>
             <?php
+            $total_manual_output = 0;
             $total_output = 0;
             $total_output_balance = 0;
 
             foreach ($hours as $h){
-            $line_report = $this->method_call->getLineHourlyReport($line_id, $h['start_time'], $h['end_time']);
+            $line_report = $this->method_call->getLineHourlyReport($line_id, $h['hour']);
 
+            if(!empty($line_report)){
                 foreach ($line_report AS $lr){
                 ?>
 
-                <td align="center" title="<?php echo $h['start_time'].' - '.$h['end_time'];?>"
+                <td align="center" title="<?php echo $lr['start_time'].' - '.$lr['end_time'];?>"
                     <?php
                     if($lr['qty'] > 0){
 
@@ -216,7 +214,9 @@
                     <?php
                     }?>>
                     <?php
-                    $total_output += $lr['qty'];
+                    $line_output_qty = $lr['qty']+$lr['manual_qty'];
+                    $total_manual_output += $lr['manual_qty'];
+                    $total_output += $line_output_qty;
 
                     $blnc = ($lr['target_hr'] - $lr['qty']);
                     $balance = round($blnc * (-1), 2);
@@ -225,7 +225,10 @@
                 </td>
 
                 <?php
-                }
+                    }
+                }else{ ?>
+                    <td align="center"></td>
+                <?php }
             }
             $total_output_balance = $total_output - $line_info[0]['target'];
 
@@ -233,7 +236,7 @@
             ?>
 <!--            <td align="center">--><?php //echo round($total_output/$total_wm_to_wh, 2);?><!--</td>-->
             <td align="center" title="<?php echo $total_wh;?>"><?php echo round($total_output/$total_wh, 2);?></td>
-            <td align="center"><?php echo $total_output;?></td>
+            <td align="center" title="Manual Adjustment: <?php echo $total_manual_output;?>"><?php echo $total_output;?></td>
             <td align="center"><?php echo $total_output_balance;?></td>
         </tr>
 
@@ -266,7 +269,7 @@
                 <th align="center" style="font-size: 20px; font-weight: 900;"><?php echo '';?></th>
                 <?php
                 foreach ($hours as $h_2){
-                    $hour_summary = $this->method_call->getHourlySummaryReport($h_2['start_time'], $h_2['end_time']);
+                    $hour_summary = $this->method_call->getHourlySummaryReport($h_2['hour']);
 
                 ?>
                 <th align="center" style="font-size: 20px; font-weight: 900;"><?php echo $hour_summary[0]['total_hour_qty'];?></th>
@@ -315,6 +318,8 @@
                     $floor_total_target += $fl['target'];
                     $floor_line_target_per_hour += ($fl['target'] / $fl['target_hour']);
 
+                    $segment_id = $this->method_call->getSegments($time, $fl['floor']);
+
                     if($segment_id == 1){
                         $floor_total_line_mp += $fl['man_power_1'];
                     }
@@ -347,11 +352,12 @@
                 foreach ($hours as $h_2){
                     $floor_total_output = 0;
 
-                    $floor_hour_summary = $this->method_call->getHourlyFloorSummaryReport($h_2['start_time'], $h_2['end_time'], $floor_id);
+                    $floor_hour_summary = $this->method_call->getHourlyFloorSummaryReport($h_2['hour'], $floor_id);
 
-                    foreach ($floor_hour_summary as $fhs){
-                        $floor_total_output += $fhs['line_qty'];
-                    }
+//                    foreach ($floor_hour_summary as $fhs){
+//                        $floor_total_output += $fhs['line_qty'];
+//                    }
+                    $floor_total_output = $floor_hour_summary[0]['line_qty'];
 
                     $floor_grand_total_output += $floor_total_output;
                     ?>
@@ -373,7 +379,7 @@
     <tr style="background-color: #f7ffb0;">
         <th align="center" colspan="3" style="font-size: 20px; font-weight: 900;">FINISHING</th>
 
-        <th align="center" colspan="10" style="font-size: 20px; font-weight: 900;">HOURS</th>
+        <th align="center" colspan="<?php echo $hour_count;?>" style="font-size: 20px; font-weight: 900;">HOURS</th>
         <th align="center" rowspan="2" style="font-size: 20px; font-weight: 900; width: 40px;">Total</th>
         <th align="center" rowspan="2" style="font-size: 20px; font-weight: 900; width: 40px;">AVG</th>
         <th align="center" rowspan="2" style="font-size: 20px; font-weight: 900; width: 40px;">BLNC</th>
@@ -383,17 +389,9 @@
         <th align="center" rowspan="2" style="font-size: 20px; font-weight: 900; width: 50px;">TAR.</th>
         <th align="center" rowspan="2" style="font-size: 20px; font-weight: 900; width: 60px;">Per/Hr</th>
 
-        <th align="center" style="font-size: 20px; font-weight: 900;">1</th>
-        <th align="center" style="font-size: 20px; font-weight: 900;">2</th>
-        <th align="center" style="font-size: 20px; font-weight: 900;">3</th>
-        <th align="center" style="font-size: 20px; font-weight: 900;">4</th>
-        <th align="center" style="font-size: 20px; font-weight: 900;">5</th>
-        <th align="center" style="font-size: 20px; font-weight: 900;">6</th>
-        <th align="center" style="font-size: 20px; font-weight: 900;">7</th>
-        <th align="center" style="font-size: 20px; font-weight: 900;">8</th>
-        <th align="center" style="font-size: 20px; font-weight: 900;">9</th>
-        <th align="center" style="font-size: 20px; font-weight: 900;">10</th>
-
+        <?php foreach ($hours as $h){ ?>
+            <th align="center" style="font-size: 20px; font-weight: 900;"><?php echo $h['hour']?></th>
+        <?php } ?>
     </tr>
     </thead>
     <tbody>
@@ -429,7 +427,7 @@
             $count_hour = 0;
 
             foreach ($hours as $h){
-                $finishing_report = $this->method_call->getFinishingHourlyReport($floor_id, $h['start_time'], $h['end_time']);
+                $finishing_report = $this->method_call->getFinishingHourlyReport($floor_id, $h['hour']);
 
                 foreach ($finishing_report AS $fr){
                     ?>
@@ -498,7 +496,7 @@
             foreach ($hours as $h_2){
                 $floor_finishing_total_output = 0;
 
-                $floor_finishing_hour_summary = $this->method_call->getHourlyFloorFinishingSummaryReport($h_2['start_time'], $h_2['end_time']);
+                $floor_finishing_hour_summary = $this->method_call->getHourlyFloorFinishingSummaryReport($h_2['hour']);
 
                 foreach ($floor_finishing_hour_summary as $fhs){
                     $floor_finishing_total_output += $fhs['finishing_qty'];
