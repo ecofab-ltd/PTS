@@ -111,7 +111,9 @@
 
             $line_target = 0;
             $line_output = 0;
+            $line_normal_output = 0;
             $line_dhu = 0;
+            $line_manual_qty = 0;
 
             $line_target_info = $this->method_call->getLineTargetInfos($v['id'], $previous_date);
 
@@ -126,7 +128,8 @@
                 $line_pre_info = $this->method_call->getLinePerformanceSummary($v['id'], $previous_date, $h['start_time'], $h['end_time']);
 
                 foreach ($line_pre_info as $lpi){
-                    $line_output += $lpi['qty']+$lpi['manual_qty'];
+                    $line_output += ($lpi['qty']+$lpi['manual_qty']);
+                    $line_manual_qty += $lpi['manual_qty'];
                 }
 
             }
@@ -158,7 +161,7 @@
 
             $line_dhu = $this->method_call->getLineDhuSumReport($v['id'], $previous_date);
             $line_dhu = $line_dhu[0]['dhu'];
-            $line_manual_qty = $line_dhu[0]['manual_qty'];
+//            $line_manual_qty = $line_dhu[0]['manual_qty'];
 
 //            $average_dhu = round(($line_sum_dhu/$avg_of_work_hour), 2);
 
@@ -167,7 +170,7 @@
 
 //            $total_line_normal_output += $v['line_normal_hours_output'];
 //            $total_over_time_qty += $over_time_qty;
-            $total_line_output += $v['total_line_output'];
+//            $total_line_output += $v['total_line_output'];
 
             if($line_remarks != ''){
                 $remarks = $line_remarks;
@@ -175,22 +178,22 @@
                 $remarks = '';
             }
 
+            $total_line_rft_qty = $line_pre_info[0]['rft_qty'];
+
+            $line_normal_output = $line_output - $over_time_qty;
+
             $total_line_target += $line_target;
-            $total_line_normal_output += $line_output;
+            $total_line_normal_output += $line_normal_output;
             $total_over_time_qty += $over_time_qty;
 
-            $total_line_output = ($line_output + $over_time_qty);
-
-            $grand_total_output_lines += $total_line_output;
-
-            $total_line_rft_qty = $line_pre_info[0]['rft_qty'];
+            $grand_total_output_lines += $line_output;
             ?>
             <tr>
                 <td align="center"><?php echo $v['line_code'];?></td>
                 <td align="center"><?php echo $line_target;?></td>
-                <td align="center"><?php echo $line_output;?></td>
+                <td align="center"><?php echo $line_normal_output;?></td>
                 <td align="center"><?php echo $over_time_qty;?></td>
-                <td align="center"><?php echo $total_line_output;?></td>
+                <td align="center"><?php echo $line_output;?></td>
                 <td align="center">
                     <?php
 
@@ -206,13 +209,12 @@
             </tr>
             <?php
             $data_l = array(
-
                 'line_id' => ($v['id'] != '' ? $v['id'] : 0),
                 'target' => ($line_target != '' ? $line_target : 0),
-                'normal_output' => ($line_output != 0 ? $line_output : 0),
+                'normal_output' => ($line_normal_output != 0 ? $line_normal_output : 0),
                 'eot_output' => ($over_time_qty != '' ? $over_time_qty : 0),
                 'manual_qty' => ($line_manual_qty != '' ? $line_manual_qty : 0),
-                'output' => ($total_line_output != '' ? $total_line_output : 0),
+                'output' => ($line_output != '' ? $line_output : 0),
                 'work_hour' => ($avg_of_work_hour != '' ? $avg_of_work_hour : 0),
                 'efficiency' => ($line_efficiency != '' ? $line_efficiency : 0),
                 'dhu' => ($line_dhu != '' ? $line_dhu : 0),
